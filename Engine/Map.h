@@ -14,6 +14,11 @@ public:
 	~Map();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window);
+
+	int getMapWidth();
+	int getMapHeight();
+
+	sf::Vector2f m_offset;
 private:
 	sf::Image* tileset;
 	std::vector<Tile*> tiles;
@@ -34,4 +39,6 @@ private:
 	b2PolygonShape p;
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
+
+	b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
 };

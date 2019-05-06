@@ -35,7 +35,6 @@ Map::Map(b2World* world) {
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
-		std::cout << line << std::endl;
 
 		if (line[0] == '#')
 			continue;
@@ -63,43 +62,21 @@ Map::Map(b2World* world) {
 	tileRenderer = new sf::RectangleShape();
 	tileRenderer->setSize(sf::Vector2f(singleTileWidth, singleTileHeight));
 
-	// Physics
-	bodyDef.type = b2_staticBody;
-	bodyDef.position.Set(0 / BOX2D_SCALE, 100 / BOX2D_SCALE);
-	body = world->CreateBody(&bodyDef);
-
 	// Create Ground Fixture
-	s.SetAsBox(100 / BOX2D_SCALE, 10 / BOX2D_SCALE);
-	fixtureDef.density = 10.0f;
-	fixtureDef.friction = 10.0f;
-	fixtureDef.shape = &s;
-	body->CreateFixture(&fixtureDef);
+	b2BodyDef m_b2BodyDef;
+	m_b2BodyDef.type = b2_staticBody;
+	m_b2BodyDef.position.Set(0, 0);
+	body = world->CreateBody(&m_b2BodyDef);
+	body->SetFixedRotation(true);
 
-	fixtureDef.density = 0.0f;
-	fixtureDef.friction = 0.0f;
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
 			int tileID = *(gridTileIDs + y * mapWidth + x);
-			if (tileID == 0)
+			if (tileID == 0) // Tile 0 is transparent, and not collidable.
 				continue;
-
-			s.SetAsBox(16 / BOX2D_SCALE, 16 / BOX2D_SCALE);
-			s.m_centroid = b2Vec2((x * singleTileWidth) / BOX2D_SCALE, (y * singleTileHeight) / BOX2D_SCALE);
-			fixtureDef.shape = &s;
-
-			//body->CreateFixture(&fixtureDef);
+			b2Fixture* ff = AddRectangleFixture(8, 8, x * 16 + 16 / 2, y * 16 + 16 / 2, 0, 0, 0);
 		}
 	}
-
-	
-	// Dynamic Physics Body For Testing Purpose
-	bodyDef2.type = b2_dynamicBody;
-	bodyDef2.position.Set(0, 0);
-	body2 = world->CreateBody(&bodyDef2);
-	p.SetAsBox(16 / BOX2D_SCALE, 16 / BOX2D_SCALE);
-	p.m_centroid = b2Vec2(0, 0);
-	fixtureDef2.shape = &p;
-	fix = body2->CreateFixture(&fixtureDef2);
 }
 
 Map::~Map() {
@@ -118,11 +95,14 @@ void Map::Update(int updateElapsed) {
 }
 
 void Map::Render(sf::RenderWindow* window) {
+	
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
 
 			// Find Tile ID
-			int tileID = *(gridTileIDs + y * mapWidth + x);
+			int tileID = *(gridTileIDs + y * mapWidth + x); // Tile 0 is transparent no need for rendering.
+			if (tileID == 0)
+				continue;
 
 			// Find Tile
 			Tile* tile;
@@ -134,15 +114,43 @@ void Map::Render(sf::RenderWindow* window) {
 
 			// Render Tile
 			tileRenderer->setTexture(tile->getTexture());
-			tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x, (float)y * tileRenderer->getSize().y));
-			window->draw(*tileRenderer);
+			tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - m_offset.x, (float)y * tileRenderer->getSize().y - m_offset.y));
+			//window->draw(*tileRenderer);
 		}
 	}
+	
 
-	// Render Dynamic Physics Object For Testing
-	sf::RectangleShape rect;
-	rect.setSize(sf::Vector2f(16, 16));
-	rect.setPosition(body2->GetPosition().x * BOX2D_SCALE, body2->GetPosition().y * BOX2D_SCALE);
-	rect.setFillColor(sf::Color::Red);
-	window->draw(rect);
+	// Render All Fixtures
+	b2Fixture* fix = body->GetFixtureList();
+	sf::Color renderColor = sf::Color(125, 125, 125, 125);
+	while (fix != nullptr) {
+		if (b2PolygonShape* v = dynamic_cast<b2PolygonShape*>(fix->GetShape())) {
+
+			sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
+			for (int i = 0; i < v->GetVertexCount(); i++)
+				vertices[i] = sf::Vertex(sf::Vector2f(v->m_vertices[i].x * BOX2D_SCALE - m_offset.x, v->m_vertices[i].y * BOX2D_SCALE - m_offset.y), renderColor);
+
+			window->draw(vertices);
+		}
+		fix = fix->GetNext();
+	}
+}
+
+int Map::getMapWidth() {
+	return mapWidth;
+}
+
+int Map::getMapHeight() {
+	return mapHeight;
+}
+
+b2Fixture* Map::AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction) {
+	b2PolygonShape polygonShape;
+	b2FixtureDef fixtureDef;
+	polygonShape.SetAsBox(width / BOX2D_SCALE, height / BOX2D_SCALE, b2Vec2(x / BOX2D_SCALE, y / BOX2D_SCALE), 0);
+	fixtureDef.restitution = restitution;
+	fixtureDef.density = density;
+	fixtureDef.friction = friction;
+	fixtureDef.shape = &polygonShape;
+	return body->CreateFixture(&fixtureDef);
 }

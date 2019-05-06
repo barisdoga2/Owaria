@@ -9,12 +9,14 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Map.h
 	${PROJECT_SOURCE_DIR}/Engine/Tile.h
 	${PROJECT_SOURCE_DIR}/Engine/Player.h
+	${PROJECT_SOURCE_DIR}/Engine/Camera.h
 )
 
 set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Map.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Tile.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Player.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Camera.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 )
