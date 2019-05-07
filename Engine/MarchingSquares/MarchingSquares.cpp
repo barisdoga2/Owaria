@@ -8,7 +8,7 @@ MarchingSquares::MarchingSquares(Map* map) {
 	findLookups();
 	solveAll();
 
-	printf("Total solutions: %d in %fms.\n", solutions.size(), float(clock() - begin_time));
+	printf("Number of solutions: %d in %.0fms.\n", solutions.size(), float(clock() - begin_time));
 }
 
 void MarchingSquares::findLookups() {
@@ -90,7 +90,6 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 
 		if (!front) {
 			if (left) {
-				// move front
 				if (axisSwap == 0)
 					y = y - yCheckDir;
 				else if (axisSwap == 1)
@@ -99,7 +98,6 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 				solution.edgePoints.push_back(sf::Vector2i(x, y));
 			}
 			else if (!left) {
-				// turn left, move left
 				if (axisSwap == 0) {
 					yCheckDir = -yCheckDir;
 					axisSwap = 1;
@@ -132,7 +130,6 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 		}
 		else if (front) {
 			if (left) {
-				// Turn right, move right
 				if (axisSwap == 0) {
 					xCheckDir = -xCheckDir;
 					axisSwap = 1;
@@ -153,6 +150,34 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 					solution.t_vertices.push_back(sf::Vector2i((x + (xCheckDir > 0 ? 1 : 0)) * 16, (y + (yCheckDir > 0 ? 1 : 0)) * 16));
+
+					front = xCheckDir == yCheckDir ? *(bitmap + y * width + x + xCheckDir) : *(bitmap + (y - yCheckDir) * width + x);
+					left = xCheckDir == yCheckDir ? *(bitmap + (y - yCheckDir) * width + x) : *(bitmap + y * width + x + xCheckDir);
+					if (!front) {
+						y = y - yCheckDir;
+						solution.edgePoints.push_back(sf::Vector2i(x, y));
+					}
+				}
+			}
+			else if (!left) {
+				if (axisSwap == 0) {
+					yCheckDir = -yCheckDir;
+					axisSwap = 1;
+					solution.corners.push_back(sf::Vector2i(x, y));
+					solution.edgePoints.push_back(sf::Vector2i(x, y));
+
+					front = xCheckDir == yCheckDir ? *(bitmap + y * width + x + xCheckDir) : *(bitmap + (y - yCheckDir) * width + x);
+					left = xCheckDir == yCheckDir ? *(bitmap + (y - yCheckDir) * width + x) : *(bitmap + y * width + x + xCheckDir);
+					if (!front) {
+						x = x + xCheckDir;
+						solution.edgePoints.push_back(sf::Vector2i(x, y));
+					}
+				}
+				else if (axisSwap == 1) {
+					xCheckDir = -xCheckDir;
+					axisSwap = 0;
+					solution.corners.push_back(sf::Vector2i(x, y));
+					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
 					front = xCheckDir == yCheckDir ? *(bitmap + y * width + x + xCheckDir) : *(bitmap + (y - yCheckDir) * width + x);
 					left = xCheckDir == yCheckDir ? *(bitmap + (y - yCheckDir) * width + x) : *(bitmap + y * width + x + xCheckDir);
