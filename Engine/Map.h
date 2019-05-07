@@ -19,8 +19,9 @@ public:
 	int getMapHeight();
 
 	sf::Vector2f m_offset;
-	int* gridTileIDs;
+	int* mapGridTileIDs;
 
+	bool isSolidTile(int tileID);
 	void resolveMarching(std::vector<sf::Vector2i> t_vertices);
 private:
 	sf::Image* tileset;
@@ -29,6 +30,8 @@ private:
 
 	int mapWidth;
 	int mapHeight;
+	int* solidTileIDs;
+	int solidTileIDsLength;
 
 	b2BodyDef bodyDef;
 	b2Body* body;

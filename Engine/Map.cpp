@@ -20,8 +20,13 @@ Map::Map(b2World* world) {
 		std::istringstream iss(line);
 		if (line[0] == '#')
 			continue;
-		if (iss >> tilesetWidth >> tilesetHeight >> singleTileWidth >> singleTileHeight >> tilingPadding)
-			break;
+		if (iss >> tilesetWidth >> tilesetHeight >> singleTileWidth >> singleTileHeight >> tilingPadding >> solidTileIDsLength) {
+			solidTileIDs = (int*)malloc(solidTileIDsLength * sizeof(int));
+			std::getline(infile, line);
+			std::istringstream iss2(line);
+			for (int i = 0; i < solidTileIDsLength; i++) 
+				iss2 >> *(solidTileIDs + i);
+		}
 	}
 	infile.close();
 
@@ -48,7 +53,7 @@ Map::Map(b2World* world) {
 
 	// Load Tilemap
 	infile.open(mapPath + tilemapName + ".cfg");
-	gridTileIDs = (int*)malloc(mapWidth * mapHeight * sizeof(int));
+	mapGridTileIDs = (int*)malloc(mapWidth * mapHeight * sizeof(int));
 	int currentColumn = 0;
 	while (std::getline(infile, line))
 	{
@@ -56,7 +61,7 @@ Map::Map(b2World* world) {
 		if (line[0] == '#')
 			continue;
 		for (int x = 0; x < mapWidth; x++)
-			iss >> *(gridTileIDs + x + mapWidth * currentColumn);
+			iss >> *(mapGridTileIDs + x + mapWidth * currentColumn);
 		currentColumn++;
 	}
 	infile.close();
@@ -74,7 +79,7 @@ Map::Map(b2World* world) {
 
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
-			int tileID = *(gridTileIDs + y * mapWidth + x);
+			int tileID = *(mapGridTileIDs + y * mapWidth + x);
 			if (tileID == 0) // Tile 0 is transparent, and not collidable.
 				continue;
 			b2Fixture* ff = AddRectangleFixture(8, 8, x * 16 + 16 / 2, y * 16 + 16 / 2, 0, 0, 0);
@@ -88,7 +93,7 @@ Map::~Map() {
 	for (Tile* t : tiles)
 		delete t;
 
-	free(gridTileIDs);
+	free(mapGridTileIDs);
 
 	delete tileRenderer;
 }
@@ -103,7 +108,7 @@ void Map::Render(sf::RenderWindow* window) {
 		for (int x = 0; x < mapWidth; x++) {
 
 			// Find Tile ID
-			int tileID = *(gridTileIDs + y * mapWidth + x); // Tile 0 is transparent no need for rendering.
+			int tileID = *(mapGridTileIDs + y * mapWidth + x); // Tile 0 is transparent no need for rendering.
 			if (tileID == 0)
 				continue;
 
@@ -121,7 +126,6 @@ void Map::Render(sf::RenderWindow* window) {
 			window->draw(*tileRenderer);
 		}
 	}
-	
 
 	// Render All Fixtures
 	b2Fixture* fix = body->GetFixtureList();
@@ -171,4 +175,12 @@ void Map::resolveMarching(std::vector<sf::Vector2i> t_vertices) {
 	fx.shape = &chain;
 
 	body->CreateFixture(&fx);
+}
+
+bool Map::isSolidTile(int tileID) {
+	for (int i = 0; i < solidTileIDsLength; i++) 
+		if (tileID == *(solidTileIDs + i)) 
+			return true;
+	
+	return false;
 }

@@ -3,8 +3,11 @@
 MarchingSquares::MarchingSquares(Map* map) {
 	this->map = map;
 
+	
+
 	const clock_t begin_time = clock();
 
+	generateBitmapFromMap();
 	findLookups();
 	solveAll();
 
@@ -14,15 +17,14 @@ MarchingSquares::MarchingSquares(Map* map) {
 void MarchingSquares::findLookups() {
 	int width = map->getMapWidth();
 	int height = map->getMapHeight();
-	int* bitmap = map->gridTileIDs;
-
+		
 	for (int y = 0; y < height - 1; y++) {
 		for (int x = 0; x < width - 1; x++) {
 			if (*(bitmap + y * width + x) == 1)
 				continue;
 
 			int bits = 0;
-
+			
 			int rightBit = x + 1 < width ? *(bitmap + y * width + x + 1) : 0;
 			int topBit = y - 1 >= 0 ? *(bitmap + (y - 1) * width + x) : 0;
 			int leftBit = x - 1 >= 0 ? *(bitmap + y * width + x - 1) : 0;
@@ -77,7 +79,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 
 	int width = map->getMapWidth();
 	int height = map->getMapHeight();
-	int* bitmap = map->gridTileIDs;
+
 	int x = lookup.x;
 	int y = lookup.y;
 	int xCheckDir = lookupDir.x;
@@ -194,4 +196,17 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 	}
 
 	return solution;
+}
+
+void MarchingSquares::generateBitmapFromMap() {
+	bitmap = (int*)malloc(map->getMapWidth() * map->getMapHeight() * sizeof(int));
+	memcpy(bitmap, map->mapGridTileIDs, map->getMapWidth() * map->getMapHeight() * sizeof(int));
+	for (int y = 0; y < map->getMapHeight(); y++) {
+		for (int x = 0; x < map->getMapWidth(); x++) {
+			if (map->isSolidTile(*(map->mapGridTileIDs + y * map->getMapWidth() + x)))
+				*(bitmap + *map->mapGridTileIDs + y * map->getMapWidth() + x) = 1;
+			else
+				*(bitmap + *map->mapGridTileIDs + y * map->getMapWidth() + x) = 0;
+		}
+	}
 }

@@ -14,13 +14,16 @@ public:
 	MarchingSquares(Map* map);
 
 	vector<MarchingSolution> solutions;
+	
 
 private:
 	Map* map;
+	int* bitmap;
 
 	vector<sf::Vector2i> lookups;
 	vector<sf::Vector2i> lookupDirs;
 
+	void generateBitmapFromMap();
 	void findLookups();
 	void solveAll();
 
