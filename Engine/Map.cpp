@@ -3,14 +3,17 @@
 
 Map::Map(b2World* world) {
 	std::string mapPath = "../../Resources/Map/";	
+	std::string tilesetName = "Tileset";
+	std::string mapName = "Map2";
+	std::string tilemapName = "Tilemap2";
 
 	// Load Tileset
 	tileset = new sf::Image();
-	tileset->loadFromFile(mapPath + "Tileset.png");
+	tileset->loadFromFile(mapPath + tilesetName + ".png");
 
 	// Load Tileset Config
 	int tilesetWidth, tilesetHeight, singleTileWidth, singleTileHeight, tilingPadding;
-	std::ifstream infile(mapPath + "Tileset.cfg");
+	std::ifstream infile(mapPath + tilesetName + ".cfg");
 	std::string line;
 	while (std::getline(infile, line))
 	{
@@ -31,7 +34,7 @@ Map::Map(b2World* world) {
 	}
 
 	// Load Map Config
-	infile.open(mapPath + "Map.cfg");
+	infile.open(mapPath + mapName + ".cfg");
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
@@ -44,7 +47,7 @@ Map::Map(b2World* world) {
 	infile.close();
 
 	// Load Tilemap
-	infile.open(mapPath + "Tilemap.cfg");
+	infile.open(mapPath + tilemapName + ".cfg");
 	gridTileIDs = (int*)malloc(mapWidth * mapHeight * sizeof(int));
 	int currentColumn = 0;
 	while (std::getline(infile, line))
@@ -60,7 +63,7 @@ Map::Map(b2World* world) {
 
 	// Tile Renderer
 	tileRenderer = new sf::RectangleShape();
-	tileRenderer->setSize(sf::Vector2f(singleTileWidth, singleTileHeight));
+	tileRenderer->setSize(sf::Vector2f((float)singleTileWidth, (float)singleTileHeight));
 
 	// Create Ground Fixture
 	b2BodyDef m_b2BodyDef;
@@ -115,7 +118,7 @@ void Map::Render(sf::RenderWindow* window) {
 			// Render Tile
 			tileRenderer->setTexture(tile->getTexture());
 			tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - m_offset.x, (float)y * tileRenderer->getSize().y - m_offset.y));
-			//window->draw(*tileRenderer);
+			window->draw(*tileRenderer);
 		}
 	}
 	
@@ -128,7 +131,7 @@ void Map::Render(sf::RenderWindow* window) {
 
 			sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
 			for (int i = 0; i < v->GetVertexCount(); i++)
-				vertices[i] = sf::Vertex(sf::Vector2f(v->m_vertices[i].x * BOX2D_SCALE - m_offset.x, v->m_vertices[i].y * BOX2D_SCALE - m_offset.y), renderColor);
+				vertices[i] = sf::Vertex(sf::Vector2f((v->m_vertices[i].x + body->GetPosition().x) * BOX2D_SCALE - m_offset.x, (v->m_vertices[i].y + body->GetPosition().y) * BOX2D_SCALE - m_offset.y), renderColor);
 
 			window->draw(vertices);
 		}
@@ -152,5 +155,20 @@ b2Fixture* Map::AddRectangleFixture(int width, int height, int x, int y, float r
 	fixtureDef.density = density;
 	fixtureDef.friction = friction;
 	fixtureDef.shape = &polygonShape;
+	fixtureDef.isSensor = true;
 	return body->CreateFixture(&fixtureDef);
+}
+
+void Map::resolveMarching(std::vector<sf::Vector2i> t_vertices) {
+	b2ChainShape chain;
+	
+	b2Vec2* v = (b2Vec2*)malloc(t_vertices.size() * sizeof(b2Vec2));
+	for (unsigned int i = 0; i < t_vertices.size(); i++) 
+		*(v + i) = b2Vec2(t_vertices.at(i).x / BOX2D_SCALE, t_vertices.at(i).y / BOX2D_SCALE);
+	chain.CreateLoop(v, t_vertices.size());
+	
+	b2FixtureDef fx;
+	fx.shape = &chain;
+
+	body->CreateFixture(&fx);
 }

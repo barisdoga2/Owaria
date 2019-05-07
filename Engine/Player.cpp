@@ -18,11 +18,10 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	body = world->CreateBody(&m_b2BodyDef);
 	body->SetFixedRotation(true);
 
-	AddRectangleFixture(1, 1, 19 + 14, 16 + 25, 0, 0, 0)->SetUserData(NULL);
-	//AddCircleFixture(14, 31, 54, 0, 0, 0)->SetUserData(NULL);
+	AddRectangleFixture(10, 10, 19 + 14, 16 + 25, 0, 0, 0)->SetUserData(NULL);
 
 	playerRenderer = new sf::RectangleShape();
-	playerRenderer->setSize(sf::Vector2f(texture->getSize().x, texture->getSize().y));
+	playerRenderer->setSize(sf::Vector2f((float)texture->getSize().x, (float)texture->getSize().y));
 	playerRenderer->setPosition(sf::Vector2f(worldPosition.x * BOX2D_SCALE - map->m_offset.x, worldPosition.y * BOX2D_SCALE - map->m_offset.y));
 	playerRenderer->setTexture(texture);
 }
@@ -38,26 +37,17 @@ void Player::Render(sf::RenderWindow* window) {
 	playerRenderer->setPosition(sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y));
 	window->draw(*playerRenderer);
 
-	// Render All Fixtures
+	
 	b2Fixture* fix = body->GetFixtureList();
 	sf::Color renderColor = sf::Color(125, 125, 125, 125);
 	while (fix != nullptr) {
 		if (b2PolygonShape* v = dynamic_cast<b2PolygonShape*>(fix->GetShape())) {
 
 			sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
-			for (int i = 0; i < v->GetVertexCount(); i++) 
-				vertices[i] = sf::Vertex(sf::Vector2f((position.x + v->m_vertices[i].x) * BOX2D_SCALE - map->m_offset.x, (v->m_vertices[i].y + position.y) * BOX2D_SCALE - map->m_offset.y), renderColor);
+			for (int i = 0; i < v->GetVertexCount(); i++)
+				vertices[i] = sf::Vertex(sf::Vector2f((v->m_vertices[i].x + body->GetPosition().x) * BOX2D_SCALE - map->m_offset.x, (v->m_vertices[i].y + body->GetPosition().y) * BOX2D_SCALE - map->m_offset.y), renderColor);
 
 			window->draw(vertices);
-		}
-		else if (b2CircleShape* v = dynamic_cast<b2CircleShape*>(fix->GetShape())) {
-			sf::CircleShape circleShape;
-			circleShape.setOrigin(sf::Vector2f(v->m_radius * BOX2D_SCALE - v->m_p.x * BOX2D_SCALE, v->m_radius * BOX2D_SCALE - v->m_p.y * BOX2D_SCALE));
-			circleShape.setPosition((position.x) * BOX2D_SCALE - map->m_offset.x, (position.y) * BOX2D_SCALE - map->m_offset.y);
-			circleShape.setRadius(v->m_radius * BOX2D_SCALE);
-			circleShape.setRotation(body->GetAngle() * 180.0f / (float)ENGINE_PI);
-			circleShape.setFillColor(sf::Color(255, 0, 0, 122));
-			window->draw(circleShape);
 		}
 		fix = fix->GetNext();
 	}
@@ -70,8 +60,8 @@ void Player::Update(int updateElapsed) {
 bool isOnAir = false;
 void Player::HandleInputs() {
 	int health = 100;
-	int PLAYER_SPEED = 1;
-	int PLAYER_JUMP_SPEED = 10;
+	float PLAYER_SPEED = 1;
+	float PLAYER_JUMP_SPEED = 10;
 	if (health > 0) {
 		b2Vec2 vel = body->GetLinearVelocity();
 		b2Vec2 playerMovement = b2Vec2(0, 0);

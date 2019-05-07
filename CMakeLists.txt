@@ -10,6 +10,10 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Tile.h
 	${PROJECT_SOURCE_DIR}/Engine/Player.h
 	${PROJECT_SOURCE_DIR}/Engine/Camera.h
+
+	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares
+	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSquares.h
+	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSolution.h
 )
 
 set(sourcefiles
@@ -17,6 +21,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Tile.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Player.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Camera.cpp
+	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSquares.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 )

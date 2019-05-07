@@ -4,67 +4,54 @@
 #include <Map.h>
 #include <Player.h>
 #include <Camera.h>
+#include <MarchingSquares.h>
+#include <MarchingSolution.h>
 
 
 
 sf::RenderWindow* sfWindow;
 b2World* world;
-Map* map;
+Map* testMap;
 Player* player;
 Camera* camera;
-
-
-#include <iostream>
-#include <cstdlib>
-void test() {
-	int width = 20;
-	int height = 20;
-	int* tileMap = (int*)malloc(width * height * 2);
-	for (int y = 0; y < height; y++) {
-		for(int x = 0; x < width; x++) {
-			*(tileMap + y * width + x) = rand() % 2;
-			std::cout << *(tileMap + y * width + x) << " ";
-		}
-		std::cout << std::endl;
-	}
-	while (1);
-}
+MarchingSquares* march;
 
 void init() {
 	camera = new Camera();
 
-	map = new Map(world);
-	player = new Player(world, map, sf::Vector2f(250, 100));
-	camera = new Camera(map, player);
+	testMap = new Map(world);
 
+	march = new MarchingSquares(testMap);
+	for (MarchingSolution s: march->solutions)
+		testMap->resolveMarching(s.t_vertices);
+	
+	player = new Player(world, testMap, sf::Vector2f(250, 100));
+	camera = new Camera(testMap, player);
 }
 
 void update(int updateElapsed) {
-	map->Update(updateElapsed);
+	testMap->Update(updateElapsed);
 	player->HandleInputs();
 	player->Update(updateElapsed);
 	camera->Update();
 }
 
 void render(int renderElapsed) {
-	map->Render(sfWindow);
+	testMap->Render(sfWindow);
 	player->Render(sfWindow);
 }
 
 void cleanUp() {
-	delete map;
+	delete testMap;
 	delete player;
 }
 
 int main(void)
 {
-	test();
-	return 1;
-
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
 	window.setVerticalSyncEnabled(V_SYNC);
 	sfWindow = &window;
-
+	
 	b2World* m_world = new b2World(b2Vec2(0, 10));
 	world = m_world;
 

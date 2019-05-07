@@ -19,6 +19,9 @@ public:
 	int getMapHeight();
 
 	sf::Vector2f m_offset;
+	int* gridTileIDs;
+
+	void resolveMarching(std::vector<sf::Vector2i> t_vertices);
 private:
 	sf::Image* tileset;
 	std::vector<Tile*> tiles;
@@ -26,7 +29,6 @@ private:
 
 	int mapWidth;
 	int mapHeight;
-	int* gridTileIDs;
 
 	b2BodyDef bodyDef;
 	b2Body* body;
