@@ -7,6 +7,10 @@
 #include <Box2D/Box2D.h>
 #include <Tile.h>
 #include <Settings.h>
+#include <b2Utils.h>
+class MarchingSquares;
+#include <MarchingSquares.h>
+#include <MarchingSolution.h>
 
 class Map {
 public:
@@ -24,6 +28,7 @@ public:
 	bool isSolidTile(int tileID);
 	void resolveMarching(std::vector<sf::Vector2i> t_vertices);
 private:
+	MarchingSquares* marchingSquares;
 	sf::Image* tileset;
 	std::vector<Tile*> tiles;
 	sf::RectangleShape* tileRenderer;
@@ -45,5 +50,5 @@ private:
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
 
-	b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
+	//b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
 };

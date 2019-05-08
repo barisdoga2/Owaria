@@ -4,8 +4,6 @@
 #include <Map.h>
 #include <Player.h>
 #include <Camera.h>
-#include <MarchingSquares.h>
-#include <MarchingSolution.h>
 
 
 
@@ -14,16 +12,11 @@ b2World* world;
 Map* testMap;
 Player* player;
 Camera* camera;
-MarchingSquares* march;
 
 void init() {
 	camera = new Camera();
 
 	testMap = new Map(world);
-
-	march = new MarchingSquares(testMap);
-	for (MarchingSolution s: march->solutions)
-		testMap->resolveMarching(s.t_vertices);
 	
 	player = new Player(world, testMap, sf::Vector2f(250, 100));
 	camera = new Camera(testMap, player);
@@ -31,7 +24,7 @@ void init() {
 
 void update(int updateElapsed) {
 	testMap->Update(updateElapsed);
-	player->HandleInputs();
+	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
 	camera->Update();
 }

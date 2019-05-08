@@ -14,7 +14,6 @@ Animation::Animation(sf::Image* image, std::string name, int yStart, int width, 
 		frame->loadFromImage(*image, sf::IntRect(i * width, yStart * height, width, height));
 		frames.push_back(frame);
 	}
-	//renderer.setSize(sf::Vector2f(width, height));
 }
 
 void Animation::Hide() {

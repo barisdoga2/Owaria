@@ -82,9 +82,15 @@ Map::Map(b2World* world) {
 			int tileID = *(mapGridTileIDs + y * mapWidth + x);
 			if (tileID == 0) // Tile 0 is transparent, and not collidable.
 				continue;
-			b2Fixture* ff = AddRectangleFixture(8, 8, x * 16 + 16 / 2, y * 16 + 16 / 2, 0, 0, 0);
+			// Until now no physics check needed for tiles
+			//b2Fixture* ff = b2Utils::AddRectangleFixture(body, 16, 16, x * 16, y * 16, 0, 0, 0, true);
 		}
 	}
+
+	// Create Marching Squares Physics
+	marchingSquares = new MarchingSquares(this);
+	for (MarchingSolution s : marchingSquares->solutions)
+		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)MAP_B2_USER_DATA);
 }
 
 Map::~Map() {
@@ -150,33 +156,6 @@ int Map::getMapWidth() {
 
 int Map::getMapHeight() {
 	return mapHeight;
-}
-
-b2Fixture* Map::AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction) {
-	b2PolygonShape polygonShape;
-	b2FixtureDef fixtureDef;
-	polygonShape.SetAsBox(width / BOX2D_SCALE, height / BOX2D_SCALE, b2Vec2(x / BOX2D_SCALE, y / BOX2D_SCALE), 0);
-	fixtureDef.restitution = restitution;
-	fixtureDef.density = density;
-	fixtureDef.friction = friction;
-	fixtureDef.shape = &polygonShape;
-	fixtureDef.isSensor = true;
-	return body->CreateFixture(&fixtureDef);
-}
-
-void Map::resolveMarching(std::vector<sf::Vector2i> t_vertices) {
-	b2ChainShape chain;
-	
-	b2Vec2* v = (b2Vec2*)malloc(t_vertices.size() * sizeof(b2Vec2));
-	for (unsigned int i = 0; i < t_vertices.size(); i++) 
-		*(v + i) = b2Vec2(t_vertices.at(i).x / BOX2D_SCALE, t_vertices.at(i).y / BOX2D_SCALE);
-	chain.CreateLoop(v, t_vertices.size());
-	free(v);
-	
-	b2FixtureDef fx;
-	fx.shape = &chain;
-
-	body->CreateFixture(&fx);
 }
 
 bool Map::isSolidTile(int tileID) {

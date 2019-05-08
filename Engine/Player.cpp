@@ -8,11 +8,19 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	spritesheet = new sf::Image();
 	spritesheet->loadFromFile(playerPath + "Player.png");
-	currentAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
-	currentAnimation->Play();
 
-	texture = new sf::Texture();
-	texture->loadFromImage(*spritesheet, sf::IntRect(0,0,64,64));
+
+	walkAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
+	walkAnimation->Play();
+
+	jumpAnimation = new Animation(spritesheet, "jump", 5, 64, 64, 3, 400, false);
+	jumpAnimation->Play();
+
+	idleAnimation = new Animation(spritesheet, "idle", 1, 64, 64, 2, 680, true);
+	idleAnimation->Play();
+	
+	currentAnimation = idleAnimation;
+
 
 	b2BodyDef m_b2BodyDef;
 	m_b2BodyDef.type = b2_dynamicBody;
@@ -20,19 +28,35 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	body = world->CreateBody(&m_b2BodyDef);
 	body->SetFixedRotation(true);
 
-	AddRectangleFixture(10, 10, 19 + 14, 16 + 25, 0, 0, 0)->SetUserData(NULL);
+	b2Utils::AddRectangleFixture(body, 2, 15, 25, 35, 0, 0, 0)->SetUserData(NULL); // Left Cover for not stuck on the walls, friction = 0
+	b2Utils::AddRectangleFixture(body, 10, 15, 27, 37, 0, PLAYER_DENSITY, PLAYER_FRICTION)->SetUserData(NULL); // Middle
+	b2Utils::AddRectangleFixture(body, 2, 15, 37, 35, 0, 0, 0)->SetUserData(NULL); // Right Cover for not stuck on the walls, friction = 0
+
+	contactListener = new MyContactListener(this);
+	world->SetContactListener(contactListener);
+	b2Utils::AddRectangleFixture(body, 4, 4, 26, 52, 0, 0, 0, true)->SetUserData((void*)PLAYER_FOOT_B2_USER_DATA); // left feet
+	b2Utils::AddRectangleFixture(body, 4, 2, 30, 55, 0, 0, 0, true)->SetUserData((void*)PLAYER_FOOT_B2_USER_DATA); // mid feet
+	b2Utils::AddRectangleFixture(body, 4, 4, 34, 52, 0, 0, 0, true)->SetUserData((void*)PLAYER_FOOT_B2_USER_DATA); // right feet
+
+	b2Utils::AddCircleFixture(body, 6, 26, 45, 0, PLAYER_DENSITY / 2, PLAYER_FRICTION)->SetUserData(NULL); // legs
+	b2Utils::AddCircleFixture(body, 6, 26, 13, 0, PLAYER_DENSITY / 2, 0)->SetUserData(NULL); // head
 }
 
 Player::~Player() {
 	delete spritesheet;
-	delete texture;
+	delete contactListener;
+	delete walkAnimation;
+	delete idleAnimation;
+	delete jumpAnimation;
 }
 
 void Player::Render(sf::RenderWindow* window) {
 	b2Vec2 position = body->GetPosition();
-	
+
+	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), moveDirection == 1);
+
 	b2Fixture* fix = body->GetFixtureList();
-	sf::Color renderColor = sf::Color(125, 125, 125, 125);
+	sf::Color renderColor = sf::Color(255, 0, 0, 50);
 	while (fix != nullptr) {
 		if (b2PolygonShape* v = dynamic_cast<b2PolygonShape*>(fix->GetShape())) {
 
@@ -42,70 +66,52 @@ void Player::Render(sf::RenderWindow* window) {
 
 			window->draw(vertices);
 		}
+		else if (b2CircleShape* v = dynamic_cast<b2CircleShape*>(fix->GetShape())) {
+			sf::CircleShape c;
+			c.setRadius(v->m_radius * BOX2D_SCALE);
+			c.setFillColor(renderColor);
+			c.setPosition((v->m_p.x + body->GetPosition().x) * BOX2D_SCALE - c.getRadius() - map->m_offset.x, (v->m_p.y + body->GetPosition().y) * BOX2D_SCALE - c.getRadius() - map->m_offset.y);
+
+			window->draw(c);
+		}
 		fix = fix->GetNext();
 	}
 	
-	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), true);
 }
 
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 }
 
-bool isOnAir = false;
-void Player::HandleInputs() {
-	int health = 100;
-	float PLAYER_SPEED = 1;
-	float PLAYER_JUMP_SPEED = 10;
-	if (health > 0) {
-		b2Vec2 vel = body->GetLinearVelocity();
-		b2Vec2 playerMovement = b2Vec2(0, 0);
+void Player::HandleInputs(int updateElapsed) {
+	b2Vec2 vel = body->GetLinearVelocity();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			playerMovement.x = -PLAYER_SPEED;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-			playerMovement.x = PLAYER_SPEED;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !isOnAir) {
-			isOnAir = true;
-			playerMovement.y = -PLAYER_JUMP_SPEED;
-		}
-		body->SetLinearVelocity(vel + playerMovement);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		currentAnimation = walkAnimation;
+		moveDirection = -1;
+		vel.x = -PLAYER_SPEED;
 	}
-
-	static bool flag = true;
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-		if (flag) {
-
-
-			flag = false;
-		}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		currentAnimation = walkAnimation;
+		moveDirection = 1;
+		vel.x = PLAYER_SPEED;
 	}
 	else {
-		flag = true;
+		currentAnimation = idleAnimation;
+		vel.x = 0;
 	}
-}
 
-b2Fixture* Player::AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction) {
-	b2PolygonShape polygonShape;
-	b2FixtureDef fixtureDef;
-	polygonShape.SetAsBox(width / BOX2D_SCALE, height / BOX2D_SCALE, b2Vec2(x / BOX2D_SCALE, y / BOX2D_SCALE), 0);
-	fixtureDef.restitution = restitution;
-	fixtureDef.density = density;
-	fixtureDef.friction = friction;
-	fixtureDef.shape = &polygonShape;
-	return body->CreateFixture(&fixtureDef);
-}
-
-b2Fixture* Player::AddCircleFixture(int radius, int x, int y, float restitution, float density, float friction) {
-	b2CircleShape circleShape;
-	b2FixtureDef fixtureDef;
-	circleShape.m_p.Set(x / BOX2D_SCALE, y / BOX2D_SCALE);
-	circleShape.m_radius = radius / BOX2D_SCALE;
-	fixtureDef.restitution = restitution;
-	fixtureDef.density = density;
-	fixtureDef.friction = friction;
-	fixtureDef.shape = &circleShape;
-	return body->CreateFixture(&fixtureDef);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !isOnAir) {
+		vel.y = -PLAYER_JUMP_SPEED;
+		isOnAir = true;
+	}
+	body->SetLinearVelocity(vel);
+	
+	if (numFootContacts > 0) {
+		isOnAir = false;
+	}
+	else {
+		isOnAir = true;
+		currentAnimation = jumpAnimation;
+	}
 }

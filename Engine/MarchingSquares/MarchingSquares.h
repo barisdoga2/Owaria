@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+class Map;
 #include <Map.h>
 #include <MarchingSolution.h>
 

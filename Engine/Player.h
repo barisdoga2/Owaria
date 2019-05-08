@@ -6,6 +6,9 @@
 #include <Map.h>
 #include <Settings.h>
 #include <Animation.h>
+#include <b2Utils.h>
+class MyContactListener;
+#include <MyContactListener.h>
 
 class Player {
 public:
@@ -13,7 +16,7 @@ public:
 	~Player();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window);
-	void HandleInputs();
+	void HandleInputs(int updateElapsed);
 
 	sf::Vector2f position;
 	sf::Vector2f velocity;
@@ -23,11 +26,16 @@ public:
 	b2PolygonShape s;
 	b2FixtureDef fixtureDef;
 
+	int moveDirection = 1;
+	bool isOnAir = false;
+	int numFootContacts = 0;
+
 private:
+	MyContactListener* contactListener;
 	Map * map;
 	Animation* currentAnimation;
+	Animation* walkAnimation;
+	Animation* idleAnimation;
+	Animation* jumpAnimation;
 	sf::Image* spritesheet;
-	sf::Texture* texture;
-	b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
-	b2Fixture* AddCircleFixture(int radius, int x, int y, float restitution, float density, float friction);
 };
