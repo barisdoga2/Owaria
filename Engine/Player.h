@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 #include <Map.h>
 #include <Settings.h>
+#include <Animation.h>
 
 class Player {
 public:
@@ -24,9 +25,9 @@ public:
 
 private:
 	Map * map;
+	Animation* currentAnimation;
 	sf::Image* spritesheet;
 	sf::Texture* texture;
-	sf::RectangleShape* playerRenderer;
 	b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
 	b2Fixture* AddCircleFixture(int radius, int x, int y, float restitution, float density, float friction);
 };

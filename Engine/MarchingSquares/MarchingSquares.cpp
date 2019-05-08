@@ -3,13 +3,12 @@
 MarchingSquares::MarchingSquares(Map* map) {
 	this->map = map;
 
-	
-
 	const clock_t begin_time = clock();
 
 	generateBitmapFromMap();
 	findLookups();
 	solveAll();
+	free(bitmap);
 
 	printf("Number of solutions: %d in %.0fms.\n", solutions.size(), float(clock() - begin_time));
 }

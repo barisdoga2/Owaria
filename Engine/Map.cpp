@@ -94,6 +94,7 @@ Map::~Map() {
 		delete t;
 
 	free(mapGridTileIDs);
+	free(solidTileIDs);
 
 	delete tileRenderer;
 }
@@ -170,6 +171,7 @@ void Map::resolveMarching(std::vector<sf::Vector2i> t_vertices) {
 	for (unsigned int i = 0; i < t_vertices.size(); i++) 
 		*(v + i) = b2Vec2(t_vertices.at(i).x / BOX2D_SCALE, t_vertices.at(i).y / BOX2D_SCALE);
 	chain.CreateLoop(v, t_vertices.size());
+	free(v);
 	
 	b2FixtureDef fx;
 	fx.shape = &chain;

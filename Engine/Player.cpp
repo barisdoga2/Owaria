@@ -8,6 +8,8 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	spritesheet = new sf::Image();
 	spritesheet->loadFromFile(playerPath + "Player.png");
+	currentAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
+	currentAnimation->Play();
 
 	texture = new sf::Texture();
 	texture->loadFromImage(*spritesheet, sf::IntRect(0,0,64,64));
@@ -19,24 +21,15 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	body->SetFixedRotation(true);
 
 	AddRectangleFixture(10, 10, 19 + 14, 16 + 25, 0, 0, 0)->SetUserData(NULL);
-
-	playerRenderer = new sf::RectangleShape();
-	playerRenderer->setSize(sf::Vector2f((float)texture->getSize().x, (float)texture->getSize().y));
-	playerRenderer->setPosition(sf::Vector2f(worldPosition.x * BOX2D_SCALE - map->m_offset.x, worldPosition.y * BOX2D_SCALE - map->m_offset.y));
-	playerRenderer->setTexture(texture);
 }
 
 Player::~Player() {
 	delete spritesheet;
 	delete texture;
-	delete playerRenderer;
 }
 
 void Player::Render(sf::RenderWindow* window) {
 	b2Vec2 position = body->GetPosition();
-	playerRenderer->setPosition(sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y));
-	window->draw(*playerRenderer);
-
 	
 	b2Fixture* fix = body->GetFixtureList();
 	sf::Color renderColor = sf::Color(125, 125, 125, 125);
@@ -51,10 +44,12 @@ void Player::Render(sf::RenderWindow* window) {
 		}
 		fix = fix->GetNext();
 	}
+	
+	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), true);
 }
 
 void Player::Update(int updateElapsed) {
-	
+	currentAnimation->Update(updateElapsed);
 }
 
 bool isOnAir = false;
