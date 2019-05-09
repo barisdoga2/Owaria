@@ -7,8 +7,7 @@
 #include <Settings.h>
 #include <Animation.h>
 #include <b2Utils.h>
-class MyContactListener;
-#include <MyContactListener.h>
+#include <ContactData.h>
 
 class Player {
 public:
@@ -30,8 +29,9 @@ public:
 	bool isOnAir = false;
 	int numFootContacts = 0;
 
+	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
+
 private:
-	MyContactListener* contactListener;
 	Map * map;
 	Animation* currentAnimation;
 	Animation* walkAnimation;

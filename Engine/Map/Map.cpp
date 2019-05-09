@@ -88,9 +88,13 @@ Map::Map(b2World* world) {
 	}
 
 	// Create Marching Squares Physics
+	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, this);
+
+	body->SetUserData((void*)bodyContact);
+
 	marchingSquares = new MarchingSquares(this);
 	for (MarchingSolution s : marchingSquares->solutions)
-		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)MAP_B2_USER_DATA);
+		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
 }
 
 Map::~Map() {
@@ -135,19 +139,7 @@ void Map::Render(sf::RenderWindow* window) {
 	}
 
 	// Render All Fixtures
-	b2Fixture* fix = body->GetFixtureList();
-	sf::Color renderColor = sf::Color(125, 125, 125, 125);
-	while (fix != nullptr) {
-		if (b2PolygonShape* v = dynamic_cast<b2PolygonShape*>(fix->GetShape())) {
-
-			sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
-			for (int i = 0; i < v->GetVertexCount(); i++)
-				vertices[i] = sf::Vertex(sf::Vector2f((v->m_vertices[i].x + body->GetPosition().x) * BOX2D_SCALE - m_offset.x, (v->m_vertices[i].y + body->GetPosition().y) * BOX2D_SCALE - m_offset.y), renderColor);
-
-			window->draw(vertices);
-		}
-		fix = fix->GetNext();
-	}
+	b2Utils::RenderFixtures(window, body, m_offset);
 }
 
 int Map::getMapWidth() {
@@ -164,4 +156,8 @@ bool Map::isSolidTile(int tileID) {
 			return true;
 	
 	return false;
+}
+
+void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
+	
 }

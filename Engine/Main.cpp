@@ -4,7 +4,7 @@
 #include <Map.h>
 #include <Player.h>
 #include <Camera.h>
-
+#include <ContactListener.h>
 
 
 sf::RenderWindow* sfWindow;
@@ -12,8 +12,12 @@ b2World* world;
 Map* testMap;
 Player* player;
 Camera* camera;
+ContactListener* contactListener;
 
 void init() {
+	contactListener = new ContactListener();
+	world->SetContactListener(contactListener);
+
 	camera = new Camera();
 
 	testMap = new Map(world);
@@ -35,6 +39,8 @@ void render(int renderElapsed) {
 }
 
 void cleanUp() {
+	delete contactListener;
+	delete camera;
 	delete testMap;
 	delete player;
 }

@@ -18,7 +18,8 @@ include_directories(
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
 	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/MyContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/Settings.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
@@ -40,8 +41,6 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
-	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Utils/MyContactListener.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.cpp
 )

@@ -11,6 +11,7 @@
 class MarchingSquares;
 #include <MarchingSquares.h>
 #include <MarchingSolution.h>
+#include <ContactData.h>
 
 class Map {
 public:
@@ -26,7 +27,9 @@ public:
 	int* mapGridTileIDs;
 
 	bool isSolidTile(int tileID);
-	void resolveMarching(std::vector<sf::Vector2i> t_vertices);
+
+	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
+
 private:
 	MarchingSquares* marchingSquares;
 	sf::Image* tileset;
