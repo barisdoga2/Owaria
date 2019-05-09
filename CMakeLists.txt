@@ -4,32 +4,46 @@ project(Owaria)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
-	${PROJECT_SOURCE_DIR}/Engine/Settings.h
 
-	${PROJECT_SOURCE_DIR}/Engine/Map.h
-	${PROJECT_SOURCE_DIR}/Engine/Tile.h
-	${PROJECT_SOURCE_DIR}/Engine/Player.h
-	${PROJECT_SOURCE_DIR}/Engine/Camera.h
-	${PROJECT_SOURCE_DIR}/Engine/Animation.h
-	${PROJECT_SOURCE_DIR}/Engine/MyContactListener.h
-	${PROJECT_SOURCE_DIR}/Engine/b2Utils.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
-	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares
-	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSquares.h
-	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSolution.h
+	${PROJECT_SOURCE_DIR}/Engine/Map
+	${PROJECT_SOURCE_DIR}/Engine/Map/Map.h
+	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.h
+
+	${PROJECT_SOURCE_DIR}/Engine/Rendering
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.h
+
+	${PROJECT_SOURCE_DIR}/Engine/Utils
+	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MyContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/Settings.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.h
 )
 
 set(sourcefiles
-	${PROJECT_SOURCE_DIR}/Engine/Map.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Tile.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Player.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Camera.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Animation.cpp
-	${PROJECT_SOURCE_DIR}/Engine/MyContactListener.cpp
-	${PROJECT_SOURCE_DIR}/Engine/b2Utils.cpp
-	${PROJECT_SOURCE_DIR}/Engine/MarchingSquares/MarchingSquares.cpp
-
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Map
+	${PROJECT_SOURCE_DIR}/Engine/Map/Map.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Rendering
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Utils
+	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MyContactListener.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
+	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.cpp
 )
 
 set(CMAKE_TOOLCHAIN_FILE "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")

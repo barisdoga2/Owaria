@@ -3,7 +3,7 @@
 Roadmap
 	+ Implement animation
 	+ Implement jumping and movement
-	- Implement mobs and map inport
+	- Implement mobs and mob import
 	- Implement Tilemap building import
 	- Implement Opimized rendering system
 	- 
