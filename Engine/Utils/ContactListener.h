@@ -32,7 +32,6 @@ private:
 				((Map*)object)->HandleCollision(p_b2Contact->GetFixtureA(), p_b2Contact->GetFixtureB(), isBegin);
 			}
 			else if (type == CONTACT_TYPE_PLAYER_INSTANCE) {
-				printf("player\n");
 				((Player*)object)->HandleCollision(p_b2Contact->GetFixtureA(), p_b2Contact->GetFixtureB(), isBegin);
 			}
 

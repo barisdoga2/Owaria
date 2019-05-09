@@ -3,6 +3,7 @@
 #include <Settings.h>
 #include <Map.h>
 #include <Player.h>
+#include <Mob.h>
 #include <Camera.h>
 #include <ContactListener.h>
 
@@ -11,6 +12,7 @@ sf::RenderWindow* sfWindow;
 b2World* world;
 Map* testMap;
 Player* player;
+Mob* mob;
 Camera* camera;
 ContactListener* contactListener;
 
@@ -23,6 +25,7 @@ void init() {
 	testMap = new Map(world);
 	
 	player = new Player(world, testMap, sf::Vector2f(250, 100));
+	mob = new Mob(world, testMap, sf::Vector2f(250 + 100, 100));
 	camera = new Camera(testMap, player);
 }
 
@@ -30,12 +33,14 @@ void update(int updateElapsed) {
 	testMap->Update(updateElapsed);
 	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
+	mob->Update(updateElapsed);
 	camera->Update();
 }
 
 void render(int renderElapsed) {
 	testMap->Render(sfWindow);
 	player->Render(sfWindow);
+	mob->Render(sfWindow);
 }
 
 void cleanUp() {
@@ -43,6 +48,7 @@ void cleanUp() {
 	delete camera;
 	delete testMap;
 	delete player;
+	delete mob;
 }
 
 int main(void)

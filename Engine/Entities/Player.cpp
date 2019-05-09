@@ -13,9 +13,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	walkAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
 	walkAnimation->Play();
 
-	jumpAnimation = new Animation(spritesheet, "jump", 5, 64, 64, 3, 400, false);
-	jumpAnimation->Play();
-
 	idleAnimation = new Animation(spritesheet, "idle", 1, 64, 64, 2, 680, true);
 	idleAnimation->Play();
 	
@@ -50,7 +47,6 @@ Player::~Player() {
 	delete spritesheet;
 	delete walkAnimation;
 	delete idleAnimation;
-	delete jumpAnimation;
 }
 
 void Player::Render(sf::RenderWindow* window) {

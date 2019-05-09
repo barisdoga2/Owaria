@@ -52,6 +52,4 @@ private:
 	b2PolygonShape p;
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
-
-	//b2Fixture* AddRectangleFixture(int width, int height, int x, int y, float restitution, float density, float friction);
 };

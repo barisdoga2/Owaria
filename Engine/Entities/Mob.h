@@ -9,13 +9,12 @@
 #include <b2Utils.h>
 #include <ContactData.h>
 
-class Player {
+class Mob {
 public:
-	Player(b2World* world, Map* map, sf::Vector2f worldPosition);
-	~Player();
+	Mob(b2World* world, Map* map, sf::Vector2f worldPosition);
+	~Mob();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window);
-	void HandleInputs(int updateElapsed);
 
 	sf::Vector2f position;
 	sf::Vector2f velocity;
