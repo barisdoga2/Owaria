@@ -1,10 +1,14 @@
-# SecretProject
+# Owaria
 
 Roadmap
-	+ Implement animation
-	+ Implement jumping and movement
-	- Implement mobs and mob import
-	- Implement Tilemap building import
-	- Implement Opimized rendering system
+	+ Animations
+	+ Jumping
+	+ Movement
+	- Slopy tile mechanics(just diagonal rectangle)
+	- Mobs
+	- Player shooting mechanics
+	- Map mob handler(respawn etc.)
+	- Tilemap buildings
+	- Opimized rendering
 	- 
 	- 
