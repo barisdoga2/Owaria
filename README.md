@@ -6,7 +6,7 @@ Roadmap
 	+ Movement
 	- Slopy tile mechanics(just diagonal rectangle)
 	- Mobs
-	- Player shooting mechanics
+	- Player arrow shooting mechanics
 	- Map mob handler(respawn etc.)
 	- Tilemap buildings
 	- Opimized rendering
