@@ -31,16 +31,43 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	ContactData* footContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)FOOT_SENSOR);
 	body->SetUserData((void*)bodyContact);
 
-	b2Utils::AddRectangleFixture(body, 2, 15, 25, 35, 0, 0, 0)->SetUserData((void*)bodyContact); // Left Cover for not stuck on the walls, friction = 0
-	b2Utils::AddRectangleFixture(body, 10, 15, 27, 37, 0, PLAYER_DENSITY, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // Middle
-	b2Utils::AddRectangleFixture(body, 2, 15, 37, 35, 0, 0, 0)->SetUserData((void*)bodyContact); // Right Cover for not stuck on the walls, friction = 0
+	// Body
+	b2Utils::AddRectangleFixture(body, 2, 21, 24, 32, 0, 0, 0)->SetUserData((void*)bodyContact); // Left Cover for not stuck on the walls, friction = 0
+	b2Utils::AddRectangleFixture(body, 12, 21, 26, 32, 0, PLAYER_DENSITY, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // Middle
+	b2Utils::AddRectangleFixture(body, 2, 21, 38, 32, 0, 0, 0)->SetUserData((void*)bodyContact); // Right Cover for not stuck on the walls, friction = 0
 
-	b2Utils::AddRectangleFixture(body, 4, 4, 26, 52, 0, 0, 0, true)->SetUserData((void*)footContact); // left feet
-	b2Utils::AddRectangleFixture(body, 4, 2, 30, 55, 0, 0, 0, true)->SetUserData((void*)footContact); // mid feet
-	b2Utils::AddRectangleFixture(body, 4, 4, 34, 52, 0, 0, 0, true)->SetUserData((void*)footContact); // right feet
+	// Foot sensors
+	b2Utils::AddRectangleFixture(body, 3, 3, 26, 55, 0, 0, 0, true)->SetUserData((void*)footContact); // left feet
+	b2Utils::AddRectangleFixture(body, 4, 2, 30, 57, 0, 0, 0, true)->SetUserData((void*)footContact); // mid feet
+	b2Utils::AddRectangleFixture(body, 3, 3, 35, 55, 0, 0, 0, true)->SetUserData((void*)footContact); // right feet
 
-	b2Utils::AddCircleFixture(body, 6, 26, 45, 0, PLAYER_DENSITY / 2, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // legs
-	b2Utils::AddCircleFixture(body, 6, 26, 13, 0, PLAYER_DENSITY / 2, 0)->SetUserData((void*)bodyContact); // head
+	// Head
+	b2Utils::AddCircleFixture(body, 8, 24, 17, 0, PLAYER_DENSITY / 2, 0)->SetUserData((void*)bodyContact); // head
+
+	// Create Legs
+	b2CircleShape circleShape;
+	m_b2BodyDef;
+	m_b2BodyDef.type = b2_dynamicBody;
+	m_b2BodyDef.position.Set((worldPosition.x + 26) / BOX2D_SCALE, (worldPosition.y + 47) / BOX2D_SCALE);
+	body_foot = world->CreateBody(&m_b2BodyDef);
+	//b2Utils::AddCircleFixture(body_foot, 6, 0, 0, 0, PLAYER_DENSITY / 2, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // legs
+	circleShape.m_p.Set((0 + 6) / BOX2D_SCALE, (0 + 6) / BOX2D_SCALE);
+	circleShape.m_radius = 6 / BOX2D_SCALE;
+
+	fixtureDef.density = 9.85f;
+	fixtureDef.friction = 0.25f;
+	fixtureDef.shape = &circleShape;
+
+	body_foot->CreateFixture(&fixtureDef);
+
+	// Create Player-Foot Joint //
+	b2RevoluteJointDef joint;
+	joint.Initialize(body_foot, body, body_foot->GetWorldCenter());
+	joint.enableMotor = true;
+	joint.collideConnected = true;
+	joint.maxMotorTorque = 100;
+	joint.motorSpeed = 100;
+	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 }
 
 Player::~Player() {
@@ -54,8 +81,8 @@ void Player::Render(sf::RenderWindow* window) {
 
 	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), moveDirection == 1);
 
-	b2Utils::RenderFixtures(window, body, map->m_offset);
-	
+	b2Utils::RenderFixtures(window, body, map->m_offset, true);
+	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
 }
 
 void Player::Update(int updateElapsed) {
@@ -69,15 +96,18 @@ void Player::HandleInputs(int updateElapsed) {
 		currentAnimation = walkAnimation;
 		moveDirection = -1;
 		vel.x = -PLAYER_SPEED;
+		foot_joint->SetMotorSpeed(100);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		currentAnimation = walkAnimation;
 		moveDirection = 1;
 		vel.x = PLAYER_SPEED;
+		foot_joint->SetMotorSpeed(-100);
 	}
 	else {
 		currentAnimation = idleAnimation;
 		vel.x = 0;
+		foot_joint->SetMotorSpeed(0);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !isOnAir) {

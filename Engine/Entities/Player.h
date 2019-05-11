@@ -22,8 +22,10 @@ public:
 
 	b2BodyDef bodyDef;
 	b2Body* body;
+	b2Body* body_foot;
 	b2PolygonShape s;
 	b2FixtureDef fixtureDef;
+	b2RevoluteJoint* foot_joint;
 
 	int moveDirection = 1;
 	bool isOnAir = false;

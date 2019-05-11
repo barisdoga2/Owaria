@@ -55,14 +55,27 @@ public:
 		return body->CreateFixture(&fixtureDef);
 	}
 
-	static void b2Utils::RenderFixtures(sf::RenderWindow* window, b2Body* body, sf::Vector2f map_offset) {
+	static void b2Utils::RenderFixtures(sf::RenderWindow* window, b2Body* body, sf::Vector2f map_offset, bool b2Render = false) {
 		b2Fixture* fix = body->GetFixtureList();
 		b2Vec2 position = body->GetPosition();
 		sf::Color renderColor;
 
 		while (fix != nullptr) {
 			if (b2PolygonShape* v = dynamic_cast<b2PolygonShape*>(fix->GetShape())) {
-				renderColor = sf::Color(0, 0, 255, 70);
+
+				sf::RectangleShape rectangleShape;
+				b2Transform tr(v->m_centroid, b2Rot(0));
+				b2Vec2 reversedSize(-((v->m_vertices[0].x - tr.p.x) + ((v->m_vertices[0].y - tr.p.y) * tr.q.s) / tr.q.c) / (tr.q.c + tr.q.s * tr.q.s / tr.q.c), -((v->m_vertices[0].y - tr.p.y) - ((v->m_vertices[0].x - tr.p.x) * tr.q.s) / tr.q.c) / (tr.q.c + tr.q.s * tr.q.s / tr.q.c));
+				rectangleShape.setOrigin(reversedSize.x * BOX2D_SCALE - v->m_centroid.x * BOX2D_SCALE, reversedSize.y * BOX2D_SCALE - v->m_centroid.y * BOX2D_SCALE);
+				rectangleShape.setPosition((position.x) * BOX2D_SCALE - map_offset.x, (position.y) * BOX2D_SCALE - map_offset.y);
+				rectangleShape.setSize(sf::Vector2f(reversedSize.x * BOX2D_SCALE * 2.0f, reversedSize.y * BOX2D_SCALE * 2.0f));
+				rectangleShape.setRotation(body->GetAngle() * 180.0f / (float)ENGINE_PI);
+				rectangleShape.setFillColor(sf::Color(0, 0, 255, 80));
+				window->draw(rectangleShape);
+
+				if (!b2Render)
+					break;
+				renderColor = sf::Color(255, 0, 0, 80);
 
 				sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
 				for (int i = 0; i < v->GetVertexCount(); i++)
@@ -71,7 +84,18 @@ public:
 				window->draw(vertices);
 			}
 			else if (b2CircleShape* v = dynamic_cast<b2CircleShape*>(fix->GetShape())) {
-				renderColor = sf::Color(0, 255, 0, 70);
+
+				sf::CircleShape circleShape;
+				circleShape.setOrigin(sf::Vector2f(v->m_radius * BOX2D_SCALE - v->m_p.x * BOX2D_SCALE, v->m_radius * BOX2D_SCALE - v->m_p.y * BOX2D_SCALE));
+				circleShape.setPosition((position.x) * BOX2D_SCALE - map_offset.x, (position.y) * BOX2D_SCALE - map_offset.y);
+				circleShape.setRadius(v->m_radius * BOX2D_SCALE);
+				circleShape.setRotation(body->GetAngle() * 180.0f / (float)ENGINE_PI);
+				circleShape.setFillColor(sf::Color(0, 0, 255, 80));
+				window->draw(circleShape);
+
+				if (!b2Render)
+					break;
+				renderColor = sf::Color(255, 0, 0, 80);
 
 				sf::CircleShape c;
 				c.setRadius(v->m_radius * BOX2D_SCALE);
@@ -88,7 +112,7 @@ public:
 
 				window->draw(vertices);
 
-				
+
 			}
 			fix = fix->GetNext();
 		}
