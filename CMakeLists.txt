@@ -6,7 +6,6 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
-	${PROJECT_SOURCE_DIR}/Engine/Entities/Mob.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
@@ -31,7 +30,6 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
-	${PROJECT_SOURCE_DIR}/Engine/Entities/Mob.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
