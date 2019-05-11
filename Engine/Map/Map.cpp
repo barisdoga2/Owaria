@@ -12,22 +12,38 @@ Map::Map(b2World* world) {
 	tileset->loadFromFile(mapPath + tilesetName + ".png");
 
 	// Load Tileset Config
-	int tilesetWidth, tilesetHeight, singleTileWidth, singleTileHeight, tilingPadding;
+	int tilesetWidth, tilesetHeight, singleTileWidth, singleTileHeight, tilingPadding, tmp;
 	std::ifstream infile(mapPath + tilesetName + ".cfg");
-	std::string line;
-	while (std::getline(infile, line))
-	{
-		std::istringstream iss(line);
-		if (line[0] == '#')
-			continue;
-		if (iss >> tilesetWidth >> tilesetHeight >> singleTileWidth >> singleTileHeight >> tilingPadding >> solidTileIDsLength) {
-			solidTileIDs = (int*)malloc(solidTileIDsLength * sizeof(int));
-			std::getline(infile, line);
-			std::istringstream iss2(line);
-			for (int i = 0; i < solidTileIDsLength; i++) 
-				iss2 >> *(solidTileIDs + i);
-		}
+	std::istringstream stream("");
+
+	ioUtils::getNextLine(stream, infile);
+	stream >> tilesetWidth >> tilesetHeight >> singleTileWidth >> singleTileHeight >> tilingPadding;
+
+	int solidTileIDsLength;
+	ioUtils::getNextLine(stream, infile);
+	stream >> solidTileIDsLength;
+
+	ioUtils::getNextLine(stream, infile);
+	for (int i = 0; i < solidTileIDsLength; i++) {
+		stream >> tmp;
+		solidTileIDs.push_back(tmp);
 	}
+	
+	int specialCollisionTileCount, id, isXTile, verticeCount, x, y;
+	ioUtils::getNextLine(stream, infile);
+	stream >> specialCollisionTileCount;
+	for (int i = 0; i < specialCollisionTileCount; i++) {
+		ioUtils::getNextLine(stream, infile);
+		stream >> id >> isXTile >> verticeCount;
+		vector<sf::Vector2i>* collision_vertices = new vector<sf::Vector2i>;
+		for (int j = 0; j < verticeCount; j++) {
+			ioUtils::getNextLine(stream, infile);
+			stream >> x >> y;
+			collision_vertices->push_back(sf::Vector2i(x, y));
+		}
+		tileDatas.push_back(new TileData(id, isXTile == 1, collision_vertices));
+	}
+
 	infile.close();
 
 	// Create Tiles
@@ -39,6 +55,7 @@ Map::Map(b2World* world) {
 	}
 
 	// Load Map Config
+	std::string line;
 	infile.open(mapPath + mapName + ".cfg");
 	while (std::getline(infile, line))
 	{
@@ -103,8 +120,10 @@ Map::~Map() {
 	for (Tile* t : tiles)
 		delete t;
 
+	for (TileData* tD : tileDatas)
+		delete tD;
+
 	free(mapGridTileIDs);
-	free(solidTileIDs);
 
 	delete tileRenderer;
 }
@@ -151,8 +170,8 @@ int Map::getMapHeight() {
 }
 
 bool Map::isSolidTile(int tileID) {
-	for (int i = 0; i < solidTileIDsLength; i++) 
-		if (tileID == *(solidTileIDs + i)) 
+	for (int i : solidTileIDs) 
+		if (tileID == i) 
 			return true;
 	
 	return false;
@@ -160,4 +179,12 @@ bool Map::isSolidTile(int tileID) {
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
 	
+}
+
+TileData* Map::getTileData(int id) {
+	for (TileData* tD : tileDatas) 
+		if (tD->id == id)
+			return tD;
+	
+	return nullptr;
 }

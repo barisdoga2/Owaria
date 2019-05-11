@@ -11,6 +11,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Map
 	${PROJECT_SOURCE_DIR}/Engine/Map/Map.h
 	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.h
+	${PROJECT_SOURCE_DIR}/Engine/Map/TileData.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
@@ -19,6 +20,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils
 	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/Settings.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares

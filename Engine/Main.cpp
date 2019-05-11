@@ -22,7 +22,7 @@ void init() {
 
 	testMap = new Map(world);
 	
-	player = new Player(world, testMap, sf::Vector2f(250, 100));
+	player = new Player(world, testMap, sf::Vector2f(1200, 100));
 	camera = new Camera(testMap, player);
 }
 

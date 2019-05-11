@@ -19,14 +19,14 @@ public:
 
 private:
 	Map* map;
-	int* bitmap;
 
 	vector<sf::Vector2i> lookups;
 	vector<sf::Vector2i> lookupDirs;
 
-	void generateBitmapFromMap();
 	void findLookups();
 	void solveAll();
+	void pushSpecialTile(MarchingSolution* solution, TileData* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
+	void pushSpecialTileCorner(MarchingSolution* solution, TileData* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
 
 	MarchingSolution solve(sf::Vector2i lookup, sf::Vector2i lookupDir);
 

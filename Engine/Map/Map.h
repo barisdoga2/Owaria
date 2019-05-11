@@ -6,12 +6,14 @@
 #include <vector>
 #include <Box2D/Box2D.h>
 #include <Tile.h>
+#include <TileData.h>
 #include <Settings.h>
 #include <b2Utils.h>
 class MarchingSquares;
 #include <MarchingSquares.h>
 #include <MarchingSolution.h>
 #include <ContactData.h>
+#include <ioUtils.h>
 
 class Map {
 public:
@@ -30,16 +32,19 @@ public:
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
+	TileData* getTileData(int id);
+
 private:
+
 	MarchingSquares* marchingSquares;
 	sf::Image* tileset;
 	std::vector<Tile*> tiles;
+	std::vector<int> solidTileIDs;
+	std::vector<TileData*> tileDatas;
 	sf::RectangleShape* tileRenderer;
 
 	int mapWidth;
 	int mapHeight;
-	int* solidTileIDs;
-	int solidTileIDsLength;
 
 	b2BodyDef bodyDef;
 	b2Body* body;
