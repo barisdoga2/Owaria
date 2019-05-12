@@ -12,6 +12,9 @@ public:
 	void Update();
 	void SetMap(Map* p_map);
 	void SetTarget(Player* p_player);
+	Player* GetTarget();
+	Map* GetMap();
+	sf::Vector2f isOffsetsLocked();
 
 private:
 	Player * m_player;

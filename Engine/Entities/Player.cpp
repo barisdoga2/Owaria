@@ -8,7 +8,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	// Create Animations
 	spritesheet = new sf::Image();
-	spritesheet->loadFromFile(playerPath + "Player.png");
+	spritesheet->loadFromFile(playerPath + "Player2.png");
 
 	walkAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
 	walkAnimation->Play();
@@ -81,8 +81,8 @@ void Player::Render(sf::RenderWindow* window) {
 
 	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), moveDirection == 1);
 
-	b2Utils::RenderFixtures(window, body, map->m_offset, true);
-	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
+	//b2Utils::RenderFixtures(window, body, map->m_offset, true);
+	//b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
 }
 
 void Player::Update(int updateElapsed) {

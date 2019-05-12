@@ -15,6 +15,7 @@ include_directories(
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
@@ -40,6 +41,7 @@ set(sourcefiles
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils

@@ -3,7 +3,7 @@
 
 Map::Map(b2World* world) {
 	std::string mapPath = "../../Resources/Map/";	
-	std::string tilesetName = "Tileset";
+	std::string tilesetName = "Tileset2";
 	std::string mapName = "Map2";
 	std::string tilemapName = "Tilemap2";
 
@@ -158,7 +158,7 @@ void Map::Render(sf::RenderWindow* window) {
 	}
 
 	// Render All Fixtures
-	b2Utils::RenderFixtures(window, body, m_offset);
+	//b2Utils::RenderFixtures(window, body, m_offset);
 }
 
 int Map::getMapWidth() {

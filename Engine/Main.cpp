@@ -5,6 +5,7 @@
 #include <Player.h>
 #include <Camera.h>
 #include <ContactListener.h>
+#include <Background.h>
 
 
 sf::RenderWindow* sfWindow;
@@ -13,6 +14,7 @@ Map* testMap;
 Player* player;
 Camera* camera;
 ContactListener* contactListener;
+Background* background;
 
 void init() {
 	contactListener = new ContactListener();
@@ -21,12 +23,16 @@ void init() {
 	camera = new Camera();
 
 	testMap = new Map(world);
-	
-	player = new Player(world, testMap, sf::Vector2f(1200, 100));
+
+
+	player = new Player(world, testMap, sf::Vector2f(1400, 500));
 	camera = new Camera(testMap, player);
+
+	background = new Background(camera);
 }
 
 void update(int updateElapsed) {
+	background->Update(updateElapsed);
 	testMap->Update(updateElapsed);
 	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
@@ -34,6 +40,7 @@ void update(int updateElapsed) {
 }
 
 void render(int renderElapsed) {
+	background->Render(sfWindow);
 	testMap->Render(sfWindow);
 	player->Render(sfWindow);
 }
@@ -43,6 +50,7 @@ void cleanUp() {
 	delete camera;
 	delete testMap;
 	delete player;
+	delete background;
 }
 
 int main(void)
