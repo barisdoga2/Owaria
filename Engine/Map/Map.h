@@ -14,6 +14,8 @@ class MarchingSquares;
 #include <MarchingSolution.h>
 #include <ContactData.h>
 #include <ioUtils.h>
+class Building;
+#include <Building.h>
 
 class Map {
 public:
@@ -53,5 +55,7 @@ private:
 	b2Fixture* fix;
 
 	Tile* getTile(int id);
+
+	Building* building;
 
 };

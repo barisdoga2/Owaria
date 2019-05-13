@@ -106,6 +106,9 @@ Map::Map(b2World* world) {
 	tileRenderer = new sf::RectangleShape();
 	tileRenderer->setSize(sf::Vector2f((float)singleTileWidth, (float)singleTileHeight));
 
+	// Create Building
+	building = new Building(90, 26, this);
+
 	// Create Ground Fixture
 	b2BodyDef m_b2BodyDef;
 	m_b2BodyDef.type = b2_staticBody;
@@ -142,6 +145,7 @@ Map::~Map() {
 	free(mapGridTileIDs);
 
 	delete tileRenderer;
+	delete building;
 }
 
 void Map::Update(int updateElapsed) {

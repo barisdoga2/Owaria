@@ -1,2 +1,10 @@
 .vs/
-build/
+build/x86-Debug/*
+!/build/x86-Debug/freetyped.dll
+!/build/x86-Debug/libbz2d.dll
+!/build/x86-Debug/libpng16d.dll
+!/build/x86-Debug/Owaria.exe
+!/build/x86-Debug/sfml-graphics-d-2.dll
+!/build/x86-Debug/sfml-system-d-2.dll
+!/build/x86-Debug/sfml-window-d-2.dll
+!/build/x86-Debug/zlibd1.dll
