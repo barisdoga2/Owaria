@@ -26,21 +26,15 @@ public:
 	int getMapHeight();
 
 	sf::Vector2f m_offset;
-	int* mapGridTileIDs;
-
-	bool isSolidTile(int tileID);
+	Tile* mapGridTileIDs;
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
-
-	TileData* getTileData(int id);
 
 private:
 
 	MarchingSquares* marchingSquares;
 	sf::Image* tileset;
 	std::vector<Tile*> tiles;
-	std::vector<int> solidTileIDs;
-	std::vector<TileData*> tileDatas;
 	sf::RectangleShape* tileRenderer;
 
 	int mapWidth;
@@ -57,4 +51,7 @@ private:
 	b2PolygonShape p;
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
+
+	Tile* getTile(int id);
+
 };

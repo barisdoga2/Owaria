@@ -23,12 +23,14 @@ Map::Map(b2World* world) {
 	ioUtils::getNextLine(stream, infile);
 	stream >> solidTileIDsLength;
 
+	vector<int> solidTileIDs;
 	ioUtils::getNextLine(stream, infile);
 	for (int i = 0; i < solidTileIDsLength; i++) {
 		stream >> tmp;
 		solidTileIDs.push_back(tmp);
 	}
 	
+	vector<TileData*> tileDatas;
 	int specialCollisionTileCount, id, isXTile, verticeCount, x, y;
 	ioUtils::getNextLine(stream, infile);
 	stream >> specialCollisionTileCount;
@@ -50,7 +52,20 @@ Map::Map(b2World* world) {
 	int idCtr = 0;
 	for (int y = 0; y < tilesetHeight; y++) {
 		for (int x = 0; x < tilesetWidth; x++) {
-			tiles.push_back(new Tile(idCtr++, *tileset, x * (singleTileWidth + tilingPadding), y * (singleTileHeight + tilingPadding), singleTileWidth, singleTileHeight));
+			bool f = false;
+			for(int i : solidTileIDs)
+				if (i == idCtr) {
+					f = true;
+					break;
+				}
+			TileData* tileData = nullptr;
+			for(TileData* tile : tileDatas)
+				if (tile->id == idCtr) {
+					tileData = tile;
+					break;
+				}
+			tiles.push_back(new Tile(idCtr, *tileset, x * (singleTileWidth + tilingPadding), y * (singleTileHeight + tilingPadding), singleTileWidth, singleTileHeight, f, tileData));
+			idCtr++;
 		}
 	}
 
@@ -70,15 +85,19 @@ Map::Map(b2World* world) {
 
 	// Load Tilemap
 	infile.open(mapPath + tilemapName + ".cfg");
-	mapGridTileIDs = (int*)malloc(mapWidth * mapHeight * sizeof(int));
+	mapGridTileIDs = (Tile*)malloc(mapWidth * mapHeight * sizeof(Tile));
 	int currentColumn = 0;
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
 		if (line[0] == '#')
 			continue;
-		for (int x = 0; x < mapWidth; x++)
-			iss >> *(mapGridTileIDs + x + mapWidth * currentColumn);
+		for (int x = 0; x < mapWidth; x++) {
+			int tileID;
+			iss >> tileID;
+			*(mapGridTileIDs + x + mapWidth * currentColumn) = *getTile(tileID);
+		}
+			
 		currentColumn++;
 	}
 	infile.close();
@@ -96,8 +115,8 @@ Map::Map(b2World* world) {
 
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
-			int tileID = *(mapGridTileIDs + y * mapWidth + x);
-			if (tileID == 0) // Tile 0 is transparent, and not collidable.
+			Tile* tile = (mapGridTileIDs + y * mapWidth + x);
+			if (tile == 0) // Tile 0 is transparent, and not collidable.
 				continue;
 			// Until now no physics check needed for tiles
 			//b2Fixture* ff = b2Utils::AddRectangleFixture(body, 16, 16, x * 16, y * 16, 0, 0, 0, true);
@@ -120,9 +139,6 @@ Map::~Map() {
 	for (Tile* t : tiles)
 		delete t;
 
-	for (TileData* tD : tileDatas)
-		delete tD;
-
 	free(mapGridTileIDs);
 
 	delete tileRenderer;
@@ -137,23 +153,15 @@ void Map::Render(sf::RenderWindow* window) {
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
 
-			// Find Tile ID
-			int tileID = *(mapGridTileIDs + y * mapWidth + x); // Tile 0 is transparent no need for rendering.
-			if (tileID == 0)
-				continue;
-
 			// Find Tile
-			Tile* tile;
-			for(Tile* t : tiles)
-				if (t->getID() == tileID) {
-					tile = t;
-					break;
-				}
-
-			// Render Tile
-			tileRenderer->setTexture(tile->getTexture());
-			tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - m_offset.x, (float)y * tileRenderer->getSize().y - m_offset.y));
-			window->draw(*tileRenderer);
+			Tile* tile = (mapGridTileIDs + y * mapWidth + x); // Tile 0 is transparent no need for rendering.
+			if (tile->getID() != 0) {
+				// Render Tile
+				tileRenderer->setTexture(tile->getTexture());
+				tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - m_offset.x, (float)y * tileRenderer->getSize().y - m_offset.y));
+				window->draw(*tileRenderer);
+			}
+			
 		}
 	}
 
@@ -169,22 +177,13 @@ int Map::getMapHeight() {
 	return mapHeight;
 }
 
-bool Map::isSolidTile(int tileID) {
-	for (int i : solidTileIDs) 
-		if (tileID == i) 
-			return true;
-	
-	return false;
-}
-
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
 	
 }
 
-TileData* Map::getTileData(int id) {
-	for (TileData* tD : tileDatas) 
-		if (tD->id == id)
-			return tD;
-	
+Tile* Map::getTile(int id) {
+	for (Tile* tile : tiles)
+		if (tile->getID() == id)
+			return tile;
 	return nullptr;
 }

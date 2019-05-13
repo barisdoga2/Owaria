@@ -36,10 +36,10 @@ void Background::Update(int updateElapsed) {
 		move -= camera->GetTarget()->body->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
 	
 	clouds_position.x += move;
-	clouds_position.x = (int)clouds_position.x % (int)clouds_sprite->getGlobalBounds().width;
+	clouds_position.x = (float)((int)clouds_position.x % (int)clouds_sprite->getGlobalBounds().width);
 
 	// Update Hills
-	hills_position.x = -(int)hills_position.x % (int)hills_sprite->getGlobalBounds().width;
+	hills_position.x = (float)(-(int)hills_position.x % (int)hills_sprite->getGlobalBounds().width);
 }
 
 void Background::Render(sf::RenderWindow* window) {
@@ -50,7 +50,7 @@ void Background::Render(sf::RenderWindow* window) {
 	window->draw(sprite);
 
 	// Render Clouds
-	sf::Vector2f renderPos(-((int)(camera->GetMap()->m_offset.x + clouds_position.x) % (int)clouds_sprite->getGlobalBounds().width), clouds_position.y);
+	sf::Vector2f renderPos((float)-((int)(camera->GetMap()->m_offset.x + clouds_position.x) % (int)clouds_sprite->getGlobalBounds().width), clouds_position.y);
 	clouds_sprite->setPosition(sf::Vector2f(renderPos.x - clouds_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*clouds_sprite);
 	clouds_sprite->setPosition(renderPos);
@@ -59,7 +59,7 @@ void Background::Render(sf::RenderWindow* window) {
 	window->draw(*clouds_sprite);
 
 	// Render Hills
-	renderPos = sf::Vector2f(-((int)(camera->GetMap()->m_offset.x + hills_position.x) % (int)hills_sprite->getGlobalBounds().width), hills_position.y);
+	renderPos = sf::Vector2f((float)-((int)(camera->GetMap()->m_offset.x + hills_position.x) % (int)hills_sprite->getGlobalBounds().width), hills_position.y);
 	hills_sprite->setPosition(sf::Vector2f(renderPos.x - hills_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*hills_sprite);
 	hills_sprite->setPosition(renderPos);
