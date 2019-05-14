@@ -12,20 +12,19 @@ MarchingSquares::MarchingSquares(Map* map) {
 }
 
 void MarchingSquares::findLookups() {
-	int width = map->getMapWidth();
-	int height = map->getMapHeight();
+	sf::Vector2i tilemapTileSize = map->getMapTileSize();
 
-	for (int y = 0; y < height - 1; y++) {
-		for (int x = 0; x < width - 1; x++) {
-			if ((map->mapGridTileIDs + y * width + x)->isSolid())
+	for (int y = 0; y < tilemapTileSize.y - 1; y++) {
+		for (int x = 0; x < tilemapTileSize.x - 1; x++) {
+			if ((map->mapGridTileIDs + y * tilemapTileSize.x + x)->isSolid())
 				continue;
 
 			int bits = 0;
 
-			int rightBit = x + 1 < width ? (map->mapGridTileIDs + y * width + x + 1)->isSolid() : 0;
-			int topBit = y - 1 >= 0 ? (map->mapGridTileIDs + (y - 1) * width + x)->isSolid() : 0;
-			int leftBit = x - 1 >= 0 ? (map->mapGridTileIDs + y * width + x - 1)->isSolid() : 0;
-			int bottomBit = y + 1 < height ? (map->mapGridTileIDs + (y + 1) * width + x)->isSolid() : 0;
+			int rightBit = x + 1 < tilemapTileSize.x ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + 1)->isSolid() : 0;
+			int topBit = y - 1 >= 0 ? (map->mapGridTileIDs + (y - 1) * tilemapTileSize.x + x)->isSolid() : 0;
+			int leftBit = x - 1 >= 0 ? (map->mapGridTileIDs + y * tilemapTileSize.x + x - 1)->isSolid() : 0;
+			int bottomBit = y + 1 < tilemapTileSize.y ? (map->mapGridTileIDs + (y + 1) * tilemapTileSize.x + x)->isSolid() : 0;
 
 			bits += rightBit;
 			bits += topBit;
@@ -124,8 +123,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 	MarchingSolution solution;
 	solution.lookup = lookup;
 
-	int width = map->getMapWidth();
-	int height = map->getMapHeight();
+	sf::Vector2i tilemapTileSize = map->getMapTileSize();
 
 	int x = lookup.x;
 	int y = lookup.y;
@@ -134,8 +132,8 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 
 	int axisSwap = xCheckDir == yCheckDir;
 	while (1) {
-		int front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-		int left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+		int front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+		int left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 
 		if (!front) {
 			if (left) {
@@ -145,7 +143,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					x = x + xCheckDir;
 
 				// Custom physics tile calculation here
-				pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+				pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 
 				solution.edgePoints.push_back(sf::Vector2i(x, y));
 			}
@@ -156,7 +154,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData();
+					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData();
 					if (tD == nullptr) {
 						solution.t_vertices.push_back(sf::Vector2i((x + (xCheckDir > 0 ? 1 : 0)) * 16, (y + (yCheckDir < 0 ? 1 : 0)) * 16));
 					}
@@ -164,13 +162,13 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 						//printf("Else0");
 					}
 					
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						x = x + xCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 				}
 				else if (axisSwap == 1) {
@@ -179,7 +177,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData();
+					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData();
 					if (tD == nullptr) {
 						solution.t_vertices.push_back(sf::Vector2i((x + (xCheckDir > 0 ? 1 : 0)) * 16, (y + (yCheckDir < 0 ? 1 : 0)) * 16));
 					}
@@ -187,13 +185,13 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 						//printf("Else1");
 					}
 
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						y = y - yCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 				}
 			}
@@ -206,7 +204,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + x)->getTileData();
+					TileData* tD = (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->getTileData();
 					if (tD == nullptr) {
 						solution.t_vertices.push_back(sf::Vector2i((x + (xCheckDir < 0 ? 1 : 0)) * 16, (y + (yCheckDir < 0 ? 1 : 0)) * 16));
 					}
@@ -214,13 +212,13 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 						pushSpecialTileCorner(&solution, tD, x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						x = x + xCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 				}
 				else if (axisSwap == 1) {
@@ -229,7 +227,7 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					TileData* tD = (map->mapGridTileIDs + (y) * map->getMapWidth() + x + xCheckDir)->getTileData();
+					TileData* tD = (map->mapGridTileIDs + (y) * tilemapTileSize.x + x + xCheckDir)->getTileData();
 					if (tD == nullptr) {
 						solution.t_vertices.push_back(sf::Vector2i((x + (xCheckDir > 0 ? 1 : 0)) * 16, (y + (yCheckDir > 0 ? 1 : 0)) * 16));
 					}
@@ -237,13 +235,13 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 						pushSpecialTileCorner(&solution, tD, x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						y = y - yCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 				}
 			}
@@ -254,13 +252,13 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						x = x + xCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * map->getMapWidth() + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
+						pushSpecialTile(&solution, (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + (x + xCheckDir))->getTileData(), x, y, xCheckDir, yCheckDir, axisSwap);
 					}
 				}
 				else if (axisSwap == 1) {
@@ -269,8 +267,8 @@ MarchingSolution MarchingSquares::solve(sf::Vector2i lookup, sf::Vector2i lookup
 					solution.corners.push_back(sf::Vector2i(x, y));
 					solution.edgePoints.push_back(sf::Vector2i(x, y));
 
-					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid();
-					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * width + x)->isSolid() : (map->mapGridTileIDs + y * width + x + xCheckDir)->isSolid();
+					front = xCheckDir == yCheckDir ? (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid() : (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid();
+					left = xCheckDir == yCheckDir ? (map->mapGridTileIDs + (y - yCheckDir) * tilemapTileSize.x + x)->isSolid() : (map->mapGridTileIDs + y * tilemapTileSize.x + x + xCheckDir)->isSolid();
 					if (!front) {
 						y = y - yCheckDir;
 						solution.edgePoints.push_back(sf::Vector2i(x, y));

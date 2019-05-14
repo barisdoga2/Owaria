@@ -10,24 +10,21 @@
 #include <Tile.h>
 class Map;
 #include <Map.h>
+#include <Tileset.h>
 
 using namespace std;
 
 class Building {
 
 public:
-	Building(int left, int top, Map* map);
+	Building(sf::Vector2i buildingTilePos, Map* map);
 	~Building();
 
-	int left;
-	int top;
-	int widthTiles;
-	int heightTiles;
-	Tile* mapGridTileIDs;
+	sf::Vector2i buildingTilePos;
+	sf::Vector2i buildingTileSize;
 
 private:
-	sf::Image* tileset;
-	vector<Tile*> tiles;
+	Tileset* tileset;
+	Tile* mapGridTileIDs;
 
-	Tile* getTile(int id);
 };

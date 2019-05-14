@@ -16,6 +16,7 @@ class MarchingSquares;
 #include <ioUtils.h>
 class Building;
 #include <Building.h>
+#include <Tileset.h>
 
 class Map {
 public:
@@ -23,24 +24,20 @@ public:
 	~Map();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window);
-
-	int getMapWidth();
-	int getMapHeight();
-
+	
 	sf::Vector2f m_offset;
 	Tile* mapGridTileIDs;
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
+	Tileset* getTileset();
+
+	sf::Vector2i getMapTileSize();
+
 private:
 
 	MarchingSquares* marchingSquares;
-	sf::Image* tileset;
-	std::vector<Tile*> tiles;
 	sf::RectangleShape* tileRenderer;
-
-	int mapWidth;
-	int mapHeight;
 
 	b2BodyDef bodyDef;
 	b2Body* body;
@@ -53,9 +50,9 @@ private:
 	b2PolygonShape p;
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
-
-	Tile* getTile(int id);
-
+	
 	Building* building;
+	Tileset* tileset;
 
+	sf::Vector2i mapTileSize;
 };

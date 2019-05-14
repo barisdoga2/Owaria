@@ -17,14 +17,14 @@ void Camera::Update() {
 		m_map->m_offset.x = position.x * BOX2D_SCALE - SCREEN_WIDTH / 2.0f;
 		if (m_map->m_offset.x < 0)
 			m_map->m_offset.x = 0;
-		else if (m_map->m_offset.x > m_map->getMapWidth() * 16 - SCREEN_WIDTH)
-			m_map->m_offset.x = (float)m_map->getMapWidth() * 16 - SCREEN_WIDTH;
+		else if (m_map->m_offset.x > m_map->getMapTileSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH)
+			m_map->m_offset.x = (float)m_map->getMapTileSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH;
 
 		m_map->m_offset.y = position.y * BOX2D_SCALE - SCREEN_HEIGHT / 2.0f;
 		if (m_map->m_offset.y < 0)
 			m_map->m_offset.y = 0;
-		else if (m_map->m_offset.y > m_map->getMapHeight() * 16 - SCREEN_HEIGHT)
-			m_map->m_offset.y = (float)m_map->getMapHeight() * 16 - SCREEN_HEIGHT;
+		else if (m_map->m_offset.y > m_map->getMapTileSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT)
+			m_map->m_offset.y = (float)m_map->getMapTileSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT;
 
 	}
 }
@@ -38,7 +38,7 @@ Player* Camera::GetTarget() {
 }
 
 sf::Vector2f Camera::isOffsetsLocked() {
-	return sf::Vector2f(m_map->m_offset.x == 0 || (m_map->m_offset.x == (float)m_map->getMapWidth() * 16 - SCREEN_WIDTH), m_map->m_offset.y == 0 || (m_map->m_offset.y == (float)m_map->getMapHeight() * 16 - SCREEN_HEIGHT));
+	return sf::Vector2f(m_map->m_offset.x == 0 || (m_map->m_offset.x == (float)m_map->getMapTileSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH), m_map->m_offset.y == 0 || (m_map->m_offset.y == (float)m_map->getMapTileSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT));
 }
 
 void Camera::SetMap(Map* p_map) {
