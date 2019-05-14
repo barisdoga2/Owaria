@@ -24,7 +24,7 @@ Map::Map(b2World* world) {
 
 	// Create Tile Renderer
 	tileRenderer = new sf::RectangleShape();
-	tileRenderer->setSize(sf::Vector2f(tileset->getTilePixelSize().x, tileset->getTilePixelSize().y));
+	tileRenderer->setSize(tileset->getTilePixelSize());
 
 	// Create Building
 	building = new Building(sf::Vector2i(90, 26), this);
@@ -44,6 +44,12 @@ Map::Map(b2World* world) {
 	marchingSquares = new MarchingSquares(this);
 	for (MarchingSolution s : marchingSquares->solutions)
 		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
+
+	// Load Trees
+	treeObjectSet = new GameObjectSet("../../Resources/GameObjects/Tree");
+	
+	gameObjects.push_back(new GameObject(treeObjectSet->getGameObjectData("Tree1A"), sf::Vector2i(83, 31)));
+
 }
 
 Map::~Map() {
@@ -54,6 +60,10 @@ Map::~Map() {
 	delete building;
 
 	delete tileset;
+	delete treeObjectSet;
+
+	for (GameObject* g : gameObjects)
+		delete g;
 }
 
 void Map::Update(int updateElapsed) {
@@ -62,6 +72,7 @@ void Map::Update(int updateElapsed) {
 
 void Map::Render(sf::RenderWindow* window) {
 	
+	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = 0; y < mapTileSize.y; y++) {
 		for (int x = 0; x < mapTileSize.x; x++) {
 
@@ -79,6 +90,17 @@ void Map::Render(sf::RenderWindow* window) {
 
 	// Render All Fixtures
 	//b2Utils::RenderFixtures(window, body, m_offset);
+
+	sf::RectangleShape r;
+	for (GameObject* go : gameObjects) {
+		Tile* t = go->getGameObjectData()->gameObjectTile;
+		sf::Vector2f tileSize = go->getGameObjectData()->gameObjectset->getTileset()->getTilePixelSize();
+
+		r.setSize(tileSize);
+		r.setTexture(t->getTexture());
+		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - m_offset.x, go->getTilemapPos().y * tileset->getTilePixelSize().y - m_offset.y));
+		window->draw(r);
+	}
 }
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {

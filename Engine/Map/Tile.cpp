@@ -1,11 +1,13 @@
 #include <Tile.h>
 
-Tile::Tile(int id, sf::Image tileset, int xStart, int yStart, sf::Vector2f tilePixelSize, bool solid, TileData* tileData) {
+
+
+Tile::Tile(int id, sf::Image tileset, sf::Vector2f tilePosInTileset, sf::Vector2f tilePixelSize, int tilingPadding, bool solid, TileData* tileData) {
 	this->solid = solid;
 	this->tileData = tileData;
 	this->id = id;
 	texture = new sf::Texture();
-	texture->loadFromImage(tileset, sf::IntRect(xStart, yStart, (int)tilePixelSize.x, (int)tilePixelSize.y));
+	texture->loadFromImage(tileset, sf::IntRect((int)(tilePosInTileset.x * (tilePixelSize.x + tilingPadding)), (int)(tilePosInTileset.y * (tilePixelSize.y + tilingPadding)), (int)tilePixelSize.x, (int)tilePixelSize.y));
 }
 
 Tile::~Tile() {

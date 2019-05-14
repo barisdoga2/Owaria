@@ -11,7 +11,7 @@ Tileset::Tileset(string tilesetConfig, string tilesetPng) {
 	std::istringstream stream("");
 	ioUtils::getNextLine(stream, infile);
 	stream >> tilesetTileSize.x >> tilesetTileSize.y >> tilePixelSize.x >> tilePixelSize.y >> tilingPadding;
-
+	
 	// Load Solid Tile IDs
 	int solidTileIDsLength, tmp;
 	vector<int> solidTileIDs;
@@ -62,7 +62,7 @@ Tileset::Tileset(string tilesetConfig, string tilesetPng) {
 				}
 
 			// Create tile
-			tiles.push_back(new Tile(idCtr, *tilesetImage, (int)(x * (tilePixelSize.x + tilingPadding)), (int)(y * (tilePixelSize.y + tilingPadding)), tilePixelSize, isSolid, tileData));
+			tiles.push_back(new Tile(idCtr, *tilesetImage, sf::Vector2f((float)x, (float)y), tilePixelSize, tilingPadding, isSolid, tileData));
 			idCtr++;
 		}
 	}
@@ -82,10 +82,10 @@ Tile* Tileset::getTile(int id) {
 	return nullptr;
 }
 
-sf::Vector2f Tileset::getTilePixelSize() {
-	return this->tilePixelSize;
-}
-
 sf::Vector2f Tileset::getTilesetTileSize() {
 	return this->tilesetTileSize;
+}
+
+sf::Vector2f Tileset::getTilePixelSize() {
+	return this->tilePixelSize;
 }

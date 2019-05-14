@@ -17,6 +17,9 @@ class MarchingSquares;
 class Building;
 #include <Building.h>
 #include <Tileset.h>
+class GameObjectSet;
+#include <GameObjectSet.h>
+#include <GameObject.h>
 
 class Map {
 public:
@@ -33,6 +36,7 @@ public:
 	Tileset* getTileset();
 
 	sf::Vector2i getMapTileSize();
+
 
 private:
 
@@ -55,4 +59,7 @@ private:
 	Tileset* tileset;
 
 	sf::Vector2i mapTileSize;
+
+	GameObjectSet* treeObjectSet;
+	vector<GameObject*> gameObjects;
 };
