@@ -6,10 +6,10 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectData.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/game_obj_data.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
@@ -38,9 +38,9 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map

@@ -5,18 +5,19 @@
 #include <Tile.h>
 class GameObjectSet;
 #include <GameObjectSet.h>
+#include <GameObjectData.h>
 
 class GameObject {
 
 public:
-	GameObject(game_obj_data* gameObjectData, sf::Vector2i tilesetPos);
+	GameObject(GameObjectData* gameObjectData, sf::Vector2i tilesetPos);
 	~GameObject();
 
-	game_obj_data* getGameObjectData();
+	GameObjectData* getGameObjectData();
 	sf::Vector2i getTilemapPos();
 
 private:
-	game_obj_data* data;
+	GameObjectData* data;
 	sf::Vector2i tilemapPos;
 
 };

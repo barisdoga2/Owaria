@@ -3,13 +3,41 @@
 
 Map::Map(b2World* world) {
 
+	// Load Map Game Objects
+	sf::Vector2i tilemapPos;
+	int objectSetCount, mapGameObjectCount;
+	string objectsetName, gameobjectName;
+	std::ifstream infile("../../Resources/Map/MapGameObjects.cfg");
+	std::istringstream stream("");
+	ioUtils::getNextLine(stream, infile);
+	stream >> objectSetCount;
+	for (int i = 0; i < objectSetCount; i++) {
+		ioUtils::getNextLine(stream, infile);
+		stream >> objectsetName;
+		objectSets.push_back(new GameObjectSet(objectsetName));
+	}
+	ioUtils::getNextLine(stream, infile);
+	stream >> mapGameObjectCount;
+	for (int i = 0; i < mapGameObjectCount; i++) {
+		ioUtils::getNextLine(stream, infile);
+		stream >> objectsetName >> gameobjectName >> tilemapPos.x >> tilemapPos.y;
+		
+		for (GameObjectSet* g : objectSets) {
+			if (g->getObjectsetName().compare(objectsetName) == 0) {
+				gameObjects.push_back(new GameObject(g->getGameObjectData(gameobjectName), tilemapPos));
+				break;
+			}
+		}
+
+	}
+	infile.close();
+
 	// Load Tileset
 	tileset = new Tileset("../../Resources/Map/Tileset.cfg", "../../Resources/Map/Tileset.png");
 	
 	// Load Tilemap
 	int tmpTileID;
-	std::ifstream infile("../../Resources/Map/Tilemap.cfg");
-	std::istringstream stream("");
+	infile.open("../../Resources/Map/Tilemap.cfg");
 	ioUtils::getNextLine(stream, infile);
 	stream >> mapTileSize.x >> mapTileSize.y;
 	mapGridTileIDs = (Tile*)malloc(mapTileSize.x * mapTileSize.y * sizeof(Tile));
@@ -45,11 +73,6 @@ Map::Map(b2World* world) {
 	for (MarchingSolution s : marchingSquares->solutions)
 		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
 
-	// Load Trees
-	treeObjectSet = new GameObjectSet("../../Resources/GameObjects/Tree");
-	
-	gameObjects.push_back(new GameObject(treeObjectSet->getGameObjectData("Tree1A"), sf::Vector2i(83, 31)));
-
 }
 
 Map::~Map() {
@@ -60,9 +83,11 @@ Map::~Map() {
 	delete building;
 
 	delete tileset;
-	delete treeObjectSet;
 
 	for (GameObject* g : gameObjects)
+		delete g;
+
+	for(GameObjectSet* g : objectSets)
 		delete g;
 }
 

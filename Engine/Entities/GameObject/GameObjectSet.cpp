@@ -1,13 +1,14 @@
 #include <GameObjectSet.h>
 
 
-GameObjectSet::GameObjectSet(string objectSetPath) {
-		
+GameObjectSet::GameObjectSet(string objectsetName) {
+	this->objectsetName = objectsetName;
+	string objectSetPath = "../../Resources/GameObjects/" + objectsetName;
 	tileset = new Tileset(objectSetPath + "/Tileset.cfg", objectSetPath  + "/Tileset.png");
 	
 	string gameObjectSuffix;
 	int numberOfObjects, id;
-	std::ifstream infile(objectSetPath + "/Tree.cfg");
+	std::ifstream infile(objectSetPath + "/" + objectsetName + ".cfg");
 	std::istringstream stream("");
 	ioUtils::getNextLine(stream, infile);
 	stream >> numberOfObjects >> gameObjectPrefix;
@@ -15,7 +16,7 @@ GameObjectSet::GameObjectSet(string objectSetPath) {
 		ioUtils::getNextLine(stream, infile);
 
 		stream >> id >> gameObjectSuffix;
-		game_obj_data* gameObjData = new game_obj_data();
+		GameObjectData* gameObjData = new GameObjectData();
 		gameObjData->gameObjectTile = tileset->getTile(id);
 		gameObjData->gameObjectName = gameObjectPrefix + gameObjectSuffix;
 		gameObjData->gameObjectset = this;
@@ -28,20 +29,25 @@ GameObjectSet::GameObjectSet(string objectSetPath) {
 GameObjectSet::~GameObjectSet() {
 	delete tileset;
 
-	for (game_obj_data* g : gameobjectdatas)
+	for (GameObjectData* g : gameobjectdatas)
 		delete g;
 }
 
-game_obj_data* GameObjectSet::getGameObjectData(string name) {
-	game_obj_data* retVal = nullptr;
-	for (game_obj_data* god : gameobjectdatas)
-		if (god->gameObjectName.compare(name) > 0) {
+GameObjectData* GameObjectSet::getGameObjectData(string name) {
+	GameObjectData* retVal = nullptr;
+	for (GameObjectData* god : gameobjectdatas) 
+		if (god->gameObjectName.compare(name) == 0) {
 			retVal = god;
 			break;
 		}
+		
 	return retVal;
 }
 
 Tileset* GameObjectSet::getTileset() {
 	return this->tileset;
+}
+
+string GameObjectSet::getObjectsetName() {
+	return this->objectsetName;
 }

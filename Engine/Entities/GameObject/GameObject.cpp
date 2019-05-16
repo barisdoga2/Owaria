@@ -2,7 +2,7 @@
 
 
 
-GameObject::GameObject(game_obj_data* data, sf::Vector2i tilemapPos) {
+GameObject::GameObject(GameObjectData* data, sf::Vector2i tilemapPos) {
 	this->data = data;
 	this->tilemapPos = tilemapPos;
 }
@@ -15,6 +15,6 @@ sf::Vector2i GameObject::getTilemapPos() {
 	return this->tilemapPos;
 }
 
-game_obj_data* GameObject::getGameObjectData() {
+GameObjectData* GameObject::getGameObjectData() {
 	return this->data;
 }

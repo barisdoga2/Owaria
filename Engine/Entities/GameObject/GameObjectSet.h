@@ -9,7 +9,7 @@
 #include <ioUtils.h>
 #include <Tile.h>
 #include <Tileset.h>
-#include <game_obj_data.h>
+#include <GameObjectData.h>
 
 using namespace std;
 
@@ -20,16 +20,19 @@ class GameObjectSet {
 public:
 
 public:
-	GameObjectSet(string objectSetPath);
+	GameObjectSet(string objectsetName);
 	~GameObjectSet();
 
 	Tileset* getTileset();
-	game_obj_data* getGameObjectData(string name);
+	GameObjectData* getGameObjectData(string name);
+
+	string getObjectsetName();
 	
 private:
+	string objectsetName;
 	string gameObjectPrefix;
 	Tileset* tileset;
-	vector<game_obj_data*> gameobjectdatas;
+	vector<GameObjectData*> gameobjectdatas;
 
 };
 

@@ -5,10 +5,10 @@
 class GameObjectSet;
 #include <GameObjectSet.h>
 
-class game_obj_data {
+class GameObjectData {
 
 public:
-	game_obj_data() {}
+	GameObjectData() {}
 	Tile* gameObjectTile;
 	std::string gameObjectName;
 	GameObjectSet* gameObjectset;

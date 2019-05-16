@@ -60,6 +60,6 @@ private:
 
 	sf::Vector2i mapTileSize;
 
-	GameObjectSet* treeObjectSet;
+	vector<GameObjectSet*> objectSets;
 	vector<GameObject*> gameObjects;
 };
