@@ -78,25 +78,23 @@ void Player::Render(sf::RenderWindow* window) {
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 
-	if (isOnLadder) {
-		body->ApplyForceToCenter(b2Vec2(0, body->GetMass() * -10), false);
+	if (isOnLadder > 0) {
+		body->ApplyForceToCenter(b2Vec2(0, -10.0f * (body->GetMass() + body_foot->GetMass())), false);
 	}
 }
 
 void Player::HandleInputs(int updateElapsed) {
 	b2Vec2 vel = body->GetLinearVelocity();
 
-	if (isOnLadder) {
+	if (isOnLadder > 0) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 			currentAnimation = walkAnimation;
 			vel.y = -PLAYER_SPEED;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 			currentAnimation = walkAnimation;
 			vel.y = PLAYER_SPEED;
-		}
-		else {
-			currentAnimation = walkAnimation;
+		}else {
+			currentAnimation = idleAnimation;
 			vel.y = 0;
 		}
 	}
@@ -143,7 +141,12 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 				isOnAir = true;
 			}
 		}
-		
+	}
+
+	if (((ContactData*)interacted->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
+		if ((int)((ContactData*)interacted->GetUserData())->getData() == LADDER_SENSOR) {
+			isOnLadder += isBegin ? 1 : -1;
+		}
 	}
 
 }

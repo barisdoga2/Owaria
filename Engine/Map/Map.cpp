@@ -22,7 +22,6 @@ Map::Map(b2World* world) {
 		ioUtils::getNextLine(stream, infile);
 		stream >> objectsetName >> gameobjectName >> tilemapPos.x >> tilemapPos.y;
 		for (GameObjectSet* g : objectSets) {
-			cout << g->getObjectsetName() << " " << objectsetName << endl;
 			if (g->getObjectsetName().compare(objectsetName) == 0) {
 				gameObjects.push_back(new GameObject(g->getGameObjectData(gameobjectName), world, tilemapPos));
 				break;
@@ -55,7 +54,7 @@ Map::Map(b2World* world) {
 	tileRenderer->setSize(tileset->getTilePixelSize());
 
 	// Create Building
-	building = new Building(sf::Vector2i(90, 26), this);
+	building = new Building(sf::Vector2i(95, 26), this);
 
 	// Create Ground Fixture
 	b2BodyDef m_b2BodyDef;
@@ -126,6 +125,7 @@ void Map::Render(sf::RenderWindow* window) {
 		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - m_offset.x, go->getTilemapPos().y * tileset->getTilePixelSize().y - m_offset.y));
 		window->draw(r);
 	}
+
 }
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {

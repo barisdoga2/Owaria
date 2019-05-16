@@ -12,7 +12,7 @@ GameObject::GameObject(GameObjectData* data, b2World* world, sf::Vector2i tilema
 
 	if (data->hasPhysicsBody) {
 		b2BodyDef bodyDef;
-		bodyDef.type = data->isDynamic ? b2_dynamicBody : b2_staticBody;
+		bodyDef.type = data->isStatic == 1 ? b2_staticBody : b2_dynamicBody;
 		bodyDef.position = b2Vec2((tilemapPos.x * 16) / BOX2D_SCALE, (tilemapPos.y * 16) / BOX2D_SCALE);
 
 		objectBody = world->CreateBody(&bodyDef);

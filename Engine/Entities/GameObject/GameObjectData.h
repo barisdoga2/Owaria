@@ -14,7 +14,7 @@ public:
 	std::string gameObjectName;
 	GameObjectSet* gameObjectset;
 	bool hasPhysicsBody;
-	bool isDynamic;
+	bool isStatic;
 	int contactDataType;
 	int contactDataObject;
 };

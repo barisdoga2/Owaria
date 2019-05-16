@@ -24,26 +24,28 @@ private:
 		void* a_bodyUserData = p_b2Contact->GetFixtureA()->GetBody()->GetUserData();
 		void* b_bodyUserData = p_b2Contact->GetFixtureB()->GetBody()->GetUserData();
 
-		if (a_bodyUserData != NULL && b_bodyUserData != NULL) {
-
+		if (a_bodyUserData != NULL) {
 			int type = ((ContactData*)a_bodyUserData)->getDataType();
 			void* object = ((ContactData*)a_bodyUserData)->getData();
+
 			if (type == CONTACT_TYPE_MAP_INSTANCE) {
 				((Map*)object)->HandleCollision(p_b2Contact->GetFixtureA(), p_b2Contact->GetFixtureB(), isBegin);
 			}
 			else if (type == CONTACT_TYPE_PLAYER_INSTANCE) {
 				((Player*)object)->HandleCollision(p_b2Contact->GetFixtureA(), p_b2Contact->GetFixtureB(), isBegin);
 			}
+		}
 
-			type = ((ContactData*)b_bodyUserData)->getDataType();
-			object = ((ContactData*)b_bodyUserData)->getData();
+		if (b_bodyUserData != NULL) {
+			int type = ((ContactData*)b_bodyUserData)->getDataType();
+			void* object = ((ContactData*)b_bodyUserData)->getData();
+
 			if (type == CONTACT_TYPE_MAP_INSTANCE) {
 				((Map*)object)->HandleCollision(p_b2Contact->GetFixtureB(), p_b2Contact->GetFixtureA(), isBegin);
 			}
 			else if (type == CONTACT_TYPE_PLAYER_INSTANCE) {
 				((Player*)object)->HandleCollision(p_b2Contact->GetFixtureB(), p_b2Contact->GetFixtureA(), isBegin);
 			}
-
 		}
 
 	}
