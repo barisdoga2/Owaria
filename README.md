@@ -1,7 +1,7 @@
 # Owaria
 
-Roadmap
-	+ Animations
+
+	- Animations
 	+ Jumping
 	+ Movement
 	+ Slopy tile mechanics
