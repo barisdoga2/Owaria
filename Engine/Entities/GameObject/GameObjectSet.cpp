@@ -7,7 +7,7 @@ GameObjectSet::GameObjectSet(string objectsetName) {
 	tileset = new Tileset(objectSetPath + "/Tileset.cfg", objectSetPath  + "/Tileset.png");
 	
 	string gameObjectSuffix;
-	int numberOfObjects, id;
+	int numberOfObjects, id, hasPhysicsBody, contactDataType, contactDataObject, isDynamic;
 	std::ifstream infile(objectSetPath + "/" + objectsetName + ".cfg");
 	std::istringstream stream("");
 	ioUtils::getNextLine(stream, infile);
@@ -15,11 +15,18 @@ GameObjectSet::GameObjectSet(string objectsetName) {
 	for (int i = 0; i < numberOfObjects; i++) {
 		ioUtils::getNextLine(stream, infile);
 
-		stream >> id >> gameObjectSuffix;
+		stream >> id >> gameObjectSuffix >> hasPhysicsBody >> isDynamic >> contactDataType >> contactDataObject;
 		GameObjectData* gameObjData = new GameObjectData();
 		gameObjData->gameObjectTile = tileset->getTile(id);
 		gameObjData->gameObjectName = gameObjectPrefix + gameObjectSuffix;
 		gameObjData->gameObjectset = this;
+		gameObjData->hasPhysicsBody = hasPhysicsBody;
+		gameObjData->isDynamic = isDynamic;
+		gameObjData->contactDataType = contactDataType;
+		gameObjData->contactDataObject = contactDataObject;
+
+		cout << contactDataType << " " << contactDataObject << endl;
+
 		gameobjectdatas.push_back(gameObjData);
 	}
 	infile.close();

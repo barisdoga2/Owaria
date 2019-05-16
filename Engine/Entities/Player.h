@@ -30,8 +30,10 @@ public:
 	int moveDirection = 1;
 	bool isOnAir = false;
 	int numFootContacts = 0;
+	bool isOnLadder = false;
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
+
 
 private:
 	Map * map;

@@ -9,7 +9,12 @@ class GameObjectData {
 
 public:
 	GameObjectData() {}
+
 	Tile* gameObjectTile;
 	std::string gameObjectName;
 	GameObjectSet* gameObjectset;
+	bool hasPhysicsBody;
+	bool isDynamic;
+	int contactDataType;
+	int contactDataObject;
 };

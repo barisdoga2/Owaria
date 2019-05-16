@@ -6,6 +6,10 @@
 #define CONTACT_TYPE_MOB_INSTANCE 4
 #define CONTACT_TYPE_SENSOR_INT 3
 
+
+#define FOOT_SENSOR 1
+#define LADDER_SENSOR 2
+
 class ContactData
 {
 public:

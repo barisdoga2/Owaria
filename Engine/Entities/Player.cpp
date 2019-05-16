@@ -20,10 +20,9 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 
 	// Create Physics
-	b2BodyDef m_b2BodyDef;
-	m_b2BodyDef.type = b2_dynamicBody;
-	m_b2BodyDef.position.Set(worldPosition.x / BOX2D_SCALE, worldPosition.y / BOX2D_SCALE);
-	body = world->CreateBody(&m_b2BodyDef);
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(worldPosition.x / BOX2D_SCALE, worldPosition.y / BOX2D_SCALE);
+	body = world->CreateBody(&bodyDef);
 	body->SetFixedRotation(true);
 
 	// Create ContactData
@@ -45,21 +44,11 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	b2Utils::AddCircleFixture(body, 8, 24, 17, 0, PLAYER_DENSITY / 2, 0)->SetUserData((void*)bodyContact); // head
 
 	// Create Legs
-	b2CircleShape circleShape;
-	m_b2BodyDef;
-	m_b2BodyDef.type = b2_dynamicBody;
-	m_b2BodyDef.position.Set((worldPosition.x + 26) / BOX2D_SCALE, (worldPosition.y + 47) / BOX2D_SCALE);
-	body_foot = world->CreateBody(&m_b2BodyDef);
-	//b2Utils::AddCircleFixture(body_foot, 6, 0, 0, 0, PLAYER_DENSITY / 2, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // legs
-	circleShape.m_p.Set((0 + 6) / BOX2D_SCALE, (0 + 6) / BOX2D_SCALE);
-	circleShape.m_radius = 6 / BOX2D_SCALE;
-
-	fixtureDef.density = 9.85f;
-	fixtureDef.friction = 0.25f;
-	fixtureDef.shape = &circleShape;
-
-	body_foot->CreateFixture(&fixtureDef);
-
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set((worldPosition.x + 26) / BOX2D_SCALE, (worldPosition.y + 47) / BOX2D_SCALE);
+	body_foot = world->CreateBody(&bodyDef);
+	b2Utils::AddCircleFixture(body_foot, 6, 0, 0, 0, PLAYER_DENSITY / 2, PLAYER_FRICTION)->SetUserData((void*)bodyContact); // legs
+	
 	// Create Player-Foot Joint //
 	b2RevoluteJointDef joint;
 	joint.Initialize(body_foot, body, body_foot->GetWorldCenter());
@@ -68,6 +57,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.maxMotorTorque = 100;
 	joint.motorSpeed = 100;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
+	
 }
 
 Player::~Player() {
@@ -82,15 +72,34 @@ void Player::Render(sf::RenderWindow* window) {
 	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), moveDirection == 1);
 
 	//b2Utils::RenderFixtures(window, body, map->m_offset, true);
-	//b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
+	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
 }
 
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
+
+	if (isOnLadder) {
+		body->ApplyForceToCenter(b2Vec2(0, body->GetMass() * -10), false);
+	}
 }
 
 void Player::HandleInputs(int updateElapsed) {
 	b2Vec2 vel = body->GetLinearVelocity();
+
+	if (isOnLadder) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+			currentAnimation = walkAnimation;
+			vel.y = -PLAYER_SPEED;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+			currentAnimation = walkAnimation;
+			vel.y = PLAYER_SPEED;
+		}
+		else {
+			currentAnimation = walkAnimation;
+			vel.y = 0;
+		}
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		currentAnimation = walkAnimation;
@@ -134,6 +143,7 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 				isOnAir = true;
 			}
 		}
+		
 	}
 
 }

@@ -6,6 +6,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectData.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.h
@@ -38,6 +39,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp

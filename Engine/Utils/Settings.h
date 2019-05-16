@@ -17,5 +17,3 @@
 #define MAP_FRICTION 3
 #define PLAYER_DENSITY 10
 #define PLAYER_FRICTION 3
-
-#define FOOT_SENSOR 1

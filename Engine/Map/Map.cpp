@@ -21,10 +21,10 @@ Map::Map(b2World* world) {
 	for (int i = 0; i < mapGameObjectCount; i++) {
 		ioUtils::getNextLine(stream, infile);
 		stream >> objectsetName >> gameobjectName >> tilemapPos.x >> tilemapPos.y;
-		
 		for (GameObjectSet* g : objectSets) {
+			cout << g->getObjectsetName() << " " << objectsetName << endl;
 			if (g->getObjectsetName().compare(objectsetName) == 0) {
-				gameObjects.push_back(new GameObject(g->getGameObjectData(gameobjectName), tilemapPos));
+				gameObjects.push_back(new GameObject(g->getGameObjectData(gameobjectName), world, tilemapPos));
 				break;
 			}
 		}
@@ -116,11 +116,11 @@ void Map::Render(sf::RenderWindow* window) {
 	// Render All Fixtures
 	//b2Utils::RenderFixtures(window, body, m_offset);
 
-	sf::RectangleShape r;
+	
 	for (GameObject* go : gameObjects) {
+		sf::RectangleShape r;
 		Tile* t = go->getGameObjectData()->gameObjectTile;
 		sf::Vector2f tileSize = go->getGameObjectData()->gameObjectset->getTileset()->getTilePixelSize();
-
 		r.setSize(tileSize);
 		r.setTexture(t->getTexture());
 		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - m_offset.x, go->getTilemapPos().y * tileset->getTilePixelSize().y - m_offset.y));
