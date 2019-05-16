@@ -11,6 +11,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingData.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map

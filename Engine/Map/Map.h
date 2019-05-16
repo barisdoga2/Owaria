@@ -20,6 +20,7 @@ class Building;
 class GameObjectSet;
 #include <GameObjectSet.h>
 #include <GameObject.h>
+#include <BuildingData.h>
 
 class Map {
 public:
@@ -55,11 +56,12 @@ private:
 	b2FixtureDef fixtureDef2;
 	b2Fixture* fix;
 	
-	Building* building;
 	Tileset* tileset;
 
 	sf::Vector2i mapTileSize;
 
 	vector<GameObjectSet*> objectSets;
 	vector<GameObject*> gameObjects;
+
+	vector<BuildingData*> buildingDatas;
 };

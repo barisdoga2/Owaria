@@ -49,12 +49,36 @@ Map::Map(b2World* world) {
 	}
 	infile.close();
 
+
+	// Load Map Buildings
+	int buildingToLoad, mapBuildingCount, xTilemapPos, yTilemapPos;
+	string buildingName;
+	infile.open("../../Resources/Map/MapBuildings.cfg");
+	ioUtils::getNextLine(stream, infile);
+	stream >> buildingToLoad;
+	for (int i = 0; i < buildingToLoad; i++) {
+		ioUtils::getNextLine(stream, infile);
+		stream >> buildingName;
+		buildingDatas.push_back(new BuildingData(buildingName));
+	}
+	ioUtils::getNextLine(stream, infile);
+	stream >> mapBuildingCount;
+	for (int i = 0; i < mapBuildingCount; i++) {
+		ioUtils::getNextLine(stream, infile);
+		stream >> buildingName >> xTilemapPos >> yTilemapPos;
+		for (BuildingData* bD : buildingDatas) {
+			if (bD->buildingName.compare(buildingName) == 0) {
+				new Building(bD, sf::Vector2i(xTilemapPos, yTilemapPos), this);
+				break;
+			}
+		}
+
+	}
+	infile.close();
+
 	// Create Tile Renderer
 	tileRenderer = new sf::RectangleShape();
 	tileRenderer->setSize(tileset->getTilePixelSize());
-
-	// Create Building
-	building = new Building(sf::Vector2i(95, 26), this);
 
 	// Create Ground Fixture
 	b2BodyDef m_b2BodyDef;
@@ -79,7 +103,6 @@ Map::~Map() {
 	free(mapGridTileIDs);
 
 	delete tileRenderer;
-	delete building;
 
 	delete tileset;
 

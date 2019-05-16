@@ -11,20 +11,19 @@
 class Map;
 #include <Map.h>
 #include <Tileset.h>
+#include <BuildingData.h>
 
 using namespace std;
 
 class Building {
 
 public:
-	Building(sf::Vector2i buildingTilePos, Map* map);
+	Building(BuildingData* buildingData, sf::Vector2i buildingTilePos, Map* map);
 	~Building();
 
-	sf::Vector2i buildingTilePos;
-	sf::Vector2i buildingTileSize;
-
+	sf::Vector2i getTilePosOnMap();
 private:
-	Tileset* tileset;
-	Tile* mapGridTileIDs;
+	BuildingData * data;
+	sf::Vector2i buildingTilePos;
 
 };
