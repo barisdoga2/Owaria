@@ -8,6 +8,8 @@
 #include <Animation.h>
 #include <b2Utils.h>
 #include <ContactData.h>
+#include <Effect.h>
+
 
 class Player {
 public:
@@ -34,6 +36,7 @@ public:
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
+	Effect* dropDustEffect;
 
 private:
 	Map * map;

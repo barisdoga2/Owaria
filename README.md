@@ -1,7 +1,7 @@
 # Owaria
 
 
-	- Animations
+	+ Animations
 	+ Jumping
 	+ Movement
 	+ Slopy tile mechanics

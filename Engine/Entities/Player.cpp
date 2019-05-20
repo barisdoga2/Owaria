@@ -58,12 +58,17 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.motorSpeed = 100;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 	
+
+	// Create Drop Effect
+	dropDustEffect = new Effect("Dust");
 }
 
 Player::~Player() {
 	delete spritesheet;
 	delete walkAnimation;
 	delete idleAnimation;
+
+	delete dropDustEffect;
 }
 
 void Player::Render(sf::RenderWindow* window) {
@@ -73,6 +78,8 @@ void Player::Render(sf::RenderWindow* window) {
 
 	//b2Utils::RenderFixtures(window, body, map->m_offset, true);
 	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
+
+	dropDustEffect->Render(window, map->m_offset);
 }
 
 void Player::Update(int updateElapsed) {
@@ -81,6 +88,8 @@ void Player::Update(int updateElapsed) {
 	if (isOnLadder > 0) {
 		body->ApplyForceToCenter(b2Vec2(0, -10.0f * (body->GetMass() + body_foot->GetMass())), false);
 	}
+
+	dropDustEffect->Update(updateElapsed);
 }
 
 void Player::HandleInputs(int updateElapsed) {
