@@ -23,13 +23,13 @@ public:
 	string GetName();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, sf::Vector2f coords, int yMirror = false);
+	int currentFrame;
 
 private:
 	bool isContinuous;
 	string name;
 	int frameDelay;
 	int length;
-	int currentFrame;
 	int timePassedMs;
 	int isPlaying;
 	int width;

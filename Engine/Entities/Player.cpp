@@ -58,7 +58,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.motorSpeed = 100;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 	
-
 	// Create Drop Effect
 	dropDustEffect = new Effect("Dust");
 }
@@ -79,7 +78,10 @@ void Player::Render(sf::RenderWindow* window) {
 	//b2Utils::RenderFixtures(window, body, map->m_offset, true);
 	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
 
-	dropDustEffect->Render(window, map->m_offset);
+	sf::Vector2f effectPos;
+	effectPos.x = body_foot->GetPosition().x * BOX2D_SCALE - map->m_offset.x - 50 / 2;
+	effectPos.y = body_foot->GetPosition().y * BOX2D_SCALE - map->m_offset.y + body_foot->GetFixtureList()->GetShape()->m_radius * BOX2D_SCALE;
+	dropDustEffect->Render(window, effectPos);
 }
 
 void Player::Update(int updateElapsed) {
@@ -144,6 +146,9 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 				numFootContacts--;
 
 			if (numFootContacts > 0) {
+				if (!isOnAir) {
+					dropDustEffect->Start();
+				}
 				isOnAir = false;
 			}
 			else {

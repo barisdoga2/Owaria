@@ -9,8 +9,7 @@ Effect::Effect(string effectName) {
 
 	img = new sf::Image();
 	img->loadFromFile(pathToEffect + "/" + effectName + ".png");
-	cout << pathToEffect + "/" + effectName + ".png";
-
+	
 	int effectLength, yStart, width, height, frameDelay, isContinious;
 	std::ifstream infile(pathToEffect + "/" + effectName + ".cfg");
 	std::istringstream stream("");
@@ -26,7 +25,8 @@ Effect::~Effect() {
 }
 
 void Effect::Start() {
-
+	effectAnim->Show();
+	effectAnim->Play();
 }
 
 void Effect::Render(sf::RenderWindow* window, sf::Vector2f offset) {
