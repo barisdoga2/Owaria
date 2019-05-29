@@ -164,3 +164,11 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 	}
 
 }
+
+sf::Vector2f Player::getPixPosition() {
+	return sf::Vector2f(body->GetPosition().x * BOX2D_SCALE, body->GetPosition().y * BOX2D_SCALE);
+}
+
+b2Vec2 Player::getb2Position() {
+	return body->GetPosition();
+}

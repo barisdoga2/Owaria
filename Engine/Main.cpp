@@ -35,7 +35,7 @@ void update(int updateElapsed) {
 	testMap->Update(updateElapsed);
 	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
-	camera->Update();
+	camera->Update(updateElapsed);
 }
 
 void render(int renderElapsed) {

@@ -31,7 +31,6 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/Settings.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.h

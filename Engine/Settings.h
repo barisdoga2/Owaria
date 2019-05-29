@@ -13,7 +13,9 @@
 
 
 #define PLAYER_SPEED 7;
-#define PLAYER_JUMP_SPEED 10;
+#define PLAYER_JUMP_SPEED 10
 #define MAP_FRICTION 3
 #define PLAYER_DENSITY 10
 #define PLAYER_FRICTION 3
+
+#define CAMERA_LERP 0.025f

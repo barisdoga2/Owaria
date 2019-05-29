@@ -19,9 +19,6 @@ public:
 	void Render(sf::RenderWindow* window);
 	void HandleInputs(int updateElapsed);
 
-	sf::Vector2f position;
-	sf::Vector2f velocity;
-
 	b2BodyDef bodyDef;
 	b2Body* body;
 	b2Body* body_foot;
@@ -37,6 +34,9 @@ public:
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
 	Effect* dropDustEffect;
+
+	sf::Vector2f getPixPosition();
+	b2Vec2 getb2Position();
 
 private:
 	Map * map;
