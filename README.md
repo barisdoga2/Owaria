@@ -1,3 +1,3 @@
 # Owaria
 
-	![alt text](https://i.ibb.co/HrvHGZP/owaria.png)
+![alt text](http://url/to/img.png)
