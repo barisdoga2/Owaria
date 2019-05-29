@@ -40,8 +40,8 @@ void update(int updateElapsed) {
 
 void render(int renderElapsed) {
 	background->Render(sfWindow);
-	testMap->Render(sfWindow);
-	player->Render(sfWindow);
+	testMap->Render(sfWindow, *camera);
+	player->Render(sfWindow, *camera);
 }
 
 void cleanUp() {

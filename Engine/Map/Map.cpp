@@ -117,7 +117,7 @@ void Map::Update(int updateElapsed) {
 	
 }
 
-void Map::Render(sf::RenderWindow* window) {
+void Map::Render(sf::RenderWindow* window, Camera camera) {
 	
 	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = 0; y < mapTileSize.y; y++) {
@@ -128,7 +128,7 @@ void Map::Render(sf::RenderWindow* window) {
 			if (tile->getID() != 0) {
 				// Render Tile
 				tileRenderer->setTexture(tile->getTexture());
-				tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - m_offset.x, (float)y * tileRenderer->getSize().y - m_offset.y));
+				tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - camera.getPosition().x, (float)y * tileRenderer->getSize().y - camera.getPosition().y));
 				window->draw(*tileRenderer);
 			}
 			
@@ -145,7 +145,7 @@ void Map::Render(sf::RenderWindow* window) {
 		sf::Vector2f tileSize = go->getGameObjectData()->gameObjectset->getTileset()->getTilePixelSize();
 		r.setSize(tileSize);
 		r.setTexture(t->getTexture());
-		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - m_offset.x, go->getTilemapPos().y * tileset->getTilePixelSize().y - m_offset.y));
+		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - camera.getPosition().x, go->getTilemapPos().y * tileset->getTilePixelSize().y - camera.getPosition().y));
 		window->draw(r);
 	}
 

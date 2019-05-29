@@ -60,7 +60,7 @@ void Background::Render(sf::RenderWindow* window) {
 	window->draw(sprite);
 
 	// Render Clouds
-	sf::Vector2f renderPos((float)-((int)(camera->GetMap()->m_offset.x + clouds_position.x) % (int)clouds_sprite->getGlobalBounds().width), clouds_position.y);
+	sf::Vector2f renderPos((float)-((int)(camera->getPosition().x + clouds_position.x) % (int)clouds_sprite->getGlobalBounds().width), clouds_position.y);
 	clouds_sprite->setPosition(sf::Vector2f(renderPos.x - clouds_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*clouds_sprite);
 	clouds_sprite->setPosition(renderPos);
@@ -68,7 +68,7 @@ void Background::Render(sf::RenderWindow* window) {
 	clouds_sprite->setPosition(sf::Vector2f(renderPos.x + clouds_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*clouds_sprite);
 
-	renderPos = sf::Vector2f((float)-((int)(camera->GetMap()->m_offset.x + clouds2_position.x) % (int)clouds2_sprite->getGlobalBounds().width), clouds2_position.y);
+	renderPos = sf::Vector2f((float)-((int)(camera->getPosition().x + clouds2_position.x) % (int)clouds2_sprite->getGlobalBounds().width), clouds2_position.y);
 	clouds2_sprite->setPosition(sf::Vector2f(renderPos.x - clouds2_sprite->getGlobalBounds().width, clouds2_position.y));
 	window->draw(*clouds2_sprite);
 	clouds2_sprite->setPosition(renderPos);
@@ -77,7 +77,7 @@ void Background::Render(sf::RenderWindow* window) {
 	window->draw(*clouds2_sprite);
 
 	// Render Hills
-	renderPos = sf::Vector2f((float)-((int)(camera->GetMap()->m_offset.x + hills_position.x) % (int)hills_sprite->getGlobalBounds().width), hills_position.y);
+	renderPos = sf::Vector2f((float)-((int)(camera->getPosition().x + hills_position.x) % (int)hills_sprite->getGlobalBounds().width), hills_position.y);
 	hills_sprite->setPosition(sf::Vector2f(renderPos.x - hills_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*hills_sprite);
 	hills_sprite->setPosition(renderPos);

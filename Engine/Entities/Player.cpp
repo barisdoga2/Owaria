@@ -70,17 +70,17 @@ Player::~Player() {
 	delete dropDustEffect;
 }
 
-void Player::Render(sf::RenderWindow* window) {
+void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
-	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - map->m_offset.x, position.y * BOX2D_SCALE - map->m_offset.y), moveDirection == 1);
+	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
 
-	//b2Utils::RenderFixtures(window, body, map->m_offset, true);
-	b2Utils::RenderFixtures(window, body_foot, map->m_offset, false);
+	//b2Utils::RenderFixtures(window, body, camera->getPosition(), true);
+	b2Utils::RenderFixtures(window, body_foot, camera.getPosition(), false);
 
 	sf::Vector2f effectPos;
-	effectPos.x = body_foot->GetPosition().x * BOX2D_SCALE - map->m_offset.x - 50 / 2;
-	effectPos.y = body_foot->GetPosition().y * BOX2D_SCALE - map->m_offset.y + body_foot->GetFixtureList()->GetShape()->m_radius * BOX2D_SCALE;
+	effectPos.x = body_foot->GetPosition().x * BOX2D_SCALE - camera.getPosition().x - 50 / 2;
+	effectPos.y = body_foot->GetPosition().y * BOX2D_SCALE - camera.getPosition().y + body_foot->GetFixtureList()->GetShape()->m_radius * BOX2D_SCALE;
 	dropDustEffect->Render(window, effectPos);
 }
 

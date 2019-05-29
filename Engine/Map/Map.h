@@ -21,15 +21,16 @@ class GameObjectSet;
 #include <GameObjectSet.h>
 #include <GameObject.h>
 #include <BuildingData.h>
+class Camera;
+#include <Camera.h>
 
 class Map {
 public:
 	Map(b2World* world);
 	~Map();
 	void Update(int updateElapsed);
-	void Render(sf::RenderWindow* window);
+	void Render(sf::RenderWindow* window, Camera camera);
 	
-	sf::Vector2f m_offset;
 	Tile* mapGridTileIDs;
 
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);

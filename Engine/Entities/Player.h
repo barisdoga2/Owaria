@@ -10,13 +10,12 @@
 #include <ContactData.h>
 #include <Effect.h>
 
-
 class Player {
 public:
 	Player(b2World* world, Map* map, sf::Vector2f worldPosition);
 	~Player();
 	void Update(int updateElapsed);
-	void Render(sf::RenderWindow* window);
+	void Render(sf::RenderWindow* window, Camera camera);
 	void HandleInputs(int updateElapsed);
 
 	b2BodyDef bodyDef;

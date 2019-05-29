@@ -1,5 +1,6 @@
 #pragma once
 
+class Player;
 #include <Player.h>
 #include <Map.h>
 
@@ -17,11 +18,14 @@ public:
 	Map* GetMap();
 	sf::Vector2f isOffsetsLocked();
 
+	sf::Vector2f getPosition();
+
 private:
 	Player * m_player;
 	Map* m_map;
 	sf::Vector2f position;
+	sf::Vector2f target;
 
-	void calculateMapOffset();
+	void calculateTarget();
 
 };
