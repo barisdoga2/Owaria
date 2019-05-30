@@ -12,15 +12,18 @@ using namespace std;
 class Tileset {
 
 public:
-	Tileset(string tilesetConfig, string tilesetPng);
+	Tileset(string tilesetName, string tilesetConfig, string tilesetPng);
 	~Tileset();
 
 	Tile* getTile(int id);
 	sf::Vector2f getTilesetTileSize();
 	sf::Vector2f getTilePixelSize();
 
+	string getName();
+
 private:
 	sf::Image* tilesetImage;
+	string name;
 
 	sf::Vector2f tilesetTileSize;
 	sf::Vector2f tilePixelSize;

@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include <Tile.h>
-class GameObjectSet;
-#include <GameObjectSet.h>
+class ObjectSet;
+#include <ObjectSet.h>
 
 class GameObjectData {
 
@@ -12,7 +12,7 @@ public:
 
 	Tile* gameObjectTile;
 	std::string gameObjectName;
-	GameObjectSet* gameObjectset;
+	ObjectSet* ObjectSet;
 	bool hasPhysicsBody;
 	bool isStatic;
 	int contactDataType;

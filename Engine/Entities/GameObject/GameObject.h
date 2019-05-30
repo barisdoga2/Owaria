@@ -4,8 +4,8 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <Tile.h>
-class GameObjectSet;
-#include <GameObjectSet.h>
+class ObjectSet;
+#include <ObjectSet.h>
 #include <GameObjectData.h>
 
 class GameObject {

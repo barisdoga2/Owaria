@@ -1,14 +1,13 @@
-#include <GameObjectSet.h>
+#include <ObjectSet.h>
 
 
-GameObjectSet::GameObjectSet(string objectsetName) {
+ObjectSet::ObjectSet(string objectsetName, Tileset* tileset, const char* cfg) {
 	this->objectsetName = objectsetName;
-	string objectSetPath = "../../Resources/GameObjects/" + objectsetName;
-	tileset = new Tileset(objectSetPath + "/Tileset.cfg", objectSetPath  + "/Tileset.png");
-	
+	this->tileset = tileset;
+
 	string gameObjectSuffix;
 	int numberOfObjects, id, hasPhysicsBody, contactDataType, contactDataObject, isStatic;
-	std::ifstream infile(objectSetPath + "/" + objectsetName + ".cfg");
+	std::ifstream infile(cfg);
 	std::istringstream stream("");
 	ioUtils::getNextLine(stream, infile);
 	stream >> numberOfObjects >> gameObjectPrefix;
@@ -19,7 +18,7 @@ GameObjectSet::GameObjectSet(string objectsetName) {
 		GameObjectData* gameObjData = new GameObjectData();
 		gameObjData->gameObjectTile = tileset->getTile(id);
 		gameObjData->gameObjectName = gameObjectPrefix + gameObjectSuffix;
-		gameObjData->gameObjectset = this;
+		gameObjData->ObjectSet = this;
 		gameObjData->hasPhysicsBody = hasPhysicsBody;
 		gameObjData->isStatic = isStatic;
 		gameObjData->contactDataType = contactDataType;
@@ -31,14 +30,12 @@ GameObjectSet::GameObjectSet(string objectsetName) {
 	
 }
 
-GameObjectSet::~GameObjectSet() {
-	delete tileset;
-
+ObjectSet::~ObjectSet() {
 	for (GameObjectData* g : gameobjectdatas)
 		delete g;
 }
 
-GameObjectData* GameObjectSet::getGameObjectData(string name) {
+GameObjectData* ObjectSet::getGameObjectData(string name) {
 	GameObjectData* retVal = nullptr;
 	for (GameObjectData* god : gameobjectdatas) 
 		if (god->gameObjectName.compare(name) == 0) {
@@ -49,10 +46,14 @@ GameObjectData* GameObjectSet::getGameObjectData(string name) {
 	return retVal;
 }
 
-Tileset* GameObjectSet::getTileset() {
+Tileset* ObjectSet::getTileset() {
 	return this->tileset;
 }
 
-string GameObjectSet::getObjectsetName() {
+string ObjectSet::getObjectsetName() {
+	return this->objectsetName;
+}
+
+string ObjectSet::getName() {
 	return this->objectsetName;
 }

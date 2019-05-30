@@ -7,19 +7,17 @@
 
 using namespace std;
 
-class BuildingData {
+class BuildingAsset {
 
 public:
 
-	BuildingData(string buildingName) {
+	BuildingAsset(string buildingName, Tileset* tileset, string cfg) {
 		this->buildingName = buildingName;
-
-		// Load Tileset
-		tileset = new Tileset("../../Resources/Buildings/" + buildingName + "/Tileset.cfg", "../../Resources/Buildings/" + buildingName + "/Tileset.png");
+		this->tileset = tileset;
 
 		// Load Tilemap
 		int tmpTileID;
-		std::ifstream infile("../../Resources/Buildings/" + buildingName + "/Tilemap.cfg");
+		std::ifstream infile(cfg);
 		std::istringstream stream("");
 		ioUtils::getNextLine(stream, infile);
 		stream >> tilemapSize.x >> tilemapSize.y;
@@ -32,17 +30,19 @@ public:
 			}
 		}
 		infile.close();
-		
 	}
 
-	~BuildingData() {
+	~BuildingAsset() {
 		free(mapGridTileIDs);
-		delete tileset;
 	}
 
 	sf::Vector2i tilemapSize;
 	Tile* mapGridTileIDs;
 	Tileset* tileset;
 	string buildingName;
+
+	string getName() {
+		return buildingName;
+	}
 
 };

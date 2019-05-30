@@ -6,7 +6,7 @@
 #include <Camera.h>
 #include <ContactListener.h>
 #include <Background.h>
-#include <tinyxml2.h>
+#include <AssetStore.h>
 
 using namespace tinyxml2;
 
@@ -18,30 +18,15 @@ Camera* camera;
 ContactListener* contactListener;
 Background* background;
 
+
 void init() {
-
-	XMLDocument tDoc;
-	tDoc.LoadFile("../../Resources/Test.xml");
-
-	XMLElement* tMap = tDoc.FirstChildElement("Map");
-
-	string mapName = tMap->Attribute("name");
-	XMLElement* objects = tMap->FirstChildElement("Objects");
-	XMLElement* buildings = tMap->FirstChildElement("Buildings");
-	XMLElement* tileMap = tMap->FirstChildElement("Tilemap");
-	
-	XMLElement* child = objects->FirstChildElement("Object");
-	while (child != nullptr) {
-		
-		child = child->NextSiblingElement();
-	}
 
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
 
 	camera = new Camera();
 
-	testMap = new Map(world);
+	testMap = new Map(world, "../../Resources/Test.xml");
 
 	player = new Player(world, testMap, sf::Vector2f(1400, 500));
 	camera = new Camera(testMap, player);
@@ -69,6 +54,8 @@ void cleanUp() {
 	delete testMap;
 	delete player;
 	delete background;
+
+	AssetStore::CleanUp();
 }
 
 int main(void)

@@ -17,16 +17,21 @@ class MarchingSquares;
 class Building;
 #include <Building.h>
 #include <Tileset.h>
-class GameObjectSet;
-#include <GameObjectSet.h>
+class ObjectSet;
+#include <ObjectSet.h>
 #include <GameObject.h>
-#include <BuildingData.h>
+#include <BuildingAsset.h>
 class Camera;
 #include <Camera.h>
+#include <tinyxml2.h>
+#include <AssetStore.h>
+
+using namespace tinyxml2;
+
 
 class Map {
 public:
-	Map(b2World* world);
+	Map(b2World* world, const char* xml);
 	~Map();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, Camera camera);
@@ -39,6 +44,7 @@ public:
 
 	sf::Vector2i getMapTileSize();
 
+	void AddGameObject(GameObject* gameObject);
 
 private:
 
@@ -61,8 +67,6 @@ private:
 
 	sf::Vector2i mapTileSize;
 
-	vector<GameObjectSet*> objectSets;
+	vector<Building*> gameBuildings;
 	vector<GameObject*> gameObjects;
-
-	vector<BuildingData*> buildingDatas;
 };

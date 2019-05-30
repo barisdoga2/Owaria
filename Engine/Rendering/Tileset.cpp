@@ -1,8 +1,9 @@
 #include <Tileset.h>
+#include <iostream>
 
-
-Tileset::Tileset(string tilesetConfig, string tilesetPng) {
+Tileset::Tileset(string tilesetName, string tilesetPng, string tilesetConfig) {
 	// Load Tileset
+	this->name = tilesetName;
 	tilesetImage = new sf::Image();
 	tilesetImage->loadFromFile(tilesetPng);
 
@@ -70,7 +71,6 @@ Tileset::Tileset(string tilesetConfig, string tilesetPng) {
 
 Tileset::~Tileset() {
 	delete tilesetImage;
-
 	for (Tile* t : tiles)
 		delete t;
 }
@@ -88,4 +88,8 @@ sf::Vector2f Tileset::getTilesetTileSize() {
 
 sf::Vector2f Tileset::getTilePixelSize() {
 	return this->tilePixelSize;
+}
+
+string Tileset::getName() {
+	return this->name;
 }

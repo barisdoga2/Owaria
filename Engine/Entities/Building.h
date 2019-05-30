@@ -11,19 +11,20 @@
 class Map;
 #include <Map.h>
 #include <Tileset.h>
-#include <BuildingData.h>
+#include <BuildingAsset.h>
 
 using namespace std;
 
 class Building {
 
 public:
-	Building(BuildingData* buildingData, sf::Vector2i buildingTilePos, Map* map);
+	Building(BuildingAsset* BuildingAsset, sf::Vector2i buildingTilePos);
 	~Building();
 
+	void mergeWithMap(Map* map);
 	sf::Vector2i getTilePosOnMap();
 private:
-	BuildingData * data;
+	BuildingAsset * data;
 	sf::Vector2i buildingTilePos;
 
 };
