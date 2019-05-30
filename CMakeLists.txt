@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.7)
 project(Owaria)
 
 include_directories(
+	${PROJECT_SOURCE_DIR}/3thParty
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.h
+
+
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
@@ -37,6 +42,10 @@ include_directories(
 )
 
 set(sourcefiles
+	${PROJECT_SOURCE_DIR}/3thParty
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.cpp
+
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities

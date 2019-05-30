@@ -21,7 +21,7 @@ GameObject::GameObject(GameObjectData* data, b2World* world, sf::Vector2i tilema
 			if (data->contactDataObject == LADDER_SENSOR) {
 				ContactData* cont = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)LADDER_SENSOR);
 				objectBody->SetUserData(cont);
-				b2Utils::AddRectangleFixture(objectBody, data->gameObjectset->getTileset()->getTilePixelSize().x, data->gameObjectset->getTileset()->getTilePixelSize().y, 0, 0, 0, 10.0f, 0.5f, true)->SetUserData(cont);
+				b2Utils::AddRectangleFixture(objectBody, (int)data->gameObjectset->getTileset()->getTilePixelSize().x, (int)data->gameObjectset->getTileset()->getTilePixelSize().y, 0, 0, 0, 10.0f, 0.5f, true)->SetUserData(cont);
 			}
 		}
 
