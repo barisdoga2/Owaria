@@ -16,7 +16,8 @@ Map::Map(b2World* world, const char* xml) {
 		// Load Needed Tilesets
 		childIter = tMap->FirstChildElement("Tilesets")->FirstChildElement("Tileset");
 		while (childIter != nullptr) {
-			AssetStore::LoadTileset(childIter->Attribute("name"), childIter->FirstChildElement("png")->GetText(), childIter->FirstChildElement("cfg")->GetText());
+			//AssetStore::LoadTileset(childIter->Attribute("name"), childIter->FirstChildElement("png")->GetText(), childIter->FirstChildElement("cfg")->GetText());
+			AssetStore::LoadTileset(childIter);
 			childIter = childIter->NextSiblingElement();
 		}
 
@@ -34,9 +35,7 @@ Map::Map(b2World* world, const char* xml) {
 			childIter = childIter->NextSiblingElement();
 		}
 	}
-
-
-
+	
 	// Create Map
 	XMLElement* tileMap = tMap->FirstChildElement("Tilemap");
 

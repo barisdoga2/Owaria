@@ -1,22 +1,101 @@
 <Map name="testMap">
 
   <Tilesets>
+
     <Tileset name="mapTileSet">
       <png>../../Resources/Map/Tileset.png</png>
       <cfg>../../Resources/Map/Tileset.cfg</cfg>
+      <width>16</width>
+      <height>15</height>
+      <tilePixWidth>16</tilePixWidth>
+      <tilePixHeight>16</tilePixHeight>
+      <padding>2</padding>
+      <solidIDs>1	18	89	105	120	121	231	232	233	234	235	236	237	238</solidIDs>
+      <specialTiles>
+        <specialTile id="231">
+          <vertex x="0" y="0"/>
+          <vertex x="4" y="4"/>
+          <vertex x="11" y="4"/>
+          <vertex x="15" y="0"/>
+        </specialTile>
+        <specialTile id="232">
+          <vertex x="0" y="0"/>
+          <vertex x="4" y="4"/>
+          <vertex x="4" y="11"/>
+          <vertex x="0" y="15"/>
+        </specialTile>
+        <specialTile id="233">
+          <vertex x="0" y="15"/>
+          <vertex x="4" y="11"/>
+          <vertex x="11" y="11"/>
+          <vertex x="15" y="15"/>
+        </specialTile>
+        <specialTile id="234">
+          <vertex x="15" y="0"/>
+          <vertex x="11" y="4"/>
+          <vertex x="11" y="11"/>
+          <vertex x="15" y="15"/>
+        </specialTile>
+        <specialTile id="235">
+          <vertex x="0" y="15"/>
+          <vertex x="2" y="7"/>
+          <vertex x="7" y="2"/>
+          <vertex x="15" y="0"/>
+        </specialTile>
+        <specialTile id="236">
+          <vertex x="0" y="0"/>
+          <vertex x="2" y="8"/>
+          <vertex x="7" y="13"/>
+          <vertex x="15" y="15"/>
+        </specialTile>
+        <specialTile id="237">
+          <vertex x="0" y="15"/>
+          <vertex x="8" y="13"/>
+          <vertex x="13" y="8"/>
+          <vertex x="15" y="0"/>
+        </specialTile>
+        <specialTile id="238">
+          <vertex x="0" y="0"/>
+          <vertex x="8" y="2"/>
+          <vertex x="13" y="7"/>
+          <vertex x="15" y="15"/>
+        </specialTile>
+      </specialTiles>
     </Tileset>
+    
     <Tileset name="buildingTileSet">
       <png>../../Resources/Buildings/Building/Tileset.png</png>
       <cfg>../../Resources/Buildings/Building/Tileset.cfg</cfg>
+      <width>17</width>
+      <height>17</height>
+      <tilePixWidth>16</tilePixWidth>
+      <tilePixHeight>16</tilePixHeight>
+      <padding>2</padding>
+      <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
     </Tileset>
+    
   <Tileset name="treeTileSet">
       <png>../../Resources/GameObjects/Tree/Tileset.png</png>
       <cfg>../../Resources/GameObjects/Tree/Tileset.cfg</cfg>
+      <width>3</width>
+      <height>1</height>
+      <tilePixWidth>80</tilePixWidth>
+      <tilePixHeight>80</tilePixHeight>
+      <padding>2</padding>
+      <solidIDs></solidIDs>
     </Tileset>
+    
   <Tileset name="ladderTileSet">
       <png>../../Resources/GameObjects/Ladder/Tileset.png</png>
       <cfg>../../Resources/GameObjects/Ladder/Tileset.cfg</cfg>
+      <width>1</width>
+      <height>1</height>
+      <tilePixWidth>48</tilePixWidth>
+      <tilePixHeight>48</tilePixHeight>
+      <padding>2</padding>
+      <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
     </Tileset>
+    
   </Tilesets>
 
   <ObjectSets>
