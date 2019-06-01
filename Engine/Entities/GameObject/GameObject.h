@@ -4,22 +4,22 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <Tile.h>
-class GameObjectSet;
-#include <GameObjectSet.h>
-#include <GameObjectData.h>
+class ObjectSet;
+#include <ObjectSet.h>
+#include <ObjectAsset.h>
 
 class GameObject {
 
 public:
-	GameObject(GameObjectData* gameObjectData, b2World* world, sf::Vector2i tilesetPos);
+	GameObject(ObjectAsset* gameObjectData, b2World* world, sf::Vector2i tilesetPos);
 	~GameObject();
 
-	GameObjectData* getGameObjectData();
+	ObjectAsset* getGameObjectData();
 	sf::Vector2i getTilemapPos();
 
 private:
 	b2Body* objectBody;
-	GameObjectData* data;
+	ObjectAsset* data;
 	sf::Vector2i tilemapPos;
 
 };

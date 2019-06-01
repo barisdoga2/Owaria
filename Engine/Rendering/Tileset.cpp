@@ -1,50 +1,52 @@
 #include <Tileset.h>
+#include <iostream>
 
+Tileset::Tileset(XMLElement* tilesetElement) {
+	this->name = tilesetElement->Attribute("name");
+	this->tilesetSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("width")->GetText()), atoi(tilesetElement->FirstChildElement("height")->GetText()));
+	this->tilePixelSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("tilePixWidth")->GetText()), atoi(tilesetElement->FirstChildElement("tilePixHeight")->GetText()));
+	this->tilingPadding = atoi(tilesetElement->FirstChildElement("padding")->GetText());
+	this->tilesetImage = new sf::Image();
+	this->tilesetImage->loadFromFile(tilesetElement->FirstChildElement("png")->GetText());
 
-Tileset::Tileset(string tilesetConfig, string tilesetPng) {
-	// Load Tileset
-	tilesetImage = new sf::Image();
-	tilesetImage->loadFromFile(tilesetPng);
-
-	// Load Tileset Config
-	std::ifstream infile(tilesetConfig);
-	std::istringstream stream("");
-	ioUtils::getNextLine(stream, infile);
-	stream >> tilesetTileSize.x >> tilesetTileSize.y >> tilePixelSize.x >> tilePixelSize.y >> tilingPadding;
-	
-	// Load Solid Tile IDs
-	int solidTileIDsLength, tmp;
+	// Load Solid IDs
 	vector<int> solidTileIDs;
-	ioUtils::getNextLine(stream, infile);
-	stream >> solidTileIDsLength;
-	ioUtils::getNextLine(stream, infile);
-	for (int i = 0; i < solidTileIDsLength; i++) {
-		stream >> tmp;
-		solidTileIDs.push_back(tmp);
+	XMLNode* solidIDsNode = tilesetElement->FirstChildElement("solidIDs");
+	if (solidIDsNode != NULL) {
+		string solidIDsStr = tilesetElement->FirstChildElement("solidIDs")->GetText();
+		int tmpID;
+		std::istringstream iss(solidIDsStr);
+		while (true) {
+			if (!(iss >> tmpID))
+				break;
+			else
+				solidTileIDs.push_back(tmpID);
+		}
 	}
 
-	// Load Speical Collision Tile Datas
+	// Load Special Tiles
 	vector<TileData*> tileDatas;
-	int specialCollisionTileCount, id, isXTile, verticeCount, x, y;
-	ioUtils::getNextLine(stream, infile);
-	stream >> specialCollisionTileCount;
-	for (int i = 0; i < specialCollisionTileCount; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> id >> isXTile >> verticeCount;
-		vector<sf::Vector2i>* collision_vertices = new vector<sf::Vector2i>;
-		for (int j = 0; j < verticeCount; j++) {
-			ioUtils::getNextLine(stream, infile);
-			stream >> x >> y;
-			collision_vertices->push_back(sf::Vector2i(x, y));
+	XMLNode* tileDatasNode = tilesetElement->FirstChildElement("specialTiles");
+	if (tileDatasNode != NULL) {
+		XMLElement* specialTile = tilesetElement->FirstChildElement("specialTiles")->FirstChildElement("specialTile");
+		while (specialTile != nullptr) {
+			TileData* tileData = new TileData(specialTile->IntAttribute("id"), false);
+
+			XMLElement* vertex = specialTile->FirstChildElement("vertex");
+			while (vertex != nullptr) {
+				tileData->AppendVertex(vertex);
+				vertex = vertex->NextSiblingElement();
+			}
+
+			tileDatas.push_back(tileData);
+			specialTile = specialTile->NextSiblingElement();
 		}
-		tileDatas.push_back(new TileData(id, isXTile == 1, collision_vertices));
 	}
-	infile.close();
 
 	// Create Tiles
 	int idCtr = 0;
-	for (int y = 0; y < tilesetTileSize.y; y++) {
-		for (int x = 0; x < tilesetTileSize.x; x++) {
+	for (int y = 0; y < tilesetSize.y; y++) {
+		for (int x = 0; x < tilesetSize.x; x++) {
 			// Check if is id solid
 			bool isSolid = false;
 			for (int i : solidTileIDs)
@@ -52,7 +54,7 @@ Tileset::Tileset(string tilesetConfig, string tilesetPng) {
 					isSolid = true;
 					break;
 				}
-			
+
 			// Check if is id have special collision data
 			TileData* tileData = nullptr;
 			for (TileData* tile : tileDatas)
@@ -83,9 +85,13 @@ Tile* Tileset::getTile(int id) {
 }
 
 sf::Vector2f Tileset::getTilesetTileSize() {
-	return this->tilesetTileSize;
+	return this->tilesetSize;
 }
 
 sf::Vector2f Tileset::getTilePixelSize() {
 	return this->tilePixelSize;
+}
+
+string Tileset::getName() {
+	return this->name;
 }

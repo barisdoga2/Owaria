@@ -13,56 +13,44 @@ class MarchingSquares;
 #include <MarchingSquares.h>
 #include <MarchingSolution.h>
 #include <ContactData.h>
-#include <ioUtils.h>
 class Building;
 #include <Building.h>
 #include <Tileset.h>
-class GameObjectSet;
-#include <GameObjectSet.h>
+class ObjectSet;
+#include <ObjectSet.h>
 #include <GameObject.h>
-#include <BuildingData.h>
+#include <BuildingAsset.h>
 class Camera;
 #include <Camera.h>
+#include <tinyxml2.h>
+#include <AssetStore.h>
+#include <XMLUtils.h>
+
+using namespace tinyxml2;
+
 
 class Map {
 public:
-	Map(b2World* world);
+	Map(b2World* world, const char* xml);
 	~Map();
+
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, Camera camera);
-	
-	Tile* mapGridTileIDs;
-
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
+	Tile* gridTiles;
 	Tileset* getTileset();
-
-	sf::Vector2i getMapTileSize();
-
+	sf::Vector2i getMapSize();
 
 private:
-
 	MarchingSquares* marchingSquares;
-	sf::RectangleShape* tileRenderer;
-
-	b2BodyDef bodyDef;
-	b2Body* body;
-	b2PolygonShape s;
-	b2FixtureDef fixtureDef;
-
-	// Dynamic Physics Object for Testing
-	b2BodyDef bodyDef2;
-	b2Body* body2;
-	b2PolygonShape p;
-	b2FixtureDef fixtureDef2;
-	b2Fixture* fix;
-	
 	Tileset* tileset;
-
-	sf::Vector2i mapTileSize;
-
-	vector<GameObjectSet*> objectSets;
+	vector<Building*> gameBuildings;
 	vector<GameObject*> gameObjects;
+	sf::Vector2i mapSize;
 
-	vector<BuildingData*> buildingDatas;
+	b2Body* body;
+	
+	sf::RectangleShape* tileRenderer;
+	
 };

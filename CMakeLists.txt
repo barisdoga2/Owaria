@@ -3,15 +3,23 @@ cmake_minimum_required(VERSION 3.7)
 project(Owaria)
 
 include_directories(
+	${PROJECT_SOURCE_DIR}/3thParty
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.h
+
+
 	${PROJECT_SOURCE_DIR}/Engine
+
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectData.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingData.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingAsset.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
@@ -30,6 +38,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
@@ -37,13 +46,22 @@ include_directories(
 )
 
 set(sourcefiles
+	${PROJECT_SOURCE_DIR}/3thParty
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
+	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.cpp
+
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectSet.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map

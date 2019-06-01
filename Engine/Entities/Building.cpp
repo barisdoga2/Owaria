@@ -2,23 +2,19 @@
 
 
 
-Building::Building(BuildingData* buildingData, sf::Vector2i buildingTilePos, Map* map) {
-	this->data = buildingData;
+Building::Building(BuildingAsset* BuildingAsset, sf::Vector2i buildingTilePos) {
+	this->data = BuildingAsset;
 	this->buildingTilePos = buildingTilePos;
-
-
-	for (int y = buildingTilePos.y; y < buildingTilePos.y + buildingData->tilemapSize.y; y++)
-		for (int x = buildingTilePos.x; x < buildingTilePos.x + buildingData->tilemapSize.x; x++) {
-			*(map->mapGridTileIDs + y * map->getMapTileSize().x + x) = *(buildingData->mapGridTileIDs + (y - buildingTilePos.y) * buildingData->tilemapSize.x + x - buildingTilePos.x);
-		}
 }
 
 Building::~Building() {
-	/*
-	free(mapGridTileIDs);
+	
+}
 
-	delete tileset;
-	*/
+void Building::mergeWithMap(Map* map) {
+	for (int y = buildingTilePos.y; y < buildingTilePos.y + data->tilemapSize.y; y++)
+		for (int x = buildingTilePos.x; x < buildingTilePos.x + data->tilemapSize.x; x++)
+			*(map->gridTiles + y * map->getMapSize().x + x) = *(data->mapGridTileIDs + (y - buildingTilePos.y) * data->tilemapSize.x + x - buildingTilePos.x);
 }
 
 sf::Vector2i Building::getTilePosOnMap() {

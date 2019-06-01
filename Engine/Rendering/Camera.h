@@ -10,14 +10,14 @@ class Camera {
 public:
 	Camera();
 	Camera(Map* p_map, Player* p_player);
-
 	void Update(int updateElapsed);
+
 	void SetMap(Map* p_map);
 	void SetTarget(Player* p_player);
 	Player* GetTarget();
 	Map* GetMap();
-	sf::Vector2f isOffsetsLocked();
 
+	sf::Vector2f isOffsetsLocked();
 	sf::Vector2f getPosition();
 
 private:

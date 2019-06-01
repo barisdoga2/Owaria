@@ -1,80 +1,45 @@
 #include <Map.h>
 
+Map::Map(b2World* world, const char* xml) {
 
-Map::Map(b2World* world) {
+	XMLDocument tDoc;
+	tDoc.LoadFile(xml);
+	XMLElement* tMap = tDoc.FirstChildElement("Map");
 
-	// Load Map Game Objects
-	sf::Vector2i tilemapPos;
-	int objectSetCount, mapGameObjectCount;
-	string objectsetName, gameobjectName;
-	std::ifstream infile("../../Resources/Map/MapGameObjects.cfg");
-	std::istringstream stream("");
-	ioUtils::getNextLine(stream, infile);
-	stream >> objectSetCount;
-	for (int i = 0; i < objectSetCount; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> objectsetName;
-		objectSets.push_back(new GameObjectSet(objectsetName));
-	}
-	ioUtils::getNextLine(stream, infile);
-	stream >> mapGameObjectCount;
-	for (int i = 0; i < mapGameObjectCount; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> objectsetName >> gameobjectName >> tilemapPos.x >> tilemapPos.y;
-		for (GameObjectSet* g : objectSets) {
-			if (g->getObjectsetName().compare(objectsetName) == 0) {
-				gameObjects.push_back(new GameObject(g->getGameObjectData(gameobjectName), world, tilemapPos));
-				break;
-			}
-		}
-
-	}
-	infile.close();
-
-	// Load Tileset
-	tileset = new Tileset("../../Resources/Map/Tileset.cfg", "../../Resources/Map/Tileset.png");
+	// Load All Assets Related with Map
+	XMLUtils::LoadMapAssets(tMap->FirstChildElement("Assets"));
 	
-	// Load Tilemap
-	int tmpTileID;
-	infile.open("../../Resources/Map/Tilemap.cfg");
-	ioUtils::getNextLine(stream, infile);
-	stream >> mapTileSize.x >> mapTileSize.y;
-	mapGridTileIDs = (Tile*)malloc(mapTileSize.x * mapTileSize.y * sizeof(Tile));
-	for (int y = 0; y < mapTileSize.y; y++) {
-		ioUtils::getNextLine(stream, infile);
-		for (int x = 0; x < mapTileSize.x; x++) {
-			stream >> tmpTileID;
-			*(mapGridTileIDs + x + mapTileSize.x * y) = *tileset->getTile(tmpTileID);
-		}
-	}
-	infile.close();
+	// Get Tilemap Element
+	XMLElement* tileMap = tMap->FirstChildElement("Tilemap");
 
+	// Set Tileset
+	this->tileset = AssetStore::GetTileset(tileMap->Attribute("tilesetName"));
+
+	// Load Tilemap
+	this->mapSize = sf::Vector2i(tileMap->IntAttribute("width"), tileMap->IntAttribute("height"));
+	istringstream str(tileMap->GetText());
+	int tmpTileID;
+	gridTiles = (Tile*)malloc(mapSize.x * mapSize.y * sizeof(Tile));
+	for (int x = 0; x < mapSize.x * mapSize.y; x++) {
+		str >> tmpTileID;
+		*(gridTiles + x) = *tileset->getTile(tmpTileID);
+	}
 
 	// Load Map Buildings
-	int buildingToLoad, mapBuildingCount, xTilemapPos, yTilemapPos;
-	string buildingName;
-	infile.open("../../Resources/Map/MapBuildings.cfg");
-	ioUtils::getNextLine(stream, infile);
-	stream >> buildingToLoad;
-	for (int i = 0; i < buildingToLoad; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> buildingName;
-		buildingDatas.push_back(new BuildingData(buildingName));
+	XMLElement* childIter;
+	childIter = tMap->FirstChildElement("Buildings")->FirstChildElement("Building");
+	while (childIter != nullptr) {
+		gameBuildings.push_back(new Building(AssetStore::GetBuildingAsset(childIter->Attribute("buildingAssetName")), sf::Vector2i(atoi(childIter->FirstChildElement("tileMapXPos")->GetText()), atoi(childIter->FirstChildElement("tileMapYPos")->GetText()))));
+		gameBuildings.at(gameBuildings.size() - 1)->mergeWithMap(this);
+		childIter = childIter->NextSiblingElement();
 	}
-	ioUtils::getNextLine(stream, infile);
-	stream >> mapBuildingCount;
-	for (int i = 0; i < mapBuildingCount; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> buildingName >> xTilemapPos >> yTilemapPos;
-		for (BuildingData* bD : buildingDatas) {
-			if (bD->buildingName.compare(buildingName) == 0) {
-				new Building(bD, sf::Vector2i(xTilemapPos, yTilemapPos), this);
-				break;
-			}
-		}
 
+	// Load Map Objects
+	childIter = tMap->FirstChildElement("Objects")->FirstChildElement("Object");
+	while (childIter != nullptr) {
+		gameObjects.push_back(new GameObject(AssetStore::GetObjectSet(childIter->Attribute("objectSetName"))->getObjectAsset(childIter->Attribute("objectDataName")), world, sf::Vector2i(atoi(childIter->FirstChildElement("tileMapXPos")->GetText()), atoi(childIter->FirstChildElement("tileMapYPos")->GetText()))));
+		childIter = childIter->NextSiblingElement();
 	}
-	infile.close();
 
 	// Create Tile Renderer
 	tileRenderer = new sf::RectangleShape();
@@ -89,28 +54,22 @@ Map::Map(b2World* world) {
 
 	// Create Marching Squares Physics
 	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, this);
-
 	body->SetUserData((void*)bodyContact);
-
 	marchingSquares = new MarchingSquares(this);
 	for (MarchingSolution s : marchingSquares->solutions)
 		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
-
 }
 
 Map::~Map() {
-
-	free(mapGridTileIDs);
+	free(gridTiles);
 
 	delete tileRenderer;
 
-	delete tileset;
-
 	for (GameObject* g : gameObjects)
 		delete g;
-
-	for(GameObjectSet* g : objectSets)
-		delete g;
+	
+	for (Building* b : gameBuildings)
+		delete b;
 }
 
 void Map::Update(int updateElapsed) {
@@ -120,11 +79,11 @@ void Map::Update(int updateElapsed) {
 void Map::Render(sf::RenderWindow* window, Camera camera) {
 	
 	tileRenderer->setSize(tileset->getTilePixelSize());
-	for (int y = 0; y < mapTileSize.y; y++) {
-		for (int x = 0; x < mapTileSize.x; x++) {
+	for (int y = 0; y < mapSize.y; y++) {
+		for (int x = 0; x < mapSize.x; x++) {
 
 			// Find Tile
-			Tile* tile = (mapGridTileIDs + y * mapTileSize.x + x); // Tile 0 is transparent no need for rendering.
+			Tile* tile = (gridTiles + y * mapSize.x + x); // Tile 0 is transparent no need for rendering.
 			if (tile->getID() != 0) {
 				// Render Tile
 				tileRenderer->setTexture(tile->getTexture());
@@ -141,8 +100,8 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 	
 	for (GameObject* go : gameObjects) {
 		sf::RectangleShape r;
-		Tile* t = go->getGameObjectData()->gameObjectTile;
-		sf::Vector2f tileSize = go->getGameObjectData()->gameObjectset->getTileset()->getTilePixelSize();
+		Tile* t = go->getGameObjectData()->getTile();
+		sf::Vector2f tileSize = go->getGameObjectData()->getObjectSet()->getTileset()->getTilePixelSize();
 		r.setSize(tileSize);
 		r.setTexture(t->getTexture());
 		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - camera.getPosition().x, go->getTilemapPos().y * tileset->getTilePixelSize().y - camera.getPosition().y));
@@ -159,6 +118,6 @@ Tileset* Map::getTileset() {
 	return this->tileset;
 }
 
-sf::Vector2i Map::getMapTileSize() {
-	return this->mapTileSize;
+sf::Vector2i Map::getMapSize() {
+	return this->mapSize;
 }

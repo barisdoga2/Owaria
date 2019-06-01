@@ -8,8 +8,10 @@ class Tile {
 public:
 	Tile(int id, sf::Image tileset, sf::Vector2f tilePosInTileset, sf::Vector2f tilePixelSize, int tilingPadding, bool solid, TileData* tileData);
 	~Tile();
+
 	int getID();
 	bool isSolid();
+
 	TileData* getTileData();
 	sf::Texture* getTexture();
 

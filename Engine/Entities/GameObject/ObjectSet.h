@@ -6,33 +6,33 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include <ioUtils.h>
 #include <Tile.h>
 #include <Tileset.h>
-#include <GameObjectData.h>
+class ObjectAsset;
+#include <ObjectAsset.h>
+#include <AssetStore.h>
 
 using namespace std;
 
-
-
-class GameObjectSet {
+class ObjectSet {
 
 public:
 
 public:
-	GameObjectSet(string objectsetName);
-	~GameObjectSet();
+	ObjectSet(XMLElement* objectsetElement);
+	~ObjectSet();
 
 	Tileset* getTileset();
-	GameObjectData* getGameObjectData(string name);
+	ObjectAsset* getObjectAsset(string name);
 
 	string getObjectsetName();
+	string getName();
 	
 private:
-	string objectsetName;
+	string name;
 	string gameObjectPrefix;
 	Tileset* tileset;
-	vector<GameObjectData*> gameobjectdatas;
+	vector<ObjectAsset*> objectAssets;
 
 };
 

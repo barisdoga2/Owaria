@@ -7,6 +7,7 @@
 #include <ContactListener.h>
 #include <Background.h>
 
+using namespace tinyxml2;
 
 sf::RenderWindow* sfWindow;
 b2World* world;
@@ -17,21 +18,22 @@ ContactListener* contactListener;
 Background* background;
 
 void init() {
+
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
 
 	camera = new Camera();
 
-	testMap = new Map(world);
+	testMap = new Map(world, "../../Resources/Test.xml");
 
 	player = new Player(world, testMap, sf::Vector2f(1400, 500));
 	camera = new Camera(testMap, player);
 
-	background = new Background(camera);
+	background = new Background();
 }
 
 void update(int updateElapsed) {
-	background->Update(updateElapsed);
+	background->Update(updateElapsed, camera);
 	testMap->Update(updateElapsed);
 	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
@@ -39,7 +41,7 @@ void update(int updateElapsed) {
 }
 
 void render(int renderElapsed) {
-	background->Render(sfWindow);
+	background->Render(sfWindow, camera);
 	testMap->Render(sfWindow, *camera);
 	player->Render(sfWindow, *camera);
 }
@@ -50,6 +52,8 @@ void cleanUp() {
 	delete testMap;
 	delete player;
 	delete background;
+
+	AssetStore::CleanUp();
 }
 
 int main(void)
