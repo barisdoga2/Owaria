@@ -1,46 +1,14 @@
 #include <Tileset.h>
 #include <iostream>
 
-Tileset::Tileset(string tilesetName, string tilesetPng, string tilesetConfig) {
-	// Load Tileset
+Tileset::Tileset(const char* tilesetName, const char* pngPath, sf::Vector2f size, sf::Vector2f tilePixSize, int tilingPadding, vector<int> solidTileIDs, vector<TileData*> tileDatas) {
 	this->name = tilesetName;
-	tilesetImage = new sf::Image();
-	tilesetImage->loadFromFile(tilesetPng);
+	this->tilesetTileSize = size;
+	this->tilePixelSize = tilePixSize;
+	this->tilingPadding = tilingPadding;
 
-	// Load Tileset Config
-	std::ifstream infile(tilesetConfig);
-	std::istringstream stream("");
-	ioUtils::getNextLine(stream, infile);
-	stream >> tilesetTileSize.x >> tilesetTileSize.y >> tilePixelSize.x >> tilePixelSize.y >> tilingPadding;
-	
-	// Load Solid Tile IDs
-	int solidTileIDsLength, tmp;
-	vector<int> solidTileIDs;
-	ioUtils::getNextLine(stream, infile);
-	stream >> solidTileIDsLength;
-	ioUtils::getNextLine(stream, infile);
-	for (int i = 0; i < solidTileIDsLength; i++) {
-		stream >> tmp;
-		solidTileIDs.push_back(tmp);
-	}
-
-	// Load Speical Collision Tile Datas
-	vector<TileData*> tileDatas;
-	int specialCollisionTileCount, id, isXTile, verticeCount, x, y;
-	ioUtils::getNextLine(stream, infile);
-	stream >> specialCollisionTileCount;
-	for (int i = 0; i < specialCollisionTileCount; i++) {
-		ioUtils::getNextLine(stream, infile);
-		stream >> id >> isXTile >> verticeCount;
-		vector<sf::Vector2i>* collision_vertices = new vector<sf::Vector2i>;
-		for (int j = 0; j < verticeCount; j++) {
-			ioUtils::getNextLine(stream, infile);
-			stream >> x >> y;
-			collision_vertices->push_back(sf::Vector2i(x, y));
-		}
-		tileDatas.push_back(new TileData(id, isXTile == 1, collision_vertices));
-	}
-	infile.close();
+	this->tilesetImage = new sf::Image();
+	this->tilesetImage->loadFromFile(pngPath);
 
 	// Create Tiles
 	int idCtr = 0;
@@ -53,7 +21,7 @@ Tileset::Tileset(string tilesetName, string tilesetPng, string tilesetConfig) {
 					isSolid = true;
 					break;
 				}
-			
+
 			// Check if is id have special collision data
 			TileData* tileData = nullptr;
 			for (TileData* tile : tileDatas)

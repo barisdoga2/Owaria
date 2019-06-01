@@ -21,9 +21,10 @@ class ObjectSet {
 public:
 
 public:
-	ObjectSet(string objectsetName, Tileset* tileset, const char* cfg);
+	ObjectSet(string objectsetName, Tileset* tileset);
 	~ObjectSet();
 
+	void AppendObjectData(XMLElement* objectElement);
 	Tileset* getTileset();
 	GameObjectData* getGameObjectData(string name);
 

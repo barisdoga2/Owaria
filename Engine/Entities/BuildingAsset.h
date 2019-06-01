@@ -11,25 +11,19 @@ class BuildingAsset {
 
 public:
 
-	BuildingAsset(string buildingName, Tileset* tileset, string cfg) {
+	BuildingAsset(string buildingName, Tileset* tileset, sf::Vector2i tilemapSize, string tileMap) {
 		this->buildingName = buildingName;
 		this->tileset = tileset;
+		this->tilemapSize = tilemapSize;
 
 		// Load Tilemap
 		int tmpTileID;
-		std::ifstream infile(cfg);
-		std::istringstream stream("");
-		ioUtils::getNextLine(stream, infile);
-		stream >> tilemapSize.x >> tilemapSize.y;
+		std::istringstream stream(tileMap);
 		mapGridTileIDs = (Tile*)malloc(tilemapSize.x * tilemapSize.y * sizeof(Tile));
-		for (int y = 0; y < tilemapSize.y; y++) {
-			ioUtils::getNextLine(stream, infile);
-			for (int x = 0; x < tilemapSize.x; x++) {
-				stream >> tmpTileID;
-				*(mapGridTileIDs + x + tilemapSize.x * y) = *tileset->getTile(tmpTileID);
-			}
+		for (int x = 0; x < tilemapSize.y * tilemapSize.x; x++) {
+			stream >> tmpTileID;
+			*(mapGridTileIDs + x) = *tileset->getTile(tmpTileID);
 		}
-		infile.close();
 	}
 
 	~BuildingAsset() {

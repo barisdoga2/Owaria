@@ -4,7 +4,6 @@
 
     <Tileset name="mapTileSet">
       <png>../../Resources/Map/Tileset.png</png>
-      <cfg>../../Resources/Map/Tileset.cfg</cfg>
       <width>16</width>
       <height>15</height>
       <tilePixWidth>16</tilePixWidth>
@@ -65,7 +64,6 @@
     
     <Tileset name="buildingTileSet">
       <png>../../Resources/Buildings/Building/Tileset.png</png>
-      <cfg>../../Resources/Buildings/Building/Tileset.cfg</cfg>
       <width>17</width>
       <height>17</height>
       <tilePixWidth>16</tilePixWidth>
@@ -76,72 +74,72 @@
     
   <Tileset name="treeTileSet">
       <png>../../Resources/GameObjects/Tree/Tileset.png</png>
-      <cfg>../../Resources/GameObjects/Tree/Tileset.cfg</cfg>
       <width>3</width>
       <height>1</height>
       <tilePixWidth>80</tilePixWidth>
       <tilePixHeight>80</tilePixHeight>
       <padding>2</padding>
-      <solidIDs></solidIDs>
     </Tileset>
     
   <Tileset name="ladderTileSet">
       <png>../../Resources/GameObjects/Ladder/Tileset.png</png>
-      <cfg>../../Resources/GameObjects/Ladder/Tileset.cfg</cfg>
       <width>1</width>
       <height>1</height>
       <tilePixWidth>48</tilePixWidth>
       <tilePixHeight>48</tilePixHeight>
       <padding>2</padding>
-      <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
     </Tileset>
     
   </Tilesets>
 
   <ObjectSets>
     <ObjectSet name="Tree" tilesetName="treeTileSet">
-      <cfg>../../Resources/GameObjects/Tree/Tree.cfg</cfg>
+      <ObjectData name="TreeA" tileSetTileID="0" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+      <ObjectData name="TreeB" tileSetTileID="1" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+      <ObjectData name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
     </ObjectSet>
-  <ObjectSet name="Ladder" tilesetName="ladderTileSet">
-      <cfg>../../Resources/GameObjects/Ladder/Ladder.cfg</cfg>
+    <ObjectSet name="Ladder" tilesetName="ladderTileSet">
+      <ObjectData name="LadderA" tileSetTileID="0" hasPhysics="1" isStaticPhysics="1" contactDataType="3" contactDataObject="2" />
     </ObjectSet>
   </ObjectSets>
 
   <BuildingAssets>
     <BuildingAsset name="Building1A" tilesetName="buildingTileSet">
-      <cfg>../../Resources/Buildings/Building/Tilemap.cfg</cfg>
+      <Tilemap tilesetName="mapTileSet" width="26" height="10">
+        17 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 19 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 102 104 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 102 104 35 35 36 34 35 35 136 138 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 136 138 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 4 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 5 21 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 22 38 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 39
+      </Tilemap>
     </BuildingAsset>
   </BuildingAssets>
     
 	<Objects>
 		<!-- Tree Set -->
-		<Object name="Tree1" objectSetName="Tree" objectName="Tree1A">
+		<Object name="Tree1" objectSetName="Tree" objectDataName="TreeA">
 			<tileMapXPos>122</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>
 		</Object>
-		<Object name="Tree2" objectSetName="Tree" objectName="Tree1B">
+		<Object name="Tree2" objectSetName="Tree" objectDataName="TreeB">
 				<tileMapXPos>82</tileMapXPos>
 				<tileMapYPos>31</tileMapYPos>
 		</Object>
-		<Object name="Tree3" objectSetName="Tree" objectName="Tree1C">
+		<Object name="Tree3" objectSetName="Tree" objectDataName="TreeC">
 			<tileMapXPos>77</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>
 		</Object>
 
 		<!-- Ladder Set -->
-		<Object name="Ladder1" objectSetName="Ladder" objectName="Ladder1A">
+		<Object name="Ladder1" objectSetName="Ladder" objectDataName="LadderA">
 			<tileMapXPos>92</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>
 		</Object>
-		<Object name="Ladder2" objectSetName="Ladder" objectName="Ladder1A">
+		<Object name="Ladder2" objectSetName="Ladder" objectDataName="LadderA">
 			<tileMapXPos>92</tileMapXPos>
 			<tileMapYPos>28</tileMapYPos>
 		</Object>
-		<Object name="Ladder3" objectSetName="Ladder" objectName="Ladder1A">
+		<Object name="Ladder3" objectSetName="Ladder" objectDataName="LadderA">
 			<tileMapXPos>92</tileMapXPos>
 			<tileMapYPos>25</tileMapYPos>
 		</Object>
-		<Object name="Ladder4" objectSetName="Ladder" objectName="Ladder1A">
+		<Object name="Ladder4" objectSetName="Ladder" objectDataName="LadderA">
 			<tileMapXPos>92</tileMapXPos>
 			<tileMapYPos>22</tileMapYPos>
 		</Object>

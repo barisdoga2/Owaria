@@ -73,22 +73,22 @@ void MarchingSquares::pushSpecialTile(MarchingSolution* solution, TileData* tD, 
 	if (tD != nullptr) {
 		if (axisSwap) {
 			if (xCheckDir > 0) {
-				for (unsigned int i = 0; i < tD->collision_vertices->size(); i++)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (unsigned int i = 0; i < tD->collision_vertices.size(); i++)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 			else {
-				for (int i = tD->collision_vertices->size() - 1; i >= 0; i--)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (int i = tD->collision_vertices.size() - 1; i >= 0; i--)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 		}
 		else {
 			if (yCheckDir > 0) {
-				for (int i = tD->collision_vertices->size() - 1; i >= 0; i--)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (int i = tD->collision_vertices.size() - 1; i >= 0; i--)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 			else {
-				for (unsigned int i = 0; i < tD->collision_vertices->size(); i++)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (unsigned int i = 0; i < tD->collision_vertices.size(); i++)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 		}
 	}
@@ -98,22 +98,22 @@ void MarchingSquares::pushSpecialTileCorner(MarchingSolution* solution, TileData
 	if (tD != nullptr) {
 		if (axisSwap) {
 			if (xCheckDir > 0) {
-				for (unsigned int i = 0; i < tD->collision_vertices->size(); i++)
-					solution->t_vertices.push_back(sf::Vector2i((x) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (unsigned int i = 0; i < tD->collision_vertices.size(); i++)
+					solution->t_vertices.push_back(sf::Vector2i((x) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 			else {
-				for (int i = tD->collision_vertices->size() - 1; i >= 0; i--)
-					solution->t_vertices.push_back(sf::Vector2i((x) * 16 + tD->collision_vertices->at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices->at(i).y));
+				for (int i = tD->collision_vertices.size() - 1; i >= 0; i--)
+					solution->t_vertices.push_back(sf::Vector2i((x) * 16 + tD->collision_vertices.at(i).x, (y - yCheckDir) * 16 + tD->collision_vertices.at(i).y));
 			}
 		}
 		else {
 			if (yCheckDir > 0) {
-				for (int i = tD->collision_vertices->size() - 1; i >= 0; i--)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y) * 16 + tD->collision_vertices->at(i).y));
+				for (int i = tD->collision_vertices.size() - 1; i >= 0; i--)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y) * 16 + tD->collision_vertices.at(i).y));
 			}
 			else {
-				for (unsigned int i = 0; i < tD->collision_vertices->size(); i++)
-					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices->at(i).x, (y) * 16 + tD->collision_vertices->at(i).y));
+				for (unsigned int i = 0; i < tD->collision_vertices.size(); i++)
+					solution->t_vertices.push_back(sf::Vector2i((x + xCheckDir) * 16 + tD->collision_vertices.at(i).x, (y) * 16 + tD->collision_vertices.at(i).y));
 			}
 		}
 	}

@@ -17,13 +17,12 @@ class AssetStore {
 public:
 	static void CleanUp();
 	static Tileset* GetTileset(const char* tilesetName);
-	static ObjectSet* GetObjectSet(string objectsetName);
-	static BuildingAsset* GetBuildingAsset(string buildingAssetName);
+	static ObjectSet* GetObjectSet(const char* objectsetName);
+	static BuildingAsset* GetBuildingAsset(const char* buildingAssetName);
 
-	static void LoadTileset(const char* tilesetName, const char* png, const char* cfg);
 	static void LoadTileset(XMLElement* tilesetElement);
-	static void LoadObjectSet(const char* objectsetName, const char* tilesetName, const char* cfg);
-	static void LoadBuildingAsset(const char* buildingAssetName, const char* tilesetName, const char* cfg);
+	static void LoadObjectSet(XMLElement* objectsetElement);
+	static void LoadBuildingAsset(XMLElement* buildingAssetElement);
 
 private:
 	AssetStore();

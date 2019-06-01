@@ -16,7 +16,6 @@ Map::Map(b2World* world, const char* xml) {
 		// Load Needed Tilesets
 		childIter = tMap->FirstChildElement("Tilesets")->FirstChildElement("Tileset");
 		while (childIter != nullptr) {
-			//AssetStore::LoadTileset(childIter->Attribute("name"), childIter->FirstChildElement("png")->GetText(), childIter->FirstChildElement("cfg")->GetText());
 			AssetStore::LoadTileset(childIter);
 			childIter = childIter->NextSiblingElement();
 		}
@@ -24,14 +23,14 @@ Map::Map(b2World* world, const char* xml) {
 		// Load Needed Building Assets
 		childIter = tMap->FirstChildElement("BuildingAssets")->FirstChildElement("BuildingAsset");
 		while (childIter != nullptr) {
-			AssetStore::LoadBuildingAsset(childIter->Attribute("name"), childIter->Attribute("tilesetName"), childIter->FirstChildElement("cfg")->GetText());
+			AssetStore::LoadBuildingAsset(childIter);
 			childIter = childIter->NextSiblingElement();
 		}
 
 		// Load Needed Object Sets
 		childIter = tMap->FirstChildElement("ObjectSets")->FirstChildElement("ObjectSet");
 		while (childIter != nullptr) {
-			AssetStore::LoadObjectSet(childIter->Attribute("name"), childIter->Attribute("tilesetName"), childIter->FirstChildElement("cfg")->GetText());
+			AssetStore::LoadObjectSet(childIter);
 			childIter = childIter->NextSiblingElement();
 		}
 	}
@@ -63,7 +62,7 @@ Map::Map(b2World* world, const char* xml) {
 	// Load Map Objects
 	childIter = tMap->FirstChildElement("Objects")->FirstChildElement("Object");
 	while (childIter != nullptr) {
-		gameObjects.push_back(new GameObject(AssetStore::GetObjectSet(childIter->Attribute("objectSetName"))->getGameObjectData(childIter->Attribute("objectName")), world, sf::Vector2i(atoi(childIter->FirstChildElement("tileMapXPos")->GetText()), atoi(childIter->FirstChildElement("tileMapYPos")->GetText()))));
+		gameObjects.push_back(new GameObject(AssetStore::GetObjectSet(childIter->Attribute("objectSetName"))->getGameObjectData(childIter->Attribute("objectDataName")), world, sf::Vector2i(atoi(childIter->FirstChildElement("tileMapXPos")->GetText()), atoi(childIter->FirstChildElement("tileMapYPos")->GetText()))));
 		childIter = childIter->NextSiblingElement();
 	}
 
