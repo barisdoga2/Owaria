@@ -6,7 +6,6 @@
 #include <Camera.h>
 #include <ContactListener.h>
 #include <Background.h>
-#include <AssetStore.h>
 
 using namespace tinyxml2;
 
@@ -17,7 +16,6 @@ Player* player;
 Camera* camera;
 ContactListener* contactListener;
 Background* background;
-
 
 void init() {
 
@@ -31,11 +29,11 @@ void init() {
 	player = new Player(world, testMap, sf::Vector2f(1400, 500));
 	camera = new Camera(testMap, player);
 
-	background = new Background(camera);
+	background = new Background();
 }
 
 void update(int updateElapsed) {
-	background->Update(updateElapsed);
+	background->Update(updateElapsed, camera);
 	testMap->Update(updateElapsed);
 	player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
@@ -43,7 +41,7 @@ void update(int updateElapsed) {
 }
 
 void render(int renderElapsed) {
-	background->Render(sfWindow);
+	background->Render(sfWindow, camera);
 	testMap->Render(sfWindow, *camera);
 	player->Render(sfWindow, *camera);
 }

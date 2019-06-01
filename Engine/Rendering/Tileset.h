@@ -5,14 +5,13 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <Tile.h>
-#include <ioUtils.h>
 
 using namespace std;
 
 class Tileset {
 
 public:
-	Tileset(const char* tilesetName, const char* pngPath, sf::Vector2f size, sf::Vector2f tilePixSize, int tilingPadding, vector<int> solidTileIDs, vector<TileData*> tileDatas);
+	Tileset(XMLElement* tilesetElement);
 	~Tileset();
 
 	Tile* getTile(int id);
@@ -22,13 +21,12 @@ public:
 	string getName();
 
 private:
-	sf::Image* tilesetImage;
 	string name;
 
-	sf::Vector2f tilesetTileSize;
+	sf::Image* tilesetImage;
+	sf::Vector2f tilesetSize;
 	sf::Vector2f tilePixelSize;
 	int tilingPadding;
 
 	vector<Tile*> tiles;
-
 };

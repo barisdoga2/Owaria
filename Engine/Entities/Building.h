@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
-#include <ioUtils.h>
 #include <TileData.h>
 #include <Tile.h>
 class Map;

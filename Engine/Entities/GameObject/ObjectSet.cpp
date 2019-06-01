@@ -1,34 +1,27 @@
 #include <ObjectSet.h>
 
 
-ObjectSet::ObjectSet(string objectsetName, Tileset* tileset) {
-	this->objectsetName = objectsetName;
-	this->tileset = tileset;
+ObjectSet::ObjectSet(XMLElement* objectsetElement) {
+	this->name = objectsetElement->Attribute("name");
+	this->tileset = AssetStore::GetTileset(objectsetElement->Attribute("tilesetName"));
+
+	XMLElement* object = objectsetElement->FirstChildElement("ObjectAsset");
+	while (object != NULL) {
+		objectAssets.push_back(new ObjectAsset(object->Attribute("name"), tileset->getTile(object->IntAttribute("tileSetTileID")), this, object->IntAttribute("hasPhysics"), object->IntAttribute("isStaticPhysics"), object->IntAttribute("contactDataType"), object->IntAttribute("contactDataObject")));
+		object = object->NextSiblingElement();
+	}
 }
 
 ObjectSet::~ObjectSet() {
-	for (GameObjectData* g : gameobjectdatas)
-		delete g;
+	for (ObjectAsset* a : objectAssets)
+		delete a;
 }
 
-void ObjectSet::AppendObjectData(XMLElement* objectElement) {
-	GameObjectData* gameObjectData = new GameObjectData();
-	gameObjectData->gameObjectTile = tileset->getTile(objectElement->IntAttribute("tileSetTileID"));
-	gameObjectData->gameObjectName = objectElement->Attribute("name");
-	gameObjectData->ObjectSet = this;
-	gameObjectData->hasPhysicsBody = objectElement->IntAttribute("hasPhysics");
-	gameObjectData->isStatic = objectElement->IntAttribute("isStaticPhysics");
-	gameObjectData->contactDataType = objectElement->IntAttribute("contactDataType");
-	gameObjectData->contactDataObject = objectElement->IntAttribute("contactDataObject");
-
-	gameobjectdatas.push_back(gameObjectData);
-}
-
-GameObjectData* ObjectSet::getGameObjectData(string name) {
-	GameObjectData* retVal = nullptr;
-	for (GameObjectData* god : gameobjectdatas) 
-		if (god->gameObjectName.compare(name) == 0) {
-			retVal = god;
+ObjectAsset* ObjectSet::getObjectAsset(string name) {
+	ObjectAsset* retVal = nullptr;
+	for (ObjectAsset* a : objectAssets) 
+		if (a->getName().compare(name) == 0) {
+			retVal = a;
 			break;
 		}
 		
@@ -39,10 +32,6 @@ Tileset* ObjectSet::getTileset() {
 	return this->tileset;
 }
 
-string ObjectSet::getObjectsetName() {
-	return this->objectsetName;
-}
-
 string ObjectSet::getName() {
-	return this->objectsetName;
+	return this->name;
 }

@@ -16,23 +16,17 @@ public:
 	~Player();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, Camera camera);
+
 	void HandleInputs(int updateElapsed);
-
-	b2BodyDef bodyDef;
-	b2Body* body;
-	b2Body* body_foot;
-	b2PolygonShape s;
-	b2FixtureDef fixtureDef;
-	b2RevoluteJoint* foot_joint;
-
-	int moveDirection = 1;
-	bool isOnAir = false;
-	int numFootContacts = 0;
-	int isOnLadder = 0;
-
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
-	Effect* dropDustEffect;
+	b2Body* body_foot;
+	b2Body* body;
+
+	int moveDirection = 1;
+	int numFootContacts = 0;
+	bool isOnAir = false;
+	bool isOnLadder = false;
 
 	sf::Vector2f getPixPosition();
 	b2Vec2 getb2Position();
@@ -43,4 +37,9 @@ private:
 	Animation* walkAnimation;
 	Animation* idleAnimation;
 	sf::Image* spritesheet;
+
+	b2RevoluteJoint* foot_joint;
+
+	Effect* dropDustEffect;
+
 };

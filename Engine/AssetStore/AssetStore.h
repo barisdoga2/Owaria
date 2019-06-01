@@ -2,12 +2,13 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <Tileset.h>
-#include <BuildingAsset.h>
-#include <GameObjectData.h>
-#include <ObjectSet.h>
 #include <tinyxml2.h>
-#include <cstdlib>
+class Tileset;
+#include <Tileset.h>
+class BuildingAsset;
+#include <BuildingAsset.h>
+class ObjectSet;
+#include <ObjectSet.h>
 
 using namespace std;
 using namespace tinyxml2;
@@ -29,7 +30,5 @@ private:
 	static std::vector<Tileset*> tilesets;
 	static std::vector<BuildingAsset*> buildingAssets;
 	static std::vector<ObjectSet*> objectSets;
-
-
 
 };

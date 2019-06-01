@@ -1,118 +1,114 @@
 <Map name="testMap">
 
-  <Tilesets>
+  <Assets>
+    <Tilesets>
+      <Tileset name="mapTileSet">
+        <png>../../Resources/Map/Tileset.png</png>
+        <width>16</width>
+        <height>15</height>
+        <tilePixWidth>16</tilePixWidth>
+        <tilePixHeight>16</tilePixHeight>
+        <padding>2</padding>
+        <solidIDs>1	18 89 105	120	121	231	232	233	234	235	236	237	238</solidIDs>
+        <specialTiles>
+          <specialTile id="231">
+            <vertex x="0" y="0"/>
+            <vertex x="4" y="4"/>
+            <vertex x="11" y="4"/>
+            <vertex x="15" y="0"/>
+          </specialTile>
+          <specialTile id="232">
+            <vertex x="0" y="0"/>
+            <vertex x="4" y="4"/>
+            <vertex x="4" y="11"/>
+            <vertex x="0" y="15"/>
+          </specialTile>
+          <specialTile id="233">
+            <vertex x="0" y="15"/>
+            <vertex x="4" y="11"/>
+            <vertex x="11" y="11"/>
+            <vertex x="15" y="15"/>
+          </specialTile>
+          <specialTile id="234">
+            <vertex x="15" y="0"/>
+            <vertex x="11" y="4"/>
+            <vertex x="11" y="11"/>
+            <vertex x="15" y="15"/>
+          </specialTile>
+          <specialTile id="235">
+            <vertex x="0" y="15"/>
+            <vertex x="2" y="7"/>
+            <vertex x="7" y="2"/>
+            <vertex x="15" y="0"/>
+          </specialTile>
+          <specialTile id="236">
+            <vertex x="0" y="0"/>
+            <vertex x="2" y="8"/>
+            <vertex x="7" y="13"/>
+            <vertex x="15" y="15"/>
+          </specialTile>
+          <specialTile id="237">
+            <vertex x="0" y="15"/>
+            <vertex x="8" y="13"/>
+            <vertex x="13" y="8"/>
+            <vertex x="15" y="0"/>
+          </specialTile>
+          <specialTile id="238">
+            <vertex x="0" y="0"/>
+            <vertex x="8" y="2"/>
+            <vertex x="13" y="7"/>
+            <vertex x="15" y="15"/>
+          </specialTile>
+        </specialTiles>
+      </Tileset>
+      <Tileset name="buildingTileSet">
+        <png>../../Resources/Buildings/Building/Tileset.png</png>
+        <width>17</width>
+        <height>17</height>
+        <tilePixWidth>16</tilePixWidth>
+        <tilePixHeight>16</tilePixHeight>
+        <padding>2</padding>
+        <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
+      </Tileset>
+      <Tileset name="treeTileSet">
+        <png>../../Resources/GameObjects/Tree/Tileset.png</png>
+        <width>3</width>
+        <height>1</height>
+        <tilePixWidth>80</tilePixWidth>
+        <tilePixHeight>80</tilePixHeight>
+        <padding>2</padding>
+      </Tileset>
+      <Tileset name="ladderTileSet">
+        <png>../../Resources/GameObjects/Ladder/Tileset.png</png>
+        <width>1</width>
+        <height>1</height>
+        <tilePixWidth>48</tilePixWidth>
+        <tilePixHeight>48</tilePixHeight>
+        <padding>2</padding>
+      </Tileset>
+    </Tilesets>
 
-    <Tileset name="mapTileSet">
-      <png>../../Resources/Map/Tileset.png</png>
-      <width>16</width>
-      <height>15</height>
-      <tilePixWidth>16</tilePixWidth>
-      <tilePixHeight>16</tilePixHeight>
-      <padding>2</padding>
-      <solidIDs>1	18	89	105	120	121	231	232	233	234	235	236	237	238</solidIDs>
-      <specialTiles>
-        <specialTile id="231">
-          <vertex x="0" y="0"/>
-          <vertex x="4" y="4"/>
-          <vertex x="11" y="4"/>
-          <vertex x="15" y="0"/>
-        </specialTile>
-        <specialTile id="232">
-          <vertex x="0" y="0"/>
-          <vertex x="4" y="4"/>
-          <vertex x="4" y="11"/>
-          <vertex x="0" y="15"/>
-        </specialTile>
-        <specialTile id="233">
-          <vertex x="0" y="15"/>
-          <vertex x="4" y="11"/>
-          <vertex x="11" y="11"/>
-          <vertex x="15" y="15"/>
-        </specialTile>
-        <specialTile id="234">
-          <vertex x="15" y="0"/>
-          <vertex x="11" y="4"/>
-          <vertex x="11" y="11"/>
-          <vertex x="15" y="15"/>
-        </specialTile>
-        <specialTile id="235">
-          <vertex x="0" y="15"/>
-          <vertex x="2" y="7"/>
-          <vertex x="7" y="2"/>
-          <vertex x="15" y="0"/>
-        </specialTile>
-        <specialTile id="236">
-          <vertex x="0" y="0"/>
-          <vertex x="2" y="8"/>
-          <vertex x="7" y="13"/>
-          <vertex x="15" y="15"/>
-        </specialTile>
-        <specialTile id="237">
-          <vertex x="0" y="15"/>
-          <vertex x="8" y="13"/>
-          <vertex x="13" y="8"/>
-          <vertex x="15" y="0"/>
-        </specialTile>
-        <specialTile id="238">
-          <vertex x="0" y="0"/>
-          <vertex x="8" y="2"/>
-          <vertex x="13" y="7"/>
-          <vertex x="15" y="15"/>
-        </specialTile>
-      </specialTiles>
-    </Tileset>
-    
-    <Tileset name="buildingTileSet">
-      <png>../../Resources/Buildings/Building/Tileset.png</png>
-      <width>17</width>
-      <height>17</height>
-      <tilePixWidth>16</tilePixWidth>
-      <tilePixHeight>16</tilePixHeight>
-      <padding>2</padding>
-      <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
-    </Tileset>
-    
-  <Tileset name="treeTileSet">
-      <png>../../Resources/GameObjects/Tree/Tileset.png</png>
-      <width>3</width>
-      <height>1</height>
-      <tilePixWidth>80</tilePixWidth>
-      <tilePixHeight>80</tilePixHeight>
-      <padding>2</padding>
-    </Tileset>
-    
-  <Tileset name="ladderTileSet">
-      <png>../../Resources/GameObjects/Ladder/Tileset.png</png>
-      <width>1</width>
-      <height>1</height>
-      <tilePixWidth>48</tilePixWidth>
-      <tilePixHeight>48</tilePixHeight>
-      <padding>2</padding>
-    </Tileset>
-    
-  </Tilesets>
+    <ObjectSets>
+      <ObjectSet name="Tree" tilesetName="treeTileSet">
+        <ObjectAsset name="TreeA" tileSetTileID="0" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+        <ObjectAsset name="TreeB" tileSetTileID="1" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+        <ObjectAsset name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+      </ObjectSet>
+      <ObjectSet name="Ladder" tilesetName="ladderTileSet">
+        <ObjectAsset name="LadderA" tileSetTileID="0" hasPhysics="1" isStaticPhysics="1" contactDataType="3" contactDataObject="2" />
+      </ObjectSet>
+    </ObjectSets>
 
-  <ObjectSets>
-    <ObjectSet name="Tree" tilesetName="treeTileSet">
-      <ObjectData name="TreeA" tileSetTileID="0" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
-      <ObjectData name="TreeB" tileSetTileID="1" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
-      <ObjectData name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
-    </ObjectSet>
-    <ObjectSet name="Ladder" tilesetName="ladderTileSet">
-      <ObjectData name="LadderA" tileSetTileID="0" hasPhysics="1" isStaticPhysics="1" contactDataType="3" contactDataObject="2" />
-    </ObjectSet>
-  </ObjectSets>
-
-  <BuildingAssets>
-    <BuildingAsset name="Building1A" tilesetName="buildingTileSet">
-      <Tilemap tilesetName="mapTileSet" width="26" height="10">
-        17 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 19 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 102 104 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 102 104 35 35 36 34 35 35 136 138 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 136 138 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 4 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 5 21 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 22 38 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 39
-      </Tilemap>
-    </BuildingAsset>
-  </BuildingAssets>
+    <BuildingAssets>
+      <BuildingAsset name="Building1A" tilesetName="buildingTileSet">
+        <Tilemap tilesetName="mapTileSet" width="26" height="10">
+          17 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 19 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 102 104 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 102 104 35 35 36 34 35 35 136 138 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 136 138 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 34 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 36 4 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 5 21 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 22 38 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 39
+        </Tilemap>
+      </BuildingAsset>
+    </BuildingAssets>
+  </Assets>
     
 	<Objects>
-		<!-- Tree Set -->
 		<Object name="Tree1" objectSetName="Tree" objectDataName="TreeA">
 			<tileMapXPos>122</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>
@@ -125,8 +121,6 @@
 			<tileMapXPos>77</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>
 		</Object>
-
-		<!-- Ladder Set -->
 		<Object name="Ladder1" objectSetName="Ladder" objectDataName="LadderA">
 			<tileMapXPos>92</tileMapXPos>
 			<tileMapYPos>31</tileMapYPos>

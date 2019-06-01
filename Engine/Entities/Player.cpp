@@ -20,6 +20,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 
 	// Create Physics
+	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(worldPosition.x / BOX2D_SCALE, worldPosition.y / BOX2D_SCALE);
 	body = world->CreateBody(&bodyDef);

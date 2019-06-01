@@ -15,7 +15,7 @@ include_directories(
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObjectData.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
@@ -38,6 +38,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
@@ -56,9 +57,11 @@ set(sourcefiles
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map

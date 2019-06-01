@@ -1,19 +1,52 @@
 #include <Tileset.h>
 #include <iostream>
 
-Tileset::Tileset(const char* tilesetName, const char* pngPath, sf::Vector2f size, sf::Vector2f tilePixSize, int tilingPadding, vector<int> solidTileIDs, vector<TileData*> tileDatas) {
-	this->name = tilesetName;
-	this->tilesetTileSize = size;
-	this->tilePixelSize = tilePixSize;
-	this->tilingPadding = tilingPadding;
-
+Tileset::Tileset(XMLElement* tilesetElement) {
+	this->name = tilesetElement->Attribute("name");
+	this->tilesetSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("width")->GetText()), atoi(tilesetElement->FirstChildElement("height")->GetText()));
+	this->tilePixelSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("tilePixWidth")->GetText()), atoi(tilesetElement->FirstChildElement("tilePixHeight")->GetText()));
+	this->tilingPadding = atoi(tilesetElement->FirstChildElement("padding")->GetText());
 	this->tilesetImage = new sf::Image();
-	this->tilesetImage->loadFromFile(pngPath);
+	this->tilesetImage->loadFromFile(tilesetElement->FirstChildElement("png")->GetText());
+
+	// Load Solid IDs
+	vector<int> solidTileIDs;
+	XMLNode* solidIDsNode = tilesetElement->FirstChildElement("solidIDs");
+	if (solidIDsNode != NULL) {
+		string solidIDsStr = tilesetElement->FirstChildElement("solidIDs")->GetText();
+		int tmpID;
+		std::istringstream iss(solidIDsStr);
+		while (true) {
+			if (!(iss >> tmpID))
+				break;
+			else
+				solidTileIDs.push_back(tmpID);
+		}
+	}
+
+	// Load Special Tiles
+	vector<TileData*> tileDatas;
+	XMLNode* tileDatasNode = tilesetElement->FirstChildElement("specialTiles");
+	if (tileDatasNode != NULL) {
+		XMLElement* specialTile = tilesetElement->FirstChildElement("specialTiles")->FirstChildElement("specialTile");
+		while (specialTile != nullptr) {
+			TileData* tileData = new TileData(specialTile->IntAttribute("id"), false);
+
+			XMLElement* vertex = specialTile->FirstChildElement("vertex");
+			while (vertex != nullptr) {
+				tileData->AppendVertex(vertex);
+				vertex = vertex->NextSiblingElement();
+			}
+
+			tileDatas.push_back(tileData);
+			specialTile = specialTile->NextSiblingElement();
+		}
+	}
 
 	// Create Tiles
 	int idCtr = 0;
-	for (int y = 0; y < tilesetTileSize.y; y++) {
-		for (int x = 0; x < tilesetTileSize.x; x++) {
+	for (int y = 0; y < tilesetSize.y; y++) {
+		for (int x = 0; x < tilesetSize.x; x++) {
 			// Check if is id solid
 			bool isSolid = false;
 			for (int i : solidTileIDs)
@@ -39,6 +72,7 @@ Tileset::Tileset(const char* tilesetName, const char* pngPath, sf::Vector2f size
 
 Tileset::~Tileset() {
 	delete tilesetImage;
+
 	for (Tile* t : tiles)
 		delete t;
 }
@@ -51,7 +85,7 @@ Tile* Tileset::getTile(int id) {
 }
 
 sf::Vector2f Tileset::getTilesetTileSize() {
-	return this->tilesetTileSize;
+	return this->tilesetSize;
 }
 
 sf::Vector2f Tileset::getTilePixelSize() {

@@ -15,15 +15,13 @@ using namespace std;
 
 class Background {
 public:
-	Background(Camera* map);
+	Background();
 	~Background();
 
-	void Update(int updateElapsed);
-	void Render(sf::RenderWindow* window);
+	void Update(int updateElapsed, Camera* camera);
+	void Render(sf::RenderWindow* window, Camera* camera);
 
 private:
-	Camera * camera;
-
 	sf::Texture* background_texture;
 
 	sf::Vector2f clouds_position;

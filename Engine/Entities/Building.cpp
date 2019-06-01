@@ -14,7 +14,7 @@ Building::~Building() {
 void Building::mergeWithMap(Map* map) {
 	for (int y = buildingTilePos.y; y < buildingTilePos.y + data->tilemapSize.y; y++)
 		for (int x = buildingTilePos.x; x < buildingTilePos.x + data->tilemapSize.x; x++)
-			*(map->mapGridTileIDs + y * map->getMapTileSize().x + x) = *(data->mapGridTileIDs + (y - buildingTilePos.y) * data->tilemapSize.x + x - buildingTilePos.x);
+			*(map->gridTiles + y * map->getMapSize().x + x) = *(data->mapGridTileIDs + (y - buildingTilePos.y) * data->tilemapSize.x + x - buildingTilePos.x);
 }
 
 sf::Vector2i Building::getTilePosOnMap() {

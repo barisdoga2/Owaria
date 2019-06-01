@@ -1,9 +1,7 @@
 #include <Background.h>
 
 
-Background::Background(Camera* camera) {
-	this->camera = camera;
-
+Background::Background() {
 	background_texture = new sf::Texture();
 	background_texture->loadFromFile("../../Resources/Backgrounds/background.png");
 
@@ -31,11 +29,15 @@ Background::Background(Camera* camera) {
 
 Background::~Background() {
 	delete background_texture;
-	delete clouds_texture;
+	delete hills_sprite;
 	delete clouds_sprite;
+	delete clouds2_sprite;
+	delete hills_texture;
+	delete clouds_texture;
+	delete clouds2_texture;
 }
 
-void Background::Update(int updateElapsed) {
+void Background::Update(int updateElapsed, Camera* camera) {
 	// Update Clouds
 	float move = (updateElapsed / 1000.0f) * CLOUDS_SPEED;
 	if (camera->isOffsetsLocked().x == 0)
@@ -53,7 +55,7 @@ void Background::Update(int updateElapsed) {
 	hills_position.x = (float)(-(int)hills_position.x % (int)hills_sprite->getGlobalBounds().width);
 }
 
-void Background::Render(sf::RenderWindow* window) {
+void Background::Render(sf::RenderWindow* window, Camera* camera) {
 	sf::Sprite sprite;
 	sprite.setTexture(*background_texture);
 	sprite.setScale(SCREEN_WIDTH / (float)background_texture->getSize().x, SCREEN_HEIGHT / (float)background_texture->getSize().y);
@@ -89,19 +91,15 @@ void Background::Render(sf::RenderWindow* window) {
 
 float Background::findMod(float a, float b)
 {
-	// Handling negative values 
 	if (a < 0)
 		a = -a;
 	if (b < 0)
 		b = -b;
 
-	// Finding mod by repeated subtraction 
 	float mod = a;
 	while (mod >= b)
 		mod = mod - b;
 
-	// Sign of result typically depends 
-	// on sign of a. 
 	if (a < 0)
 		return -mod;
 
