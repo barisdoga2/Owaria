@@ -88,7 +88,7 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 
-	if (isOnLadder) {
+	if (isOnLadder > 0) {
 		body->ApplyForceToCenter(b2Vec2(0, -10.0f * (body->GetMass() + body_foot->GetMass())), false);
 	}
 
@@ -98,7 +98,7 @@ void Player::Update(int updateElapsed) {
 void Player::HandleInputs(int updateElapsed) {
 	b2Vec2 vel = body->GetLinearVelocity();
 
-	if (isOnLadder) {
+	if (isOnLadder > 0) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 			currentAnimation = walkAnimation;
 			vel.y = -PLAYER_SPEED;
@@ -160,7 +160,7 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 
 	if (((ContactData*)interacted->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
 		if ((int)((ContactData*)interacted->GetUserData())->getData() == LADDER_SENSOR) {
-			isOnLadder = isBegin ? 1 : -1;
+			isOnLadder += isBegin ? 1 : -1;
 		}
 	}
 

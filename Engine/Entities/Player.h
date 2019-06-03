@@ -26,7 +26,7 @@ public:
 	int moveDirection = 1;
 	int numFootContacts = 0;
 	bool isOnAir = false;
-	bool isOnLadder = false;
+	int isOnLadder = 0;
 
 	sf::Vector2f getPixPosition();
 	b2Vec2 getb2Position();

@@ -81,13 +81,10 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 
 	int xStart = cameraPos.x / tileset->getTilesetTileSize().x;
 	int yStart = cameraPos.y / tileset->getTilesetTileSize().y;
-
-	cout << xStart << " " << yStart << endl;
-
 	
 	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = yStart; y < yStart + SCREEN_HEIGHT / tileset->getTilesetTileSize().y; y++) {
-		for (int x = xStart; x < xStart + SCREEN_WIDTH / tileset->getTilesetTileSize().x; x++) {
+		for (int x = xStart; x < xStart + SCREEN_WIDTH / tileset->getTilesetTileSize().x + 1; x++) {
 
 			// Find Tile
 			Tile* tile = (gridTiles + y * mapSize.x + x); // Tile 0 is transparent no need for rendering.
