@@ -3,7 +3,7 @@
   <Assets>
     <Tilesets>
       <Tileset name="mapTileSet">
-        <png>../../Resources/Map/Tileset.png</png>
+        <png>../../Resources/Tilesets/MapTileset.png</png>
         <width>16</width>
         <height>15</height>
         <tilePixWidth>16</tilePixWidth>
@@ -62,7 +62,7 @@
         </specialTiles>
       </Tileset>
       <Tileset name="buildingTileSet">
-        <png>../../Resources/Buildings/Building/Tileset.png</png>
+        <png>../../Resources/Tilesets/BuildingTileset.png</png>
         <width>17</width>
         <height>17</height>
         <tilePixWidth>16</tilePixWidth>
@@ -71,7 +71,7 @@
         <solidIDs>17	18	19	34	36	51	52	53</solidIDs>
       </Tileset>
       <Tileset name="treeTileSet">
-        <png>../../Resources/GameObjects/Tree/Tileset.png</png>
+        <png>../../Resources/Tilesets/TreeTileset.png</png>
         <width>3</width>
         <height>1</height>
         <tilePixWidth>80</tilePixWidth>
@@ -79,7 +79,7 @@
         <padding>2</padding>
       </Tileset>
       <Tileset name="ladderTileSet">
-        <png>../../Resources/GameObjects/Ladder/Tileset.png</png>
+        <png>../../Resources/Tilesets/LadderTileset.png</png>
         <width>1</width>
         <height>1</height>
         <tilePixWidth>48</tilePixWidth>

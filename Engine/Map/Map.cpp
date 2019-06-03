@@ -81,7 +81,7 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = 0; y < mapSize.y; y++) {
 		for (int x = 0; x < mapSize.x; x++) {
-
+			
 			// Find Tile
 			Tile* tile = (gridTiles + y * mapSize.x + x); // Tile 0 is transparent no need for rendering.
 			if (tile->getID() != 0) {
