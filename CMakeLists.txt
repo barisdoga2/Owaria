@@ -12,20 +12,19 @@ include_directories(
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/BuildingAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectSet.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/TileAsset.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
 	${PROJECT_SOURCE_DIR}/Engine/Map/Map.h
 	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.h
-	${PROJECT_SOURCE_DIR}/Engine/Map/TileData.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
@@ -35,14 +34,16 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Tileset.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
-	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
+
+
 )
 
 set(sourcefiles
@@ -54,14 +55,14 @@ set(sourcefiles
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/BuildingAsset.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectAsset.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectSet.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/TileAsset.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectAsset.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/GameObject.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject/ObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Entities/BuildingAsset.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map

@@ -6,7 +6,7 @@
 #include <vector>
 #include <Box2D/Box2D.h>
 #include <Tile.h>
-#include <TileData.h>
+#include <TileAsset.h>
 #include <Settings.h>
 #include <b2Utils.h>
 class MarchingSquares;

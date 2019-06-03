@@ -3,8 +3,8 @@
 
 Tileset::Tileset(XMLElement* tilesetElement) {
 	this->name = tilesetElement->Attribute("name");
-	this->tilesetSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("width")->GetText()), atoi(tilesetElement->FirstChildElement("height")->GetText()));
-	this->tilePixelSize = sf::Vector2f(atoi(tilesetElement->FirstChildElement("tilePixWidth")->GetText()), atoi(tilesetElement->FirstChildElement("tilePixHeight")->GetText()));
+	this->tilesetSize = sf::Vector2f((float)atoi(tilesetElement->FirstChildElement("width")->GetText()), (float)atoi(tilesetElement->FirstChildElement("height")->GetText()));
+	this->tilePixelSize = sf::Vector2f((float)atoi(tilesetElement->FirstChildElement("tilePixWidth")->GetText()), (float)atoi(tilesetElement->FirstChildElement("tilePixHeight")->GetText()));
 	this->tilingPadding = atoi(tilesetElement->FirstChildElement("padding")->GetText());
 	this->tilesetImage = new sf::Image();
 	this->tilesetImage->loadFromFile(tilesetElement->FirstChildElement("png")->GetText());
@@ -25,20 +25,20 @@ Tileset::Tileset(XMLElement* tilesetElement) {
 	}
 
 	// Load Special Tiles
-	vector<TileData*> tileDatas;
+	vector<TileAsset*> tileDatas;
 	XMLNode* tileDatasNode = tilesetElement->FirstChildElement("specialTiles");
 	if (tileDatasNode != NULL) {
 		XMLElement* specialTile = tilesetElement->FirstChildElement("specialTiles")->FirstChildElement("specialTile");
 		while (specialTile != nullptr) {
-			TileData* tileData = new TileData(specialTile->IntAttribute("id"), false);
+			TileAsset* tileAsset = new TileAsset(specialTile->IntAttribute("id"), false);
 
 			XMLElement* vertex = specialTile->FirstChildElement("vertex");
 			while (vertex != nullptr) {
-				tileData->AppendVertex(vertex);
+				tileAsset->AppendVertex(vertex);
 				vertex = vertex->NextSiblingElement();
 			}
 
-			tileDatas.push_back(tileData);
+			tileDatas.push_back(tileAsset);
 			specialTile = specialTile->NextSiblingElement();
 		}
 	}
@@ -56,15 +56,15 @@ Tileset::Tileset(XMLElement* tilesetElement) {
 				}
 
 			// Check if is id have special collision data
-			TileData* tileData = nullptr;
-			for (TileData* tile : tileDatas)
+			TileAsset* tileAsset = nullptr;
+			for (TileAsset* tile : tileDatas)
 				if (tile->id == idCtr) {
-					tileData = tile;
+					tileAsset = tile;
 					break;
 				}
 
 			// Create tile
-			tiles.push_back(new Tile(idCtr, *tilesetImage, sf::Vector2f((float)x, (float)y), tilePixelSize, tilingPadding, isSolid, tileData));
+			tiles.push_back(new Tile(idCtr, *tilesetImage, sf::Vector2f((float)x, (float)y), tilePixelSize, tilingPadding, isSolid, tileAsset));
 			idCtr++;
 		}
 	}

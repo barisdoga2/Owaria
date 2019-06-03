@@ -1,24 +1,24 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <TileData.h>
+#include <TileAsset.h>
 
 
 class Tile {
 public:
-	Tile(int id, sf::Image tileset, sf::Vector2f tilePosInTileset, sf::Vector2f tilePixelSize, int tilingPadding, bool solid, TileData* tileData);
+	Tile(int id, sf::Image tileset, sf::Vector2f tilePosInTileset, sf::Vector2f tilePixelSize, int tilingPadding, bool solid, TileAsset* tileAsset);
 	~Tile();
 
 	int getID();
 	bool isSolid();
 
-	TileData* getTileData();
+	TileAsset* getTileAsset();
 	sf::Texture* getTexture();
 
 private:
 	int id;
 	bool solid;
-	TileData* tileData;
+	TileAsset* tileAsset;
 	sf::Texture* texture;
 
 };

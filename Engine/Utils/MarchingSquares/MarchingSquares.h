@@ -25,8 +25,8 @@ private:
 
 	void findLookups();
 	void solveAll();
-	void pushSpecialTile(MarchingSolution* solution, TileData* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
-	void pushSpecialTileCorner(MarchingSolution* solution, TileData* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
+	void pushSpecialTile(MarchingSolution* solution, TileAsset* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
+	void pushSpecialTileCorner(MarchingSolution* solution, TileAsset* tD, int x, int y, int xCheckDir, int yCheckDir, int axisSwap);
 
 	MarchingSolution solve(sf::Vector2i lookup, sf::Vector2i lookupDir);
 
