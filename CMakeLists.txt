@@ -3,11 +3,6 @@ cmake_minimum_required(VERSION 3.7)
 project(Owaria)
 
 include_directories(
-	${PROJECT_SOURCE_DIR}/3thParty
-	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
-	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.h
-
-
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
@@ -47,10 +42,6 @@ include_directories(
 )
 
 set(sourcefiles
-	${PROJECT_SOURCE_DIR}/3thParty
-	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2
-	${PROJECT_SOURCE_DIR}/3thParty/TinyXML2/tinyxml2.cpp
-
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
@@ -82,21 +73,22 @@ set(sourcefiles
 )
 
 set(CMAKE_TOOLCHAIN_FILE "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
-find_package(Threads REQUIRED)
-find_package(unofficial-box2d CONFIG REQUIRED)
 
-set(
-	CMAKE_MODULE_PATH
-	"${CMAKE_SOURCE_DIR}/cmake_modules"
-	${CMAKE_MODULE_PATH}
-)
+find_package(Threads REQUIRED)
 find_package(SFML 2.5 COMPONENTS system window graphics main REQUIRED)
+find_package(unofficial-box2d CONFIG REQUIRED)
+find_package(tinyxml2 CONFIG REQUIRED)
+find_package(TGUI CONFIG REQUIRED)
 
 add_executable(Owaria  ${sourcefiles})
-target_compile_features(
-	Owaria
-	PRIVATE
-	cxx_std_17)
-target_link_libraries(Owaria sfml-system sfml-window sfml-graphics sfml-main ${CMAKE_THREAD_LIBS_INIT} unofficial::box2d::Box2D)
+
+target_compile_features(Owaria PRIVATE cxx_std_17)
+
+target_link_libraries(Owaria ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(Owaria sfml-system sfml-window sfml-graphics sfml-main)
+target_link_libraries(Owaria unofficial::box2d::Box2D)
+target_link_libraries(Owaria tinyxml2::tinyxml2)
+target_link_libraries(Owaria tgui)

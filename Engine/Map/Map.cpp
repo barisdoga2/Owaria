@@ -62,7 +62,7 @@ Map::Map(b2World* world, const char* xml) {
 
 Map::~Map() {
 	free(gridTiles);
-
+	
 	delete tileRenderer;
 
 	for (GameObject* g : gameObjects)
@@ -79,8 +79,8 @@ void Map::Update(int updateElapsed) {
 void Map::Render(sf::RenderWindow* window, Camera camera) {
 	sf::Vector2f cameraPos = camera.getPosition();
 
-	int xStart = cameraPos.x / tileset->getTilesetTileSize().x;
-	int yStart = cameraPos.y / tileset->getTilesetTileSize().y;
+	int xStart = (int)cameraPos.x / (int)tileset->getTilesetTileSize().x;
+	int yStart = (int)cameraPos.y / (int)tileset->getTilesetTileSize().y;
 	
 	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = yStart; y < yStart + SCREEN_HEIGHT / tileset->getTilesetTileSize().y; y++) {

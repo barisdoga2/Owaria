@@ -6,6 +6,8 @@
 #include <Camera.h>
 #include <ContactListener.h>
 #include <Background.h>
+#include <tinyxml2.h>
+#include <TGUI/TGUI.hpp>
 
 using namespace tinyxml2;
 
@@ -16,8 +18,13 @@ Player* player;
 Camera* camera;
 ContactListener* contactListener;
 Background* background;
+tgui::Gui* gui;
 
 void init() {
+	gui = new tgui::Gui(*sfWindow);
+	tgui::Button::Ptr button = tgui::Button::create("asd");
+
+	gui->add(button);
 
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
@@ -44,9 +51,12 @@ void render(int renderElapsed) {
 	background->Render(sfWindow, camera);
 	testMap->Render(sfWindow, *camera);
 	player->Render(sfWindow, *camera);
+
+	gui->draw();
 }
 
 void cleanUp() {
+	delete gui;
 	delete contactListener;
 	delete camera;
 	delete testMap;
@@ -124,9 +134,12 @@ int main(void)
 		window.setTitle(std::string(SCREEN_TITLE) + std::string(" Updates: ") + std::to_string(updates / updateCounter.asSeconds()) + std::string(" / Renders: ") + std::to_string(renders / renderCounter.asSeconds()) + std::string(" / Per Physics(ms): ") + std::to_string(physicsCalcTook.asMilliseconds()) + std::string(" / Per Render(ms): ") + std::to_string(renderCalcTook.asMilliseconds()));
 
 		sf::Event sfEvent;
-		while (window.pollEvent(sfEvent))
+		while (window.pollEvent(sfEvent)) {
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
+			gui->handleEvent(sfEvent);
+		}
+			
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 			window.close();
 	}
