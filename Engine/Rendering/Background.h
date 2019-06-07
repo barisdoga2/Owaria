@@ -5,6 +5,7 @@
 #include <Map.h>
 #include <Player.h>
 #include <Camera.h>
+#include <mathUtils.h>
 
 using namespace std;
 
@@ -35,6 +36,4 @@ private:
 	sf::Vector2f hills_position;
 	sf::Texture* hills_texture;
 	sf::Sprite* hills_sprite;
-
-	float findMod(float a, float b);
 };

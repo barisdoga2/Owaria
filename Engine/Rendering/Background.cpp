@@ -43,13 +43,13 @@ void Background::Update(int updateElapsed, Camera* camera) {
 	if (camera->isOffsetsLocked().x == 0)
 		move -= camera->GetTarget()->body->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
 	clouds_position.x += move;
-	clouds_position.x = findMod(clouds_position.x, clouds_sprite->getGlobalBounds().width);
+	clouds_position.x = mathUtils::findMod(clouds_position.x, clouds_sprite->getGlobalBounds().width);
 
 	move = (updateElapsed / 1000.0f) * (CLOUDS_SPEED / SLOW_CLOUD_DIV);
 	if (camera->isOffsetsLocked().x == 0)
 		move -= camera->GetTarget()->body->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
 	clouds2_position.x += move;
-	clouds2_position.x = findMod(clouds2_position.x, clouds2_sprite->getGlobalBounds().width);
+	clouds2_position.x = mathUtils::findMod(clouds2_position.x, clouds2_sprite->getGlobalBounds().width);
 
 	// Update Hills
 	hills_position.x = (float)(-(int)hills_position.x % (int)hills_sprite->getGlobalBounds().width);
@@ -87,21 +87,4 @@ void Background::Render(sf::RenderWindow* window, Camera* camera) {
 	hills_sprite->setPosition(sf::Vector2f(renderPos.x + hills_sprite->getGlobalBounds().width, clouds_position.y));
 	window->draw(*hills_sprite);
 
-}
-
-float Background::findMod(float a, float b)
-{
-	if (a < 0)
-		a = -a;
-	if (b < 0)
-		b = -b;
-
-	float mod = a;
-	while (mod >= b)
-		mod = mod - b;
-
-	if (a < 0)
-		return -mod;
-
-	return mod;
 }

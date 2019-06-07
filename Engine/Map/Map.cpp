@@ -1,6 +1,6 @@
 #include <Map.h>
 
-Map::Map(b2World* world, const char* xml) {
+Map::Map(b2World* world, sf::RenderWindow* window, const char* xml) {
 
 	XMLDocument tDoc;
 	tDoc.LoadFile(xml);
@@ -58,6 +58,9 @@ Map::Map(b2World* world, const char* xml) {
 	marchingSquares = new MarchingSquares(this);
 	for (MarchingSolution s : marchingSquares->solutions)
 		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
+
+	// Create Tilemap Editor
+	tilemapEditor = new TilemapEditor(window, tileset);
 }
 
 Map::~Map() {
@@ -70,14 +73,16 @@ Map::~Map() {
 	
 	for (Building* b : gameBuildings)
 		delete b;
+
+	delete tilemapEditor;
 }
 
-void Map::Update(int updateElapsed) {
-	
+void Map::Update(int updateElapsed, Camera* camera) {
+	tilemapEditor->Update(updateElapsed, camera);
 }
 
-void Map::Render(sf::RenderWindow* window, Camera camera) {
-	sf::Vector2f cameraPos = camera.getPosition();
+void Map::Render(sf::RenderWindow* window, Camera* camera) {
+	sf::Vector2f cameraPos = camera->getPosition();
 
 	int xStart = (int)floor(cameraPos.x / tileset->getTilePixelSize().x);
 	int yStart = (int)floor(cameraPos.y / tileset->getTilePixelSize().y);
@@ -96,7 +101,7 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 			if (tile->getID() != 0) {
 				// Render Tile
 				tileRenderer->setTexture(tile->getTexture());
-				tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - camera.getPosition().x, (float)y * tileRenderer->getSize().y - camera.getPosition().y));
+				tileRenderer->setPosition(sf::Vector2f((float)x * tileRenderer->getSize().x - camera->getPosition().x, (float)y * tileRenderer->getSize().y - camera->getPosition().y));
 				window->draw(*tileRenderer);
 			}
 			
@@ -112,10 +117,11 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 		sf::Vector2f tileSize = go->getGameObjectData()->getObjectSet()->getTileset()->getTilePixelSize();
 		r.setSize(tileSize);
 		r.setTexture(t->getTexture());
-		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - camera.getPosition().x, go->getTilemapPos().y * tileset->getTilePixelSize().y - camera.getPosition().y));
+		r.setPosition(sf::Vector2f(go->getTilemapPos().x * tileset->getTilePixelSize().x - camera->getPosition().x, go->getTilemapPos().y * tileset->getTilePixelSize().y - camera->getPosition().y));
 		window->draw(r);
 	}
 
+	tilemapEditor->Render(camera);
 }
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
@@ -128,4 +134,8 @@ Tileset* Map::getTileset() {
 
 sf::Vector2i Map::getMapSize() {
 	return this->mapSize;
+}
+
+void Map::HandleWindowEvent(sf::Event event) {
+	tilemapEditor->HandleWindowEvent(event);
 }
