@@ -19,6 +19,8 @@ public:
 	sf::Vector2f getTilePixelSize();
 
 	string getName();
+	sf::Image* getImage();
+	int getTilingPadding();
 
 private:
 	string name;

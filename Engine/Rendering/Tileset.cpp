@@ -96,3 +96,11 @@ sf::Vector2f Tileset::getTilePixelSize() {
 string Tileset::getName() {
 	return this->name;
 }
+
+sf::Image* Tileset::getImage() {
+	return this->tilesetImage;
+}
+
+int Tileset::getTilingPadding() {
+	return this->tilingPadding;
+}

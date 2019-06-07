@@ -5,6 +5,9 @@ project(Owaria)
 include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
+	${PROJECT_SOURCE_DIR}/Engine/Editors
+	${PROJECT_SOURCE_DIR}/Engine/Editors/TilemapEditor.h
+
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.h
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/BuildingAsset.h
@@ -36,6 +39,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/mathUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
 
 
@@ -43,6 +47,9 @@ include_directories(
 
 set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Editors
+	${PROJECT_SOURCE_DIR}/Engine/Editors/TilemapEditor.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.cpp

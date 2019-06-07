@@ -7,7 +7,6 @@
 #include <ContactListener.h>
 #include <Background.h>
 #include <tinyxml2.h>
-#include <TGUI/TGUI.hpp>
 
 using namespace tinyxml2;
 
@@ -18,25 +17,14 @@ Player* player;
 Camera* camera;
 ContactListener* contactListener;
 Background* background;
-tgui::Gui* gui;
-
-void onSignal() {
-	camera->SetFreeRoam(!camera->isCameraFreeRoam());
-}
 
 void init() {
-	gui = new tgui::Gui(*sfWindow);
-	tgui::Button::Ptr button = tgui::Button::create("Free Roam Switch!");
-	button->connect("pressed", onSignal);
-
-	gui->add(button);
-
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
 
 	camera = new Camera();
 
-	testMap = new Map(world, "../../Resources/Maps/TestMap.xml");
+	testMap = new Map(world, sfWindow, "../../Resources/Maps/TestMap.xml");
 
 	player = new Player(world, testMap, sf::Vector2f(1400, 500));
 	camera = new Camera(testMap, player);
@@ -46,7 +34,7 @@ void init() {
 
 void update(int updateElapsed) {
 	background->Update(updateElapsed, camera);
-	testMap->Update(updateElapsed);
+	testMap->Update(updateElapsed, camera);
 	if(!camera->isCameraFreeRoam())
 		player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
@@ -55,14 +43,11 @@ void update(int updateElapsed) {
 
 void render(int renderElapsed) {
 	background->Render(sfWindow, camera);
-	testMap->Render(sfWindow, *camera);
+	testMap->Render(sfWindow, camera);
 	player->Render(sfWindow, *camera);
-
-	gui->draw();
 }
 
 void cleanUp() {
-	delete gui;
 	delete contactListener;
 	delete camera;
 	delete testMap;
@@ -144,7 +129,7 @@ int main(void)
 		while (window.pollEvent(sfEvent)) {
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
-			gui->handleEvent(sfEvent);
+			testMap->HandleWindowEvent(sfEvent);
 		}
 			
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
