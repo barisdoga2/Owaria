@@ -81,7 +81,8 @@ Tile* Tileset::getTile(int id) {
 	for (Tile* tile : tiles)
 		if (tile->getID() == id)
 			return tile;
-	return nullptr;
+
+	return Tile::tileNotFound;
 }
 
 sf::Vector2f Tileset::getTilesetTileSize() {

@@ -79,12 +79,17 @@ void Map::Update(int updateElapsed) {
 void Map::Render(sf::RenderWindow* window, Camera camera) {
 	sf::Vector2f cameraPos = camera.getPosition();
 
-	int xStart = (int)cameraPos.x / (int)tileset->getTilesetTileSize().x;
-	int yStart = (int)cameraPos.y / (int)tileset->getTilesetTileSize().y;
+	int xStart = (int)floor(cameraPos.x / tileset->getTilePixelSize().x);
+	int yStart = (int)floor(cameraPos.y / tileset->getTilePixelSize().y);
+
+	int xEnd = xStart + (int)ceil(SCREEN_WIDTH / tileset->getTilePixelSize().x) + 1;
+	int yEnd = yStart + (int)ceil(SCREEN_HEIGHT / tileset->getTilePixelSize().y) + 1;
+	xEnd = xEnd > mapSize.x ? mapSize.x : xEnd;
+	yEnd = yEnd > mapSize.y ? mapSize.y : yEnd;
 	
 	tileRenderer->setSize(tileset->getTilePixelSize());
-	for (int y = yStart; y < yStart + SCREEN_HEIGHT / tileset->getTilesetTileSize().y; y++) {
-		for (int x = xStart; x < xStart + SCREEN_WIDTH / tileset->getTilesetTileSize().x + 1; x++) {
+	for (int y = yStart; y < yEnd; y++) {
+		for (int x = xStart; x < xEnd; x++) {
 
 			// Find Tile
 			Tile* tile = (gridTiles + y * mapSize.x + x); // Tile 0 is transparent no need for rendering.
@@ -100,7 +105,6 @@ void Map::Render(sf::RenderWindow* window, Camera camera) {
 
 	// Render All Fixtures
 	//b2Utils::RenderFixtures(window, body, m_offset);
-
 	
 	for (GameObject* go : gameObjects) {
 		sf::RectangleShape r;

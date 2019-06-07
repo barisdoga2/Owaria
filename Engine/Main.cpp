@@ -20,9 +20,14 @@ ContactListener* contactListener;
 Background* background;
 tgui::Gui* gui;
 
+void onSignal() {
+	camera->SetFreeRoam(!camera->isCameraFreeRoam());
+}
+
 void init() {
 	gui = new tgui::Gui(*sfWindow);
-	tgui::Button::Ptr button = tgui::Button::create("asd");
+	tgui::Button::Ptr button = tgui::Button::create("Free Roam Switch!");
+	button->connect("pressed", onSignal);
 
 	gui->add(button);
 
@@ -42,7 +47,8 @@ void init() {
 void update(int updateElapsed) {
 	background->Update(updateElapsed, camera);
 	testMap->Update(updateElapsed);
-	player->HandleInputs(updateElapsed);
+	if(!camera->isCameraFreeRoam())
+		player->HandleInputs(updateElapsed);
 	player->Update(updateElapsed);
 	camera->Update(updateElapsed);
 }
@@ -69,6 +75,7 @@ void cleanUp() {
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
+
 	window.setVerticalSyncEnabled(V_SYNC);
 	sfWindow = &window;
 	

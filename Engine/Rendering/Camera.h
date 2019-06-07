@@ -14,6 +14,8 @@ public:
 
 	void SetMap(Map* p_map);
 	void SetTarget(Player* p_player);
+	void SetFreeRoam(bool isFreeRoam);
+	bool isCameraFreeRoam();
 	Player* GetTarget();
 	Map* GetMap();
 
@@ -25,6 +27,7 @@ private:
 	Map* m_map;
 	sf::Vector2f position;
 	sf::Vector2f target;
+	bool isFreeRoam = false;
 
 	void calculateTarget();
 

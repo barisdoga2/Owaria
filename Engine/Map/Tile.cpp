@@ -1,8 +1,10 @@
 #include <Tile.h>
 
-
+Tile* Tile::tileNotFound;
 
 Tile::Tile(int id, sf::Image tileset, sf::Vector2f tilePosInTileset, sf::Vector2f tilePixelSize, int tilingPadding, bool solid, TileAsset* tileAsset) {
+	if (tileNotFound == nullptr)
+		Tile::EarlyInit();
 	this->solid = solid;
 	this->tileAsset = tileAsset;
 	this->id = id;

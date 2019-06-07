@@ -11,18 +11,34 @@ Camera::Camera(Map* p_map, Player* p_player) {
 }
 
 void Camera::Update(int updateElapsed) {
-	if (m_player != nullptr && m_map != nullptr) {
-		
-		sf::Vector2f playerPixPos = m_player->getPixPosition();
 
-		calculateTarget();
-		position.x += (target.x - position.x) * CAMERA_LERP * updateElapsed;
-		position.y += (target.y - position.y) * CAMERA_LERP * updateElapsed;
+	if (m_map != nullptr) {
+		if (!isFreeRoam && m_player != nullptr) {
+			calculateTarget();
+			position.x += (target.x - position.x) * CAMERA_LERP * updateElapsed;
+			position.y += (target.y - position.y) * CAMERA_LERP * updateElapsed;
+		}
+		else {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+				position.x -= CAMERA_FREE_ROAM_SPEED * updateElapsed;
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+				position.x += CAMERA_FREE_ROAM_SPEED * updateElapsed;
 
-		target.x = position.x;
-		target.y = position.y;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+				position.y -= CAMERA_FREE_ROAM_SPEED * updateElapsed;
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+				position.y += CAMERA_FREE_ROAM_SPEED * updateElapsed;
+
+			position.x = position.x < 0 ? 0 : position.x;
+			position.x = position.x > m_map->getMapSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH ? m_map->getMapSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH : position.x;
+			position.y = position.y < 0 ? 0 : position.y;
+			position.y = position.y > m_map->getMapSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT ? m_map->getMapSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT : position.y;
+		}
 	}
-
+			
+	target.x = position.x;
+	target.y = position.y;
+	
 }
 
 void Camera::calculateTarget() {
@@ -68,4 +84,12 @@ void Camera::SetTarget(Player* p_player) {
 
 sf::Vector2f Camera::getPosition() {
 	return position;
+}
+
+void Camera::SetFreeRoam(bool isFreeRoam) {
+	this->isFreeRoam = isFreeRoam;
+}
+
+bool Camera::isCameraFreeRoam() {
+	return isFreeRoam;
 }

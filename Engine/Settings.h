@@ -5,7 +5,7 @@
 #define TARGET_UPS 60.0f
 #define TARGET_FPS_TIME 1.0f / TARGET_FPS
 #define TARGET_UPS_TIME 1.0f / TARGET_UPS
-#define V_SYNC true
+#define V_SYNC false
 #define BOX2D_SCALE 30.0f
 #define BOX2D_VELOCITY_ITERATIONS 8
 #define BOX2D_POSITION_ITERATIONS 3
@@ -19,3 +19,4 @@
 #define PLAYER_FRICTION 3
 
 #define CAMERA_LERP 0.025f
+#define CAMERA_FREE_ROAM_SPEED 1.0f
