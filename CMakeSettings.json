@@ -14,10 +14,10 @@
       "inheritEnvironments": [ "msvc_x86" ],
       "buildRoot": "${projectDir}\\build\\${name}",
       "variables": [
-        {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
-        }
+							{
+								"name": "CMAKE_TOOLCHAIN_FILE",
+								"value": "${env.VCKPG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
+							}
       ]
     },
     {
@@ -27,10 +27,10 @@
       "inheritEnvironments": [ "msvc_x64" ],
       "buildRoot": "${projectDir}\\build\\${name}",
       "variables": [
-        {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
-        }
+							{
+								"name": "CMAKE_TOOLCHAIN_FILE",
+								"value": "${env.VCKPG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
+							}
       ]
     }
   ]
