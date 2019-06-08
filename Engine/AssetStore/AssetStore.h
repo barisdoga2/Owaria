@@ -25,6 +25,8 @@ public:
 	static void LoadObjectSet(XMLElement* objectsetElement);
 	static void LoadBuildingAsset(XMLElement* buildingAssetElement);
 
+	static vector<ObjectSet*> getAllObjectSets();
+
 private:
 	AssetStore();
 	static std::vector<Tileset*> tilesets;

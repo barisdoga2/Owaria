@@ -11,27 +11,28 @@ using namespace std;
 using namespace tgui;
 
 
-class TilemapEditor {
+class ObjectEditor {
 public:
-	TilemapEditor(sf::RenderWindow* window, Map* map);
-	~TilemapEditor();
+	ObjectEditor(sf::RenderWindow* window, Map* map);
+	~ObjectEditor();
 
-	void clickCallback();
+	void itemSelectCallback();
 	void Render(Camera* camera);
 	void Update(int updateElapsed, Camera* camera);
 	void HandleWindowEvent(sf::Event event, Camera* camera);
 	
-
 private:
 	sf::RenderWindow* window;
 	Gui* gui;
 	bool isActive = false;
+	ComboBox::Ptr objectSets;
+	string lastSelectedObjectSet;
+	ComboBox::Ptr objectAssets;
+	string lastSelectedObjectAsset;
+	ObjectAsset* selectedObjectAsset = nullptr;
 
 	Map* map;
-	Tile* selectedTile = nullptr;
-	sf::RectangleShape* selectedTileRenderer;
 
-	// GUI Widgets
-	Picture::Ptr tilesetImage;
+	sf::RectangleShape* selectedObjectAssetRenderer;
 
 };

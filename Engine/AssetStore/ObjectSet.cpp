@@ -35,3 +35,7 @@ Tileset* ObjectSet::getTileset() {
 string ObjectSet::getName() {
 	return this->name;
 }
+
+vector<ObjectAsset*> ObjectSet::getAllObjectAssets() {
+	return this->objectAssets;
+}

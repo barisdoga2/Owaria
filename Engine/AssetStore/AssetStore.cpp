@@ -52,3 +52,7 @@ void AssetStore::CleanUp() {
 	for (BuildingAsset* b : buildingAssets)
 		delete b;
 }
+
+vector<ObjectSet*> AssetStore::getAllObjectSets() {
+	return objectSets;
+}

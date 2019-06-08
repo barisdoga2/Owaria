@@ -6,6 +6,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
+	${PROJECT_SOURCE_DIR}/Engine/Editors/ObjectEditor.h
 	${PROJECT_SOURCE_DIR}/Engine/Editors/TilemapEditor.h
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
@@ -49,6 +50,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
+	${PROJECT_SOURCE_DIR}/Engine/Editors/ObjectEditor.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Editors/TilemapEditor.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore

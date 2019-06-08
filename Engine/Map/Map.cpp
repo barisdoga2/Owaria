@@ -1,6 +1,7 @@
 #include <Map.h>
 
 Map::Map(b2World* world, sf::RenderWindow* window, const char* xml) {
+	this->world = world;
 
 	XMLDocument tDoc;
 	tDoc.LoadFile(xml);
@@ -59,8 +60,9 @@ Map::Map(b2World* world, sf::RenderWindow* window, const char* xml) {
 	for (MarchingSolution s : marchingSquares->solutions)
 		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
 
-	// Create Tilemap Editor
-	tilemapEditor = new TilemapEditor(window, tileset);
+	// Create Editors
+	tilemapEditor = new TilemapEditor(window, this);
+	objectEditor = new ObjectEditor(window, this);
 }
 
 Map::~Map() {
@@ -75,10 +77,12 @@ Map::~Map() {
 		delete b;
 
 	delete tilemapEditor;
+	delete objectEditor;
 }
 
 void Map::Update(int updateElapsed, Camera* camera) {
 	tilemapEditor->Update(updateElapsed, camera);
+	objectEditor->Update(updateElapsed, camera);
 }
 
 void Map::Render(sf::RenderWindow* window, Camera* camera) {
@@ -122,6 +126,7 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 	}
 
 	tilemapEditor->Render(camera);
+	objectEditor->Render(camera);
 }
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
@@ -136,6 +141,19 @@ sf::Vector2i Map::getMapSize() {
 	return this->mapSize;
 }
 
-void Map::HandleWindowEvent(sf::Event event) {
-	tilemapEditor->HandleWindowEvent(event);
+void Map::HandleWindowEvent(sf::Event event, Camera* camera) {
+	tilemapEditor->HandleWindowEvent(event, camera);
+	objectEditor->HandleWindowEvent(event, camera);
+}
+
+void Map::reMarch() {
+	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, this);
+	body->SetUserData((void*)bodyContact);
+	marchingSquares = new MarchingSquares(this);
+	for (MarchingSolution s : marchingSquares->solutions)
+		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
+}
+
+void Map::AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos) {
+	gameObjects.push_back(new GameObject(asset, world, tilePos));
 }
