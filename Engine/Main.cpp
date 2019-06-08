@@ -129,7 +129,7 @@ int main(void)
 		while (window.pollEvent(sfEvent)) {
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
-			testMap->HandleWindowEvent(sfEvent);
+			testMap->HandleWindowEvent(sfEvent, camera);
 		}
 			
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))

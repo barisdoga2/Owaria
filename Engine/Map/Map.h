@@ -27,6 +27,8 @@ class Camera;
 #include <XMLUtils.h>
 class TilemapEditor;
 #include <TilemapEditor.h>
+class ObjectEditor;
+#include <ObjectEditor.h>
 
 using namespace tinyxml2;
 
@@ -39,7 +41,9 @@ public:
 	void Update(int updateElapsed, Camera* camera);
 	void Render(sf::RenderWindow* window, Camera* camera);
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
-	void HandleWindowEvent(sf::Event event);
+	void HandleWindowEvent(sf::Event event, Camera* camera);
+	void reMarch();
+	void AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos);
 
 	Tile* gridTiles;
 	Tileset* getTileset();
@@ -57,4 +61,7 @@ private:
 	sf::RectangleShape* tileRenderer;
 	
 	TilemapEditor* tilemapEditor;
+	ObjectEditor* objectEditor;
+
+	b2World* world;
 };

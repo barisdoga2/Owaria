@@ -13,13 +13,13 @@ using namespace tgui;
 
 class TilemapEditor {
 public:
-	TilemapEditor(sf::RenderWindow* window, Tileset* tileset);
+	TilemapEditor(sf::RenderWindow* window, Map* map);
 	~TilemapEditor();
 
 	void clickCallback();
 	void Render(Camera* camera);
 	void Update(int updateElapsed, Camera* camera);
-	void HandleWindowEvent(sf::Event event);
+	void HandleWindowEvent(sf::Event event, Camera* camera);
 	
 
 private:
@@ -27,7 +27,7 @@ private:
 	Gui* gui;
 	bool isActive = false;
 
-	Tileset* tileset;
+	Map* map;
 	Tile* selectedTile = nullptr;
 	sf::RectangleShape* selectedTileRenderer;
 

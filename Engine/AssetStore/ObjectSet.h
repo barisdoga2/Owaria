@@ -27,7 +27,8 @@ public:
 
 	string getObjectsetName();
 	string getName();
-	
+	vector<ObjectAsset*> getAllObjectAssets();
+
 private:
 	string name;
 	string gameObjectPrefix;
