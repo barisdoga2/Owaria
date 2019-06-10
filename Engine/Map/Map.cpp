@@ -162,3 +162,8 @@ void Map::reMarch() {
 void Map::AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos) {
 	gameObjects.push_back(new GameObject(asset, world, tilePos));
 }
+
+void Map::AddBuilding(BuildingAsset* asset, sf::Vector2i tilePos) {
+	gameBuildings.push_back(new Building(asset, tilePos));
+	gameBuildings.at(gameBuildings.size() - 1)->mergeWithMap(this);
+}

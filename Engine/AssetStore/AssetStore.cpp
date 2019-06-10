@@ -56,3 +56,7 @@ void AssetStore::CleanUp() {
 vector<ObjectSet*> AssetStore::getAllObjectSets() {
 	return objectSets;
 }
+
+vector<BuildingAsset*> AssetStore::getAllBuildingAssets() {
+	return buildingAssets;
+}

@@ -10,3 +10,4 @@ build/x86-Debug/*
 !/build/x86-Debug/zlibd1.dll
 !/build/x86-Debug/tinyxml2d.dll
 !/build/x86-Debug/tgui-d.dll
+*.bat

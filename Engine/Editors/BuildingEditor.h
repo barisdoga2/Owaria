@@ -26,6 +26,11 @@ private:
 	Gui* gui;
 	bool isActive = false;
 
+	ComboBox::Ptr buildings;
+
+	sf::RectangleShape* tileRenderer;
+	BuildingAsset* selectedBuildingAsset = nullptr;
+
 	Map* map;
 
 };

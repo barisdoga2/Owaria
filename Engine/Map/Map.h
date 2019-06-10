@@ -46,6 +46,7 @@ public:
 	void HandleWindowEvent(sf::Event event, Camera* camera);
 	void reMarch();
 	void AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos);
+	void AddBuilding(BuildingAsset* asset, sf::Vector2i tilePos);
 
 	Tile* gridTiles;
 	Tileset* getTileset();
