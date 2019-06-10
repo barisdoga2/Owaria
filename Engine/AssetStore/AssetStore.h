@@ -26,6 +26,7 @@ public:
 	static void LoadBuildingAsset(XMLElement* buildingAssetElement);
 
 	static vector<ObjectSet*> getAllObjectSets();
+	static vector<BuildingAsset*> getAllBuildingAssets();
 
 private:
 	AssetStore();
