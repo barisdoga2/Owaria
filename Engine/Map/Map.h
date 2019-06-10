@@ -29,6 +29,8 @@ class TilemapEditor;
 #include <TilemapEditor.h>
 class ObjectEditor;
 #include <ObjectEditor.h>
+class BuildingEditor;
+#include <BuildingEditor.h>
 
 using namespace tinyxml2;
 
@@ -62,6 +64,7 @@ private:
 	
 	TilemapEditor* tilemapEditor;
 	ObjectEditor* objectEditor;
+	BuildingEditor* buildingEditor;
 
 	b2World* world;
 };

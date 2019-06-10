@@ -63,6 +63,7 @@ Map::Map(b2World* world, sf::RenderWindow* window, const char* xml) {
 	// Create Editors
 	tilemapEditor = new TilemapEditor(window, this);
 	objectEditor = new ObjectEditor(window, this);
+	buildingEditor = new BuildingEditor(window, this);
 }
 
 Map::~Map() {
@@ -78,11 +79,13 @@ Map::~Map() {
 
 	delete tilemapEditor;
 	delete objectEditor;
+	delete buildingEditor;
 }
 
 void Map::Update(int updateElapsed, Camera* camera) {
 	tilemapEditor->Update(updateElapsed, camera);
 	objectEditor->Update(updateElapsed, camera);
+	buildingEditor->Update(updateElapsed, camera);
 }
 
 void Map::Render(sf::RenderWindow* window, Camera* camera) {
@@ -127,6 +130,7 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 
 	tilemapEditor->Render(camera);
 	objectEditor->Render(camera);
+	buildingEditor->Render(camera);
 }
 
 void Map::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
@@ -144,6 +148,7 @@ sf::Vector2i Map::getMapSize() {
 void Map::HandleWindowEvent(sf::Event event, Camera* camera) {
 	tilemapEditor->HandleWindowEvent(event, camera);
 	objectEditor->HandleWindowEvent(event, camera);
+	buildingEditor->HandleWindowEvent(event, camera);
 }
 
 void Map::reMarch() {
