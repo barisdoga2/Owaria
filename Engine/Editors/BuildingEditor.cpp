@@ -3,19 +3,35 @@
 
 
 BuildingEditor::BuildingEditor(sf::RenderWindow* window, Map* map) {
-	cout << "Press 'CTRL+B' or '3' to open or close Building Editor! While it is opened you can press 'H' to hide or show building selector!" << endl;
+	cout << "Press 'CTRL+B' or '3' to open or close Building Editor!" << endl;
 	this->window = window;
 	this->map = map;
 
 	gui = new Gui(*window);
+	child = ChildWindow::create("Building Editor");
 
+	Label::Ptr selectBuildingLabel = Label::create("Please select a building asset");
+	child->add(selectBuildingLabel);
+
+	int maxItems = 5;
 	buildings = ComboBox::create();
 	buildings->connect("itemSelected", (std::function<void()>)std::bind(&BuildingEditor::itemSelectCallback, this));
+	buildings->setMaximumItems(maxItems);
+	buildings->setPosition(0, selectBuildingLabel->getSize().y);
+	child->add(buildings);
 
 	for (BuildingAsset* bA : AssetStore::getAllBuildingAssets()) 
 		buildings->addItem(bA->getName());
 
-	gui->add(buildings);
+	int maxXSize = 0;
+	for (Widget::Ptr p : child->getWidgets()) {
+		cout << p->getSize().x << endl;
+		if (p->getSize().x > maxXSize)
+			maxXSize = p->getSize().x;
+	}
+
+	child->setSize(maxXSize, buildings->getPosition().y + buildings->getSize().y);
+	gui->add(child);
 
 	tileRenderer = new sf::RectangleShape();
 }
@@ -42,18 +58,6 @@ void BuildingEditor::Update(int updateElapsed, Camera* camera) {
 
 	if (!isActive)
 		return;
-
-	static bool keyRelaseFlag2 = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
-		if (keyRelaseFlag2) {
-			buildings->setVisible(!buildings->isVisible());
-			keyRelaseFlag2 = false;
-		}
-	}
-	else {
-		keyRelaseFlag2 = true;
-	}
-
 }
 
 void BuildingEditor::Render(Camera* camera) {
@@ -81,19 +85,20 @@ void BuildingEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 	if (!isActive)
 		return;
 
-	gui->handleEvent(event);
+	if (gui->handleEvent(event))
+		return;
 	
-	sf::Vector2i mPos = sf::Mouse::getPosition(*window);
-	if (selectedBuildingAsset == nullptr || (buildings->isVisible() && mathUtils::intersectsWith(buildings->getPosition(), buildings->getSize(), mPos)))
+	if (selectedBuildingAsset == nullptr)
 		return;
 
-	static bool mouseRelaseFlag = false;
+	static bool mouseRelaseFlag = true;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (mouseRelaseFlag)
 			mouseRelaseFlag = false;
 	}
 	else {
 		if (!mouseRelaseFlag) {
+			sf::Vector2i mPos = sf::Mouse::getPosition(*window);
 			sf::Vector2f cPos = camera->getPosition();
 			sf::Vector2i tilePos = sf::Vector2i((int)(cPos.x + mPos.x) / (int)map->getTileset()->getTilePixelSize().x, (int)(cPos.y + mPos.y) / (int)map->getTileset()->getTilePixelSize().y);
 			map->AddBuilding(selectedBuildingAsset, tilePos);

@@ -3,25 +3,47 @@
 
 
 ObjectEditor::ObjectEditor(sf::RenderWindow* window, Map* map) {
-	cout << "Press 'CTRL+O' or '2' to open or close Tilemap Editor! While it is opened you can press 'H' to hide or show object selector!" << endl;
+	cout << "Press 'CTRL+O' or '2' to open or close Object Editor!" << endl;
 	this->window = window;
 	this->map = map;
 
 	gui = new Gui(*window);
-	
+	child = ChildWindow::create("Object Editor");
+	Label::Ptr selectObecjectSetLabel = Label::create("Please select a object set");
+	Label::Ptr selectObjectAssetLabel = Label::create("Please select a object asset");
+
+	child->add(selectObecjectSetLabel);
+
+	int maxItems = 5;
 	objectSets = ComboBox::create();
 	objectSets->connect("itemSelected", (std::function<void()>)std::bind(&ObjectEditor::itemSelectCallback, this));
-	
+	objectSets->setPosition(0, selectObecjectSetLabel->getPosition().y + selectObecjectSetLabel->getSize().y);
+	objectSets->setItemsToDisplay(maxItems);
+	child->add(objectSets);
+
+	selectObjectAssetLabel->setPosition(0, objectSets->getPosition().y + objectSets->getSize().y);
+	child->add(selectObjectAssetLabel);
+
 	objectAssets = ComboBox::create();
 	objectAssets->connect("itemSelected", (std::function<void()>)std::bind(&ObjectEditor::itemSelectCallback, this));
-	objectAssets->setPosition(sf::Vector2f(0, objectSets->getSize().y));
+	objectAssets->setPosition(sf::Vector2f(0, selectObjectAssetLabel->getPosition().y + selectObjectAssetLabel->getSize().y));
+	objectAssets->setItemsToDisplay(maxItems);
+	child->add(objectAssets);
 
 	for (ObjectSet* objectSet : AssetStore::getAllObjectSets()) {
 		objectSets->addItem(objectSet->getName());
 	}
-	
-	gui->add(objectSets);
-	gui->add(objectAssets);
+
+	int maxXSize = 0;
+	for (Widget::Ptr p : child->getWidgets()) {
+		cout << p->getSize().x << endl;
+		if (p->getSize().x > maxXSize)
+			maxXSize = p->getSize().x;
+	}
+
+	child->setSize(maxXSize, objectAssets->getPosition().y + objectAssets->getSize().y);
+	child->setTitleButtons(0);
+	gui->add(child);
 
 	selectedObjectAssetRenderer = new sf::RectangleShape();
 }
@@ -50,18 +72,6 @@ void ObjectEditor::Update(int updateElapsed, Camera* camera) {
 	if (!isActive)
 		return;
 
-	static bool keyRelaseFlag2 = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
-		if (keyRelaseFlag2) {
-			objectSets->setVisible(!objectSets->isVisible());
-			objectAssets->setVisible(!objectAssets->isVisible());
-			keyRelaseFlag2 = false;
-		}
-	}
-	else {
-		keyRelaseFlag2 = true;
-	}
-
 }
 
 void ObjectEditor::Render(Camera* camera) {
@@ -85,19 +95,20 @@ void ObjectEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 	if (!isActive)
 		return;
 
-	gui->handleEvent(event);
-
-	sf::Vector2i mPos = sf::Mouse::getPosition(*window);
-	if (selectedObjectAsset == nullptr || (objectSets->isVisible() && mathUtils::intersectsWith(objectSets->getPosition(), objectSets->getSize(), mPos)) || (objectAssets->isVisible() && mathUtils::intersectsWith(objectAssets->getPosition(), objectAssets->getSize(), mPos)))
+	if (gui->handleEvent(event))
 		return;
 	
-	static bool mouseRelaseFlag = false;
+	if (selectedObjectAsset == nullptr)
+		return;
+	
+	static bool mouseRelaseFlag = true;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (mouseRelaseFlag) 
 			mouseRelaseFlag = false;
 	}
 	else {
 		if (!mouseRelaseFlag) {
+			sf::Vector2i mPos = sf::Mouse::getPosition(*window);
 			sf::Vector2f cPos = camera->getPosition();
 			sf::Vector2i tilePos = sf::Vector2i((int)(cPos.x + mPos.x) / (int)map->getTileset()->getTilePixelSize().x, (int)(cPos.y + mPos.y) / (int)map->getTileset()->getTilePixelSize().y);
 			map->AddGameObject(selectedObjectAsset, tilePos);

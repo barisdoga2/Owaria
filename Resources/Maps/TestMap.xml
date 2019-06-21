@@ -93,6 +93,8 @@
         <ObjectAsset name="TreeA" tileSetTileID="0" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
         <ObjectAsset name="TreeB" tileSetTileID="1" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
         <ObjectAsset name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+        <ObjectAsset name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
+        <ObjectAsset name="TreeC" tileSetTileID="2" hasPhysics="0" isStaticPhysics="0" contactDataType="0" contactDataObject="0" />
       </ObjectSet>
       <ObjectSet name="Ladder" tilesetName="ladderTileSet">
         <ObjectAsset name="LadderA" tileSetTileID="0" hasPhysics="1" isStaticPhysics="1" contactDataType="3" contactDataObject="2" />

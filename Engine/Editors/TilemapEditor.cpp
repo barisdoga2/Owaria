@@ -3,18 +3,27 @@
 
 
 TilemapEditor::TilemapEditor(sf::RenderWindow* window, Map* map) {
-	cout << "Press 'CTRL+T' or '1' to open or close Tilemap Editor! While it is opened you can press 'H' to hide or show tile selector!" << endl;
+	cout << "Press 'CTRL+T' or '1' to open or close Tilemap Editor!" << endl;
 	this->window = window;
 	this->map = map;
 
-	gui = new Gui(*window);
-
 	sf::Texture tt;
 	tt.loadFromImage(*map->getTileset()->getImage());
+
+	gui = new Gui(*window);
+	child = ChildWindow::create("Tilemap Editor");
+	Label::Ptr selectTileLabel = Label::create("Please Select a tile");
 	tilesetImage = Picture::create(tt, false);
+	child->setSize(tilesetImage->getSize().x, tilesetImage->getSize().y + selectTileLabel->getSize().y);
+
 	tilesetImage->connect("clicked", (std::function<void()>)std::bind(&TilemapEditor::clickCallback, this));
+	tilesetImage->setPosition(0, selectTileLabel->getPosition().y + selectTileLabel->getSize().y);
 	
-	gui->add(tilesetImage);
+	child->setTitleButtons(0);
+	child->add(selectTileLabel);
+	child->add(tilesetImage);
+
+	gui->add(child);
 
 	selectedTileRenderer = new sf::RectangleShape();
 	selectedTileRenderer->setSize(map->getTileset()->getTilePixelSize());
@@ -31,7 +40,6 @@ void TilemapEditor::Update(int updateElapsed, Camera* camera) {
 		if (keyRelaseFlag) {
 			isActive = !isActive;
 			selectedTile = nullptr;
-			tilesetImage->setVisible(true);
 			camera->SetFreeRoam(isActive);
 			keyRelaseFlag = false;
 		}
@@ -42,18 +50,6 @@ void TilemapEditor::Update(int updateElapsed, Camera* camera) {
 
 	if (!isActive)
 		return;
-
-	static bool keyRelaseFlag2 = false;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::H)) {
-		if (keyRelaseFlag2) {
-			tilesetImage->setVisible(!tilesetImage->isVisible());
-			keyRelaseFlag2 = false;
-		}
-	}
-	else {
-		keyRelaseFlag2 = true;
-	}
-
 }
 
 void TilemapEditor::Render(Camera* camera) {
@@ -77,14 +73,15 @@ void TilemapEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 	if (!isActive)
 		return;
 
-	gui->handleEvent(event);
+	if (gui->handleEvent(event))
+		return;
 
-	sf::Vector2i mPos = sf::Mouse::getPosition(*window);
-	if (selectedTile == nullptr || (tilesetImage->isVisible() && mathUtils::intersectsWith(tilesetImage->getPosition(), map->getTileset()->getImage()->getSize(), mPos)))
+	if (selectedTile == nullptr)
 		return;
 
 	static bool mouseRelaseFlag = false;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		sf::Vector2i mPos = sf::Mouse::getPosition(*window);
 		sf::Vector2f cPos = camera->getPosition();
 		sf::Vector2i tilePos = sf::Vector2i((int)(cPos.x + mPos.x) / (int)map->getTileset()->getTilePixelSize().x, (int)(cPos.y + mPos.y) / (int)map->getTileset()->getTilePixelSize().y);
 
@@ -103,7 +100,7 @@ void TilemapEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 
 void TilemapEditor::clickCallback() {
 	sf::Vector2i mPos = sf::Mouse::getPosition(*window);
-	sf::Vector2f iPos = tilesetImage->getPosition();
+	sf::Vector2f iPos = tilesetImage->getAbsolutePosition();
 	sf::Vector2i absPos = sf::Vector2i(mPos.x - (int)iPos.x, mPos.y - (int)iPos.y);
 	sf::Vector2i tilePos = sf::Vector2i((int)absPos.x / ((int)map->getTileset()->getTilePixelSize().x + map->getTileset()->getTilingPadding()), (int)absPos.y / ((int)map->getTileset()->getTilePixelSize().y + map->getTileset()->getTilingPadding()));
 	int tileID = tilePos.x + tilePos.y * (int)map->getTileset()->getTilesetTileSize().x;

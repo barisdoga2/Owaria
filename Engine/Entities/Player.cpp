@@ -59,16 +59,12 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.motorSpeed = 100;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 	
-	// Create Drop Effect
-	dropDustEffect = new Effect("Dust");
 }
 
 Player::~Player() {
 	delete spritesheet;
 	delete walkAnimation;
 	delete idleAnimation;
-
-	delete dropDustEffect;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
@@ -82,7 +78,6 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 	sf::Vector2f effectPos;
 	effectPos.x = body_foot->GetPosition().x * BOX2D_SCALE - camera.getPosition().x - 50 / 2;
 	effectPos.y = body_foot->GetPosition().y * BOX2D_SCALE - camera.getPosition().y + body_foot->GetFixtureList()->GetShape()->m_radius * BOX2D_SCALE;
-	dropDustEffect->Render(window, effectPos);
 }
 
 void Player::Update(int updateElapsed) {
@@ -91,8 +86,6 @@ void Player::Update(int updateElapsed) {
 	if (isOnLadder > 0) {
 		body->ApplyForceToCenter(b2Vec2(0, -10.0f * (body->GetMass() + body_foot->GetMass())), false);
 	}
-
-	dropDustEffect->Update(updateElapsed);
 }
 
 void Player::HandleInputs(int updateElapsed) {
@@ -148,7 +141,7 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 
 			if (numFootContacts > 0) {
 				if (!isOnAir) {
-					dropDustEffect->Start();
+
 				}
 				isOnAir = false;
 			}

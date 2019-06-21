@@ -25,6 +25,7 @@ public:
 private:
 	sf::RenderWindow* window;
 	Gui* gui;
+	ChildWindow::Ptr child;
 	bool isActive = false;
 
 	Map* map;
@@ -33,5 +34,6 @@ private:
 
 	// GUI Widgets
 	Picture::Ptr tilesetImage;
+
 
 };

@@ -8,7 +8,6 @@
 #include <Animation.h>
 #include <b2Utils.h>
 #include <ContactData.h>
-#include <Effect.h>
 
 class Player {
 public:
@@ -39,7 +38,5 @@ private:
 	sf::Image* spritesheet;
 
 	b2RevoluteJoint* foot_joint;
-
-	Effect* dropDustEffect;
 
 };

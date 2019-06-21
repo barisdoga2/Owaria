@@ -24,6 +24,7 @@ public:
 private:
 	sf::RenderWindow* window;
 	Gui* gui;
+	ChildWindow::Ptr child;
 	bool isActive = false;
 	ComboBox::Ptr objectSets;
 	string lastSelectedObjectSet;
