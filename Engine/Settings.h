@@ -1,5 +1,5 @@
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 #define SCREEN_TITLE "Owaria!"
 #define TARGET_FPS 60.0f
 #define TARGET_UPS 60.0f

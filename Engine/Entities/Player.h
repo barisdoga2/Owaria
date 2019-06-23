@@ -35,6 +35,7 @@ private:
 	Animation* currentAnimation;
 	Animation* walkAnimation;
 	Animation* idleAnimation;
+	Animation* slashAnimation;
 	sf::Texture* spritesheet;
 	sf::Texture* spritesheet2;
 

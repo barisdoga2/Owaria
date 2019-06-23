@@ -9,6 +9,7 @@ BuildingEditor::BuildingEditor(sf::RenderWindow* window, Map* map) {
 
 	gui = new Gui(*window);
 	child = ChildWindow::create("Building Editor");
+	child->setTitleButtons(0);
 
 	Label::Ptr selectBuildingLabel = Label::create("Please select a building asset");
 	child->add(selectBuildingLabel);

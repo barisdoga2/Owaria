@@ -19,6 +19,9 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	idleAnimation = new Animation("idle", 0, 1 * 64, 64, 64, 2, 680, true);
 	idleAnimation->Play();
+
+	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, true);
+	slashAnimation->Play();
 	
 	currentAnimation = idleAnimation;
 
@@ -69,6 +72,7 @@ Player::~Player() {
 	delete spritesheet2;
 	delete walkAnimation;
 	delete idleAnimation;
+	delete slashAnimation;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
@@ -128,6 +132,10 @@ void Player::HandleInputs(int updateElapsed) {
 		isOnAir = true;
 	}
 	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+		currentAnimation = slashAnimation;
+	}
+
 	body->SetLinearVelocity(vel);
 	
 }
