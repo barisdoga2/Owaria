@@ -5,9 +5,9 @@
 #include <Box2D/Box2D.h>
 #include <Map.h>
 #include <Settings.h>
-#include <Animation.h>
 #include <b2Utils.h>
 #include <ContactData.h>
+#include <Animation.h>
 
 class Player {
 public:
@@ -35,7 +35,8 @@ private:
 	Animation* currentAnimation;
 	Animation* walkAnimation;
 	Animation* idleAnimation;
-	sf::Image* spritesheet;
+	sf::Texture* spritesheet;
+	sf::Texture* spritesheet2;
 
 	b2RevoluteJoint* foot_joint;
 

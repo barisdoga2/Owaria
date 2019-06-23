@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <Box2D/Box2D.h>
 #include <Settings.h>
 #include <Map.h>
@@ -61,10 +62,18 @@ int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
 
+	sf::Music music;
+	if (!music.openFromFile("../../Resources/music.ogg")) {
+		cout << "couldnt load" << endl;
+	}
+	music.setLoop(true);
+	music.setVolume(25);
+	music.play();
+
 	window.setVerticalSyncEnabled(V_SYNC);
 	sfWindow = &window;
 	
-	b2World* m_world = new b2World(b2Vec2(0, 10));
+	b2World* m_world = new b2World(b2Vec2(0, WORLD_GRAVITY));
 	world = m_world;
 
 	init();

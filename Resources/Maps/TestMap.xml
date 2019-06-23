@@ -9,8 +9,21 @@
         <tilePixWidth>16</tilePixWidth>
         <tilePixHeight>16</tilePixHeight>
         <padding>2</padding>
-        <solidIDs>1	18 89 105	120	121	231	232	233	234	235	236	237	238</solidIDs>
+        <solidIDs>1	18 89 105	120	121 215 216	231	232	233	234	235	236	237	238</solidIDs>
         <specialTiles>
+          <specialTile id="215">
+            <vertex x="0" y="0"/>
+            <vertex x="4" y="4"/>
+            <vertex x="11" y="8"/>
+            <vertex x="15" y="8"/>
+          </specialTile>
+          <specialTile id="216">
+            <vertex x="0" y="8"/>
+            <vertex x="4" y="9"/>
+            <vertex x="11" y="10"/>
+            <vertex x="15" y="16"/>
+          </specialTile>
+
           <specialTile id="231">
             <vertex x="0" y="0"/>
             <vertex x="4" y="4"/>

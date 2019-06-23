@@ -16,7 +16,7 @@
       "variables": [
 							{
 								"name": "CMAKE_TOOLCHAIN_FILE",
-								"value": "${env.VCKPG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
+								"value": "${env.VCKG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
 							}
       ]
     },
@@ -29,7 +29,7 @@
       "variables": [
 							{
 								"name": "CMAKE_TOOLCHAIN_FILE",
-								"value": "${env.VCKPG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
+								"value": "${env.VCKG_PATH}\\scripts\\buildsystems\\vcpkg.cmake"
 							}
       ]
     }

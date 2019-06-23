@@ -1,7 +1,8 @@
 #include <Animation.h>
 
 
-Animation::Animation(sf::Image* image, std::string name, int yStart, int width, int height, int length, int frameDelay, bool isContinuous) {
+
+Animation::Animation(std::string name, int xStart, int yStart, int width, int height, int length, int frameDelay, bool isContinuous) {
 	this->name = name;
 	this->frameDelay = frameDelay;
 	this->width = width;
@@ -9,11 +10,12 @@ Animation::Animation(sf::Image* image, std::string name, int yStart, int width, 
 	this->isContinuous = isContinuous;
 	this->length = length;
 	this->currentFrame = 0;
-	for (int i = 0; i < length; i++) {
-		sf::Texture* frame = new sf::Texture();
-		frame->loadFromImage(*image, sf::IntRect(i * width, yStart * height, width, height));
-		frames.push_back(frame);
-	}
+	for (int i = 0; i < length; i++) 
+		frames.push_back(sf::IntRect(xStart + i * width, yStart, width, height));
+}
+
+Animation::~Animation() {
+
 }
 
 void Animation::Hide() {
@@ -42,9 +44,9 @@ bool Animation::isFinished() {
 void Animation::Update(int updateElapsed) {
 	if (isPlaying) {
 		timePassedMs += updateElapsed;
-		if (timePassedMs >= frameDelay * (currentFrame + 1)) 
+		if (timePassedMs >= frameDelay * (currentFrame + 1))
 			currentFrame++;
-		if(currentFrame > length - 1)
+		if (currentFrame > length - 1)
 			if (isContinuous)
 				Play();
 			else
@@ -52,24 +54,20 @@ void Animation::Update(int updateElapsed) {
 	}
 }
 
-void Animation::Render(sf::RenderWindow* window, sf::Vector2f coords, int yMirror) {
+void Animation::Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vector2f coords, int yMirror) {
 	if (isHidden)
 		return;
 
-	renderer.setTexture(*frames.at(currentFrame));
+	renderer.setTexture(*texture);
 	renderer.setPosition(sf::Vector2f(coords.x + (yMirror ? width : 0), coords.y));
+	renderer.setTextureRect(frames.at(currentFrame));
 
 	if (!yMirror)
 		renderer.setScale(1, 1);
 	else
 		renderer.setScale(-1, 1);
-	
-	window->draw(renderer);
-}
 
-Animation::~Animation() {
-	for (sf::Texture* f : frames) 
-		delete f;
+	window->draw(renderer);
 }
 
 string Animation::GetName() {

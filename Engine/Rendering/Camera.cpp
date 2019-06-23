@@ -50,7 +50,7 @@ void Camera::calculateTarget() {
 	else if (target.x > m_map->getMapSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH)
 		target.x = (float)m_map->getMapSize().x * m_map->getTileset()->getTilePixelSize().x - SCREEN_WIDTH;
 
-	target.y = playerb2Pos.y * BOX2D_SCALE - SCREEN_HEIGHT / 2.0f;
+	target.y = playerb2Pos.y * BOX2D_SCALE - SCREEN_HEIGHT / 1.5f;
 	if (target.y < 0)
 		target.y = 0;
 	else if (target.y > m_map->getMapSize().y * m_map->getTileset()->getTilePixelSize().y - SCREEN_HEIGHT)

@@ -1,5 +1,7 @@
 #include <Player.h>
 
+#define SPEED 1
+#define TORQUE 10
 
 Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	this->map = map;
@@ -7,17 +9,18 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	std::string playerPath = "../../Resources/Player/";
 
 	// Create Animations
-	spritesheet = new sf::Image();
-	spritesheet->loadFromFile(playerPath + "Player2.png");
+	spritesheet = new sf::Texture();
+	spritesheet2 = new sf::Texture();
+	spritesheet->loadFromFile(playerPath + "Body.png");
+	spritesheet2->loadFromFile(playerPath + "Dagger.png");
 
-	walkAnimation = new Animation(spritesheet, "walk", 9, 64, 64, 9, 300, true);
+	walkAnimation = new Animation("walk", 0, 9 * 64, 64, 64, 9, 300, true);
 	walkAnimation->Play();
 
-	idleAnimation = new Animation(spritesheet, "idle", 1, 64, 64, 2, 680, true);
+	idleAnimation = new Animation("idle", 0, 1 * 64, 64, 64, 2, 680, true);
 	idleAnimation->Play();
 	
 	currentAnimation = idleAnimation;
-
 
 	// Create Physics
 	b2BodyDef bodyDef;
@@ -55,14 +58,15 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.Initialize(body_foot, body, body_foot->GetWorldCenter());
 	joint.enableMotor = true;
 	joint.collideConnected = true;
-	joint.maxMotorTorque = 100;
-	joint.motorSpeed = 100;
+	joint.maxMotorTorque = TORQUE;
+	joint.motorSpeed = SPEED;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
-	
+
 }
 
 Player::~Player() {
 	delete spritesheet;
+	delete spritesheet2;
 	delete walkAnimation;
 	delete idleAnimation;
 }
@@ -70,21 +74,18 @@ Player::~Player() {
 void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
-	currentAnimation->Render(window, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
+	currentAnimation->Render(window, spritesheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
+	currentAnimation->Render(window, spritesheet2, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
 
 	//b2Utils::RenderFixtures(window, body, camera->getPosition(), true);
-	b2Utils::RenderFixtures(window, body_foot, camera.getPosition(), false);
-
-	sf::Vector2f effectPos;
-	effectPos.x = body_foot->GetPosition().x * BOX2D_SCALE - camera.getPosition().x - 50 / 2;
-	effectPos.y = body_foot->GetPosition().y * BOX2D_SCALE - camera.getPosition().y + body_foot->GetFixtureList()->GetShape()->m_radius * BOX2D_SCALE;
+	b2Utils::RenderFixtures(window, body_foot, camera.getPosition(), true);
 }
 
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 
 	if (isOnLadder > 0) {
-		body->ApplyForceToCenter(b2Vec2(0, -10.0f * (body->GetMass() + body_foot->GetMass())), false);
+		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
 	}
 }
 
@@ -108,13 +109,13 @@ void Player::HandleInputs(int updateElapsed) {
 		currentAnimation = walkAnimation;
 		moveDirection = -1;
 		vel.x = -PLAYER_SPEED;
-		foot_joint->SetMotorSpeed(100);
+		foot_joint->SetMotorSpeed(SPEED);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		currentAnimation = walkAnimation;
 		moveDirection = 1;
 		vel.x = PLAYER_SPEED;
-		foot_joint->SetMotorSpeed(-100);
+		foot_joint->SetMotorSpeed(-SPEED);
 	}
 	else {
 		currentAnimation = idleAnimation;
@@ -123,9 +124,10 @@ void Player::HandleInputs(int updateElapsed) {
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !isOnAir) {
-		vel.y = -PLAYER_JUMP_SPEED;
+		body->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass()) * 65), false);
 		isOnAir = true;
 	}
+	
 	body->SetLinearVelocity(vel);
 	
 }
@@ -133,7 +135,7 @@ void Player::HandleInputs(int updateElapsed) {
 void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
 	
 	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
-		if ((int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR) {
+		if ((int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR && (int)((ContactData*)interacted->GetUserData())->getData() == MAP_SENSOR) {
 			if (isBegin)
 				numFootContacts++;
 			else
@@ -156,7 +158,6 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 			isOnLadder += isBegin ? 1 : -1;
 		}
 	}
-
 }
 
 sf::Vector2f Player::getPixPosition() {

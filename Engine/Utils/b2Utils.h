@@ -70,12 +70,12 @@ public:
 				rectangleShape.setPosition((position.x) * BOX2D_SCALE - map_offset.x, (position.y) * BOX2D_SCALE - map_offset.y);
 				rectangleShape.setSize(sf::Vector2f(reversedSize.x * BOX2D_SCALE * 2.0f, reversedSize.y * BOX2D_SCALE * 2.0f));
 				rectangleShape.setRotation(body->GetAngle() * 180.0f / (float)ENGINE_PI);
-				rectangleShape.setFillColor(sf::Color(0, 0, 255, 80));
+				rectangleShape.setFillColor(sf::Color(255, 0, 0, 255));
 				window->draw(rectangleShape);
 
 				if (!b2Render)
 					break;
-				renderColor = sf::Color(255, 0, 0, 80);
+				renderColor = sf::Color(0, 0, 255, 255);
 
 				sf::VertexArray vertices(sf::TrianglesFan, v->GetVertexCount());
 				for (int i = 0; i < v->GetVertexCount(); i++)
@@ -90,12 +90,12 @@ public:
 				circleShape.setPosition((position.x) * BOX2D_SCALE - map_offset.x, (position.y) * BOX2D_SCALE - map_offset.y);
 				circleShape.setRadius(v->m_radius * BOX2D_SCALE);
 				circleShape.setRotation(body->GetAngle() * 180.0f / (float)ENGINE_PI);
-				circleShape.setFillColor(sf::Color(0, 0, 255, 80));
+				circleShape.setFillColor(sf::Color(255, 0, 0, 255));
 				window->draw(circleShape);
 
 				if (!b2Render)
 					break;
-				renderColor = sf::Color(255, 0, 0, 80);
+				renderColor = sf::Color(0, 0, 255, 255);
 
 				sf::CircleShape c;
 				c.setRadius(v->m_radius * BOX2D_SCALE);

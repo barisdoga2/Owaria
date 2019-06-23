@@ -54,11 +54,7 @@ Map::Map(b2World* world, sf::RenderWindow* window, const char* xml) {
 	body->SetFixedRotation(true);
 
 	// Create Marching Squares Physics
-	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, this);
-	body->SetUserData((void*)bodyContact);
-	marchingSquares = new MarchingSquares(this);
-	for (MarchingSolution s : marchingSquares->solutions)
-		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
+	ApplyMarchingSquares();
 
 	// Create Editors
 	tilemapEditor = new TilemapEditor(window, this);
@@ -116,7 +112,7 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 	}
 
 	// Render All Fixtures
-	//b2Utils::RenderFixtures(window, body, m_offset);
+	b2Utils::RenderFixtures(window, body, cameraPos, true);
 	
 	for (GameObject* go : gameObjects) {
 		sf::RectangleShape r;
@@ -151,12 +147,20 @@ void Map::HandleWindowEvent(sf::Event event, Camera* camera) {
 	buildingEditor->HandleWindowEvent(event, camera);
 }
 
-void Map::reMarch() {
-	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, this);
+void Map::ApplyMarchingSquares() {
+	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, (void*)MAP_SENSOR);
 	body->SetUserData((void*)bodyContact);
 	marchingSquares = new MarchingSquares(this);
-	for (MarchingSolution s : marchingSquares->solutions)
-		b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false)->SetUserData((void*)bodyContact);
+	
+	for (b2Fixture* m : marchingSquaresFixtures) 
+		body->DestroyFixture(m);
+	marchingSquaresFixtures.clear();
+	for (MarchingSolution s : marchingSquares->solutions) {
+		b2Fixture* m = b2Utils::AddChainLoopFixture(body, s.t_vertices, 0, 10, MAP_FRICTION, false);
+		m->SetUserData((void*)bodyContact);
+		marchingSquaresFixtures.push_back(m);
+	}
+		
 }
 
 void Map::AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos) {

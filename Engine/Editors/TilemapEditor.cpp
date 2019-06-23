@@ -92,7 +92,7 @@ void TilemapEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 	}
 	else {
 		if (!mouseRelaseFlag) 
-			map->reMarch();
+			map->ApplyMarchingSquares();
 		mouseRelaseFlag = true;
 	}
 	

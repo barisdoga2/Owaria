@@ -34,12 +34,10 @@ ObjectEditor::ObjectEditor(sf::RenderWindow* window, Map* map) {
 		objectSets->addItem(objectSet->getName());
 	}
 
-	int maxXSize = 0;
-	for (Widget::Ptr p : child->getWidgets()) {
-		cout << p->getSize().x << endl;
+	float maxXSize = 0;
+	for (Widget::Ptr p : child->getWidgets()) 
 		if (p->getSize().x > maxXSize)
 			maxXSize = p->getSize().x;
-	}
 
 	child->setSize(maxXSize, objectAssets->getPosition().y + objectAssets->getSize().y);
 	child->setTitleButtons(0);

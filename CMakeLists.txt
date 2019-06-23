@@ -42,8 +42,6 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/mathUtils.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
-
-
 )
 
 set(sourcefiles
@@ -81,13 +79,13 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.cpp
 )
 
-set(CMAKE_TOOLCHAIN_FILE "C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "${env.VCKG_PATH}\\scripts\\buildsystems\\vcpkg.cmake")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 find_package(Threads REQUIRED)
-find_package(SFML 2.5 COMPONENTS system window graphics main REQUIRED)
+find_package(SFML 2.5 COMPONENTS system window audio graphics main REQUIRED)
 find_package(unofficial-box2d CONFIG REQUIRED)
 find_package(tinyxml2 CONFIG REQUIRED)
 find_package(TGUI CONFIG REQUIRED)
@@ -97,7 +95,7 @@ add_executable(Owaria  ${sourcefiles})
 target_compile_features(Owaria PRIVATE cxx_std_17)
 
 target_link_libraries(Owaria ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(Owaria sfml-system sfml-window sfml-graphics sfml-main)
+target_link_libraries(Owaria sfml-system sfml-window sfml-audio sfml-graphics sfml-main)
 target_link_libraries(Owaria unofficial::box2d::Box2D)
 target_link_libraries(Owaria tinyxml2::tinyxml2)
 target_link_libraries(Owaria tgui)

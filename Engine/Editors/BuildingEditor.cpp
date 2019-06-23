@@ -23,9 +23,8 @@ BuildingEditor::BuildingEditor(sf::RenderWindow* window, Map* map) {
 	for (BuildingAsset* bA : AssetStore::getAllBuildingAssets()) 
 		buildings->addItem(bA->getName());
 
-	int maxXSize = 0;
+	float maxXSize = 0;
 	for (Widget::Ptr p : child->getWidgets()) {
-		cout << p->getSize().x << endl;
 		if (p->getSize().x > maxXSize)
 			maxXSize = p->getSize().x;
 	}
@@ -102,7 +101,7 @@ void BuildingEditor::HandleWindowEvent(sf::Event event, Camera* camera) {
 			sf::Vector2f cPos = camera->getPosition();
 			sf::Vector2i tilePos = sf::Vector2i((int)(cPos.x + mPos.x) / (int)map->getTileset()->getTilePixelSize().x, (int)(cPos.y + mPos.y) / (int)map->getTileset()->getTilePixelSize().y);
 			map->AddBuilding(selectedBuildingAsset, tilePos);
-			map->reMarch();
+			map->ApplyMarchingSquares();
 		}
 		mouseRelaseFlag = true;
 	}

@@ -44,7 +44,7 @@ public:
 	void Render(sf::RenderWindow* window, Camera* camera);
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 	void HandleWindowEvent(sf::Event event, Camera* camera);
-	void reMarch();
+	void ApplyMarchingSquares();
 	void AddGameObject(ObjectAsset* asset, sf::Vector2i tilePos);
 	void AddBuilding(BuildingAsset* asset, sf::Vector2i tilePos);
 
@@ -54,6 +54,7 @@ public:
 
 private:
 	MarchingSquares* marchingSquares;
+	vector<b2Fixture*> marchingSquaresFixtures;
 	Tileset* tileset;
 	vector<Building*> gameBuildings;
 	vector<GameObject*> gameObjects;

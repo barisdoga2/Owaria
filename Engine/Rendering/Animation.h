@@ -1,31 +1,29 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 using namespace std;
 
 class Animation {
 
 public:
-	Animation(sf::Image* image, string name, int yStart, int width, int height, int length, int frameDelay, bool isContinuous);
+	Animation(string name, int xStart, int yStart, int width, int height, int length, int frameDelay, bool isContinuous);
 	~Animation();
-	
-	void Play();
-	void Stop();
 
-	// hide and show is for effects
+	void Update(int updateElapsed);
+	void Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vector2f coords, int yMirror = false);
+
 	void Hide();
 	void Show();
+	void Play();
+	void Stop();
 	bool isFinished();
-
 	string GetName();
-	void Update(int updateElapsed);
-	void Render(sf::RenderWindow* window, sf::Vector2f coords, int yMirror = false);
-	int currentFrame;
 
 private:
+	int currentFrame;
 	bool isContinuous;
 	string name;
 	int frameDelay;
@@ -35,6 +33,7 @@ private:
 	int width;
 	int height;
 	bool isHidden = false;
-	vector<sf::Texture*> frames;
+	vector<sf::IntRect> frames;
 	sf::Sprite renderer;
+
 };
