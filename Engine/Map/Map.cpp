@@ -111,9 +111,6 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 		}
 	}
 
-	// Render All Fixtures
-	b2Utils::RenderFixtures(window, body, cameraPos, true);
-	
 	for (GameObject* go : gameObjects) {
 		sf::RectangleShape r;
 		Tile* t = go->getGameObjectData()->getTile();

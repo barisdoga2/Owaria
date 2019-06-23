@@ -5,7 +5,7 @@
 #define TARGET_UPS 60.0f
 #define TARGET_FPS_TIME 1.0f / TARGET_FPS
 #define TARGET_UPS_TIME 1.0f / TARGET_UPS
-#define V_SYNC false
+#define V_SYNC true
 #define WORLD_GRAVITY 10.0f
 #define BOX2D_SCALE 30.0f
 #define BOX2D_VELOCITY_ITERATIONS 8

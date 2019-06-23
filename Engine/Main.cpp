@@ -8,6 +8,7 @@
 #include <ContactListener.h>
 #include <Background.h>
 #include <tinyxml2.h>
+#include <SFMLDebugDraw.h>
 
 using namespace tinyxml2;
 
@@ -75,8 +76,14 @@ int main(void)
 	
 	b2World* m_world = new b2World(b2Vec2(0, WORLD_GRAVITY));
 	world = m_world;
-
+	
 	init();
+
+	bool isDebugDrawEnabled = false;
+	cout << "Press F1 to enable or disable Box2D Debug Draw!" << endl;
+	SFMLDebugDraw debugDraw(window, camera);
+	debugDraw.SetFlags(b2Draw::e_shapeBit);
+	m_world->SetDebugDraw(&debugDraw);
 	
 	sf::Clock clock;
 	sf::Time renderElapsed = sf::Time::Zero;
@@ -122,6 +129,8 @@ int main(void)
 			rendersClock.restart();
 			window.clear(sf::Color(30,30,30,255));
 			render(renderElapsed.asMilliseconds());
+			if(isDebugDrawEnabled)
+				world->DrawDebugData();
 			window.display();
 			renderCalcTook = rendersClock.restart();
 			renderCounter += renderElapsed;
@@ -147,6 +156,20 @@ int main(void)
 			renders = 0;
 			renderCounter = sf::Time::Zero;
 		}
+
+		// Check Debug Draw is Enable or Disable Event
+		static bool releaseFlag = true;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1)) {
+			if (releaseFlag)
+				releaseFlag = false;
+		}
+		else {
+			if (!releaseFlag) {
+				isDebugDrawEnabled = !isDebugDrawEnabled;
+				releaseFlag = true;
+			}
+		}
+
 
 		sf::Event sfEvent;
 		while (window.pollEvent(sfEvent)) {

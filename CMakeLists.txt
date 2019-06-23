@@ -27,6 +27,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw/SFMLDebugDraw.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.h
@@ -69,6 +71,8 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw/SFMLDebugDraw.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp

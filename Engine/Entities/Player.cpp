@@ -2,6 +2,12 @@
 
 #define SPEED 1
 #define TORQUE 10
+#define LEFT_DIR -1
+#define RIGHT_DIR 1
+#define TOP_DIR 1
+#define DOWN_DIR -1
+#define NONE_DIR 0
+
 
 Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	this->map = map;
@@ -17,10 +23,16 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	walkAnimation = new Animation("walk", 0, 9 * 64, 64, 64, 9, 300, true);
 	walkAnimation->Play();
 
+	climbUpAnimation = new Animation("climbUp", 0, 8 * 64, 64, 64, 9, 300, true);
+	climbUpAnimation->Play();
+
+	climbDownAnimation = new Animation("climbDown", 0, 10 * 64, 64, 64, 9, 300, true);
+	climbDownAnimation->Play();
+
 	idleAnimation = new Animation("idle", 0, 1 * 64, 64, 64, 2, 680, true);
 	idleAnimation->Play();
 
-	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, true);
+	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, false);
 	slashAnimation->Play();
 	
 	currentAnimation = idleAnimation;
@@ -73,22 +85,21 @@ Player::~Player() {
 	delete walkAnimation;
 	delete idleAnimation;
 	delete slashAnimation;
+	delete climbUpAnimation;
+	delete climbDownAnimation;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
-	currentAnimation->Render(window, spritesheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
-	currentAnimation->Render(window, spritesheet2, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection == 1);
-
-	//b2Utils::RenderFixtures(window, body, camera->getPosition(), true);
-	b2Utils::RenderFixtures(window, body_foot, camera.getPosition(), true);
+	currentAnimation->Render(window, spritesheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	currentAnimation->Render(window, spritesheet2, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
 }
 
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 
-	if (isOnLadder > 0) {
+	if (isOnLadder) {
 		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
 	}
 }
@@ -96,74 +107,92 @@ void Player::Update(int updateElapsed) {
 void Player::HandleInputs(int updateElapsed) {
 	b2Vec2 vel = body->GetLinearVelocity();
 
-	if (isOnLadder > 0) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-			currentAnimation = walkAnimation;
-			vel.y = -PLAYER_SPEED;
-		}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			currentAnimation = walkAnimation;
-			vel.y = PLAYER_SPEED;
-		}else {
-			currentAnimation = idleAnimation;
-			vel.y = 0;
-		}
-	}
-
+	// Handle Ground Movements
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		currentAnimation = walkAnimation;
-		moveDirection = -1;
+		isWalking = true;
+		moveDirection.x = LEFT_DIR;
 		vel.x = -PLAYER_SPEED;
 		foot_joint->SetMotorSpeed(SPEED);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		currentAnimation = walkAnimation;
-		moveDirection = 1;
+		isWalking = true;
+		moveDirection.x = RIGHT_DIR;
 		vel.x = PLAYER_SPEED;
 		foot_joint->SetMotorSpeed(-SPEED);
 	}
 	else {
-		currentAnimation = idleAnimation;
+		isWalking = false;
 		vel.x = 0;
 		foot_joint->SetMotorSpeed(0);
 	}
 
+	// Handle Ladder
+	if (isOnLadder) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+			moveDirection.y = TOP_DIR;
+			vel.y = -PLAYER_SPEED;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+			moveDirection.y = DOWN_DIR;
+			vel.y = PLAYER_SPEED;
+		}
+		else {
+			moveDirection.y = NONE_DIR;
+			vel.y = 0;
+		}
+	}
+	body->SetLinearVelocity(vel);
+
+	// Handle Jumping
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !isOnAir) {
 		body->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass()) * 65), false);
 		isOnAir = true;
 	}
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-		currentAnimation = slashAnimation;
+	// Handle Attacking
+	static int countDown;
+	countDown -= updateElapsed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !isAttacking && countDown <= 0) {
+		countDown = 1000;
+		isAttacking = true;
+	}
+	else {
+		if (slashAnimation->isFinished())
+			isAttacking = false;
 	}
 
-	body->SetLinearVelocity(vel);
-	
+	// Basic Animation "State Machine"
+	currentAnimation = idleAnimation;
+
+	if (isWalking) 
+		currentAnimation = walkAnimation;
+
+	if (isOnLadder) 
+		if (moveDirection.y > 0)
+			currentAnimation = climbUpAnimation;
+		else if(moveDirection.y < 0)
+			currentAnimation = climbDownAnimation;
+
+	if (isAttacking)
+		currentAnimation = slashAnimation;
+
+	if(currentAnimation->isFinished())
+		currentAnimation->Play();
 }
 
 void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
 	
 	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
 		if ((int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR && (int)((ContactData*)interacted->GetUserData())->getData() == MAP_SENSOR) {
-			if (isBegin)
-				numFootContacts++;
-			else
-				numFootContacts--;
-
-			if (numFootContacts > 0) {
-				if (!isOnAir) {
-
-				}
-				isOnAir = false;
-			}
-			else {
-				isOnAir = true;
-			}
+			numFootContacts += isBegin ? 1 : -1;
+			isOnAir = numFootContacts == 0;
 		}
 	}
 
 	if (((ContactData*)interacted->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
 		if ((int)((ContactData*)interacted->GetUserData())->getData() == LADDER_SENSOR) {
-			isOnLadder += isBegin ? 1 : -1;
+			numLadderContacts += isBegin ? 1 : -1;
+			isOnLadder = numLadderContacts > 0;
 		}
 	}
 }

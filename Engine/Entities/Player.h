@@ -22,10 +22,15 @@ public:
 	b2Body* body_foot;
 	b2Body* body;
 
-	int moveDirection = 1;
+	sf::Vector2f moveDirection = sf::Vector2f(1, 0);
 	int numFootContacts = 0;
+	int numLadderContacts = 0;
+
+	bool isOnLadder = false;
 	bool isOnAir = false;
-	int isOnLadder = 0;
+	bool isWalking = false;
+	bool isAttacking = false;
+	bool isClimbing = false;
 
 	sf::Vector2f getPixPosition();
 	b2Vec2 getb2Position();
@@ -36,6 +41,8 @@ private:
 	Animation* walkAnimation;
 	Animation* idleAnimation;
 	Animation* slashAnimation;
+	Animation* climbUpAnimation;
+	Animation* climbDownAnimation;
 	sf::Texture* spritesheet;
 	sf::Texture* spritesheet2;
 
