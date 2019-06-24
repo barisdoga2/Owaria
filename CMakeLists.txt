@@ -6,44 +6,49 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
-	${PROJECT_SOURCE_DIR}/Engine/Editors/BuildingEditor.h
-	${PROJECT_SOURCE_DIR}/Engine/Editors/ObjectEditor.h
-	${PROJECT_SOURCE_DIR}/Engine/Editors/TilemapEditor.h
+	${PROJECT_SOURCE_DIR}/Engine/Editors/inc
+	${PROJECT_SOURCE_DIR}/Engine/Editors/inc/BuildingEditor.h
+	${PROJECT_SOURCE_DIR}/Engine/Editors/inc/ObjectEditor.h
+	${PROJECT_SOURCE_DIR}/Engine/Editors/inc/TilemapEditor.h
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
-	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.h
-	${PROJECT_SOURCE_DIR}/Engine/AssetStore/BuildingAsset.h
-	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectAsset.h
-	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectSet.h
-	${PROJECT_SOURCE_DIR}/Engine/AssetStore/TileAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/AssetStore.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/BuildingAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/ObjectAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/ObjectSet.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/TileAsset.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
-	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.h
-	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/inc
+	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Building.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/GameObject.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Player.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
-	${PROJECT_SOURCE_DIR}/Engine/Map/Map.h
-	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.h
+	${PROJECT_SOURCE_DIR}/Engine/Map/inc
+	${PROJECT_SOURCE_DIR}/Engine/Map/inc/Map.h
+	${PROJECT_SOURCE_DIR}/Engine/Map/inc/Tile.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw/SFMLDebugDraw.h
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.h
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.h
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.h
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/Tileset.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/SFMLDebugDraw.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Animation.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Background.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Camera.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Tileset.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSolution.h
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares/MarchingSquares.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/b2Utils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactData.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ContactListener.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/ioUtils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/mathUtils.h
-	${PROJECT_SOURCE_DIR}/Engine/Utils/XMLUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/b2Utils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/ContactData.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/ContactListener.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/ioUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/mathUtils.h
+	${PROJECT_SOURCE_DIR}/Engine/Utils/inc/XMLUtils.h
 )
 
 set(sourcefiles
@@ -71,8 +76,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Map/Tile.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Rendering
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw
-	${PROJECT_SOURCE_DIR}/Engine/Rendering/debugDraw/SFMLDebugDraw.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/SFMLDebugDraw.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Animation.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp

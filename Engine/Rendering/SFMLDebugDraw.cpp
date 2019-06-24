@@ -1,22 +1,33 @@
-// Debug draw for Box2D 2.2.1 - 2.3.0 for SFML 2.0 - SFMLDebugDraw.cpp
-// Copyright (C) 2013  Matija Lovrekovic
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 #include "SFMLDebugDraw.h"
 
-SFMLDebugDraw::SFMLDebugDraw(sf::RenderWindow &window, Camera* camera) : m_window(&window), camera(camera) {}
+SFMLDebugDraw::SFMLDebugDraw(sf::RenderWindow* window, b2World* world, Camera* camera) {
+	this->m_window = window;
+	this->world = world;
+	this->camera = camera;
+
+	cout << "Press F1 to enable or disable Box2D Debug Draw!" << endl;
+
+	this->SetFlags(b2Draw::e_shapeBit);
+	world->SetDebugDraw(this);
+}
+
+void SFMLDebugDraw::Render() {
+	if (isDebugDrawEnabled) 
+		world->DrawDebugData();
+
+	// Check Debug Draw is Enable or Disable Event
+	static bool releaseFlag = true;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1)) {
+		if (releaseFlag)
+			releaseFlag = false;
+	}
+	else {
+		if (!releaseFlag) {
+			isDebugDrawEnabled = !isDebugDrawEnabled;
+			releaseFlag = true;
+		}
+	}
+}
 
 void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) 
 {
@@ -24,7 +35,6 @@ void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const
 	sf::Vector2f center;
 	for(int i = 0; i < vertexCount; i++)
 	{
-		//polygon.setPoint(i, SFMLDraw::B2VecToSFVec(vertices[i]));
 		sf::Vector2f transformedVec = B2VecToSFVec(vertices[i]);
 		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y))); // flooring the coords to fix distorted lines on flat surfaces
 	}																								   // they still show up though.. but less frequently
@@ -34,12 +44,12 @@ void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const
 
 	m_window->draw(polygon);
 }
+
 void SFMLDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) 
 {
 	sf::ConvexShape polygon(vertexCount);
 	for(int i = 0; i < vertexCount; i++)
 	{
-		//polygon.setPoint(i, SFMLDraw::B2VecToSFVec(vertices[i]));
 		sf::Vector2f transformedVec = B2VecToSFVec(vertices[i]);
 		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y))); // flooring the coords to fix distorted lines on flat surfaces
 	}																								   // they still show up though.. but less frequently
@@ -49,6 +59,7 @@ void SFMLDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, 
 
 	m_window->draw(polygon);
 }
+
 void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) 
 {
 	sf::CircleShape circle(radius * BOX2D_SCALE);
@@ -60,6 +71,7 @@ void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Col
 
 	m_window->draw(circle);
 }
+
 void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) 
 {
 	sf::CircleShape circle(radius * BOX2D_SCALE);
@@ -89,6 +101,7 @@ void SFMLDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Colo
 
 	m_window->draw(line, 2, sf::Lines);
 }
+
 void SFMLDebugDraw::DrawTransform(const b2Transform& xf) 
 {
 	float lineLength = 0.4f;

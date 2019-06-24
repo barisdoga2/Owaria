@@ -28,9 +28,14 @@ class SFMLDebugDraw : public b2Draw
 {
 private:
 	sf::RenderWindow* m_window;
+	b2World* world;
 	Camera* camera;
+	bool isDebugDrawEnabled = false;
+
 public:
-	SFMLDebugDraw(sf::RenderWindow &window, Camera* camera);
+	SFMLDebugDraw(sf::RenderWindow* window, b2World* world, Camera* camera);
+
+	void Render();
 
 	/// Convert Box2D's OpenGL style color definition[0-1] to SFML's color definition[0-255], with optional alpha byte[Default - opaque]
 	static sf::Color GLColorToSFML(const b2Color &color, sf::Uint8 alpha = 255)

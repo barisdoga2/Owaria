@@ -19,6 +19,7 @@ Player* player;
 Camera* camera;
 ContactListener* contactListener;
 Background* background;
+SFMLDebugDraw* debugDraw;
 
 void init() {
 	contactListener = new ContactListener();
@@ -32,6 +33,8 @@ void init() {
 	camera = new Camera(testMap, player);
 
 	background = new Background();
+
+	debugDraw = new SFMLDebugDraw(sfWindow, world, camera);	
 }
 
 void update(int updateElapsed) {
@@ -61,15 +64,12 @@ void cleanUp() {
 
 int main(void)
 {
-	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
-
 	sf::Music music;
-	if (!music.openFromFile("../../Resources/music.ogg")) {
-		cout << "couldnt load" << endl;
-	}
-	music.setLoop(true);
+	music.openFromFile("../../Resources/Musics/Main.ogg");
 	music.setVolume(25);
 	music.play();
+
+	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
 
 	window.setVerticalSyncEnabled(V_SYNC);
 	sfWindow = &window;
@@ -78,12 +78,6 @@ int main(void)
 	world = m_world;
 	
 	init();
-
-	bool isDebugDrawEnabled = false;
-	cout << "Press F1 to enable or disable Box2D Debug Draw!" << endl;
-	SFMLDebugDraw debugDraw(window, camera);
-	debugDraw.SetFlags(b2Draw::e_shapeBit);
-	m_world->SetDebugDraw(&debugDraw);
 	
 	sf::Clock clock;
 	sf::Time renderElapsed = sf::Time::Zero;
@@ -129,8 +123,7 @@ int main(void)
 			rendersClock.restart();
 			window.clear(sf::Color(30,30,30,255));
 			render(renderElapsed.asMilliseconds());
-			if(isDebugDrawEnabled)
-				world->DrawDebugData();
+			debugDraw->Render();
 			window.display();
 			renderCalcTook = rendersClock.restart();
 			renderCounter += renderElapsed;
@@ -156,20 +149,6 @@ int main(void)
 			renders = 0;
 			renderCounter = sf::Time::Zero;
 		}
-
-		// Check Debug Draw is Enable or Disable Event
-		static bool releaseFlag = true;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1)) {
-			if (releaseFlag)
-				releaseFlag = false;
-		}
-		else {
-			if (!releaseFlag) {
-				isDebugDrawEnabled = !isDebugDrawEnabled;
-				releaseFlag = true;
-			}
-		}
-
 
 		sf::Event sfEvent;
 		while (window.pollEvent(sfEvent)) {
