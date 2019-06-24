@@ -29,15 +29,14 @@ void SFMLDebugDraw::Render() {
 	}
 }
 
-void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) 
-{
+void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
 	sf::ConvexShape polygon(vertexCount);
 	sf::Vector2f center;
 	for(int i = 0; i < vertexCount; i++)
 	{
 		sf::Vector2f transformedVec = B2VecToSFVec(vertices[i]);
-		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y))); // flooring the coords to fix distorted lines on flat surfaces
-	}																								   // they still show up though.. but less frequently
+		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y)));
+	}
 	polygon.setOutlineThickness(-1.f);
 	polygon.setFillColor(sf::Color::Transparent);
 	polygon.setOutlineColor(sf::Color::Red);
@@ -45,14 +44,13 @@ void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const
 	m_window->draw(polygon);
 }
 
-void SFMLDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) 
-{
+void SFMLDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
 	sf::ConvexShape polygon(vertexCount);
 	for(int i = 0; i < vertexCount; i++)
 	{
 		sf::Vector2f transformedVec = B2VecToSFVec(vertices[i]);
-		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y))); // flooring the coords to fix distorted lines on flat surfaces
-	}																								   // they still show up though.. but less frequently
+		polygon.setPoint(i, sf::Vector2f(std::floor(transformedVec.x), std::floor(transformedVec.y)));
+	}
 	polygon.setOutlineThickness(-1.f);
 	polygon.setFillColor(SFMLDebugDraw::GLColorToSFML(color, 60));
 	polygon.setOutlineColor(sf::Color::Red);
@@ -60,8 +58,7 @@ void SFMLDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, 
 	m_window->draw(polygon);
 }
 
-void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) 
-{
+void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) {
 	sf::CircleShape circle(radius * BOX2D_SCALE);
 	circle.setOrigin(radius * BOX2D_SCALE, radius * BOX2D_SCALE);
 	circle.setPosition(B2VecToSFVec(center));
@@ -72,8 +69,7 @@ void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Col
 	m_window->draw(circle);
 }
 
-void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) 
-{
+void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) {
 	sf::CircleShape circle(radius * BOX2D_SCALE);
 	circle.setOrigin(radius * BOX2D_SCALE, radius * BOX2D_SCALE);
 	circle.setPosition(B2VecToSFVec(center));
@@ -91,8 +87,8 @@ void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const 
 	m_window->draw(circle);
 	m_window->draw(line, 2, sf::Lines);
 }
-void SFMLDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) 
-{
+
+void SFMLDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {
 	sf::Vertex line[] =
 	{
 		sf::Vertex(B2VecToSFVec(p1), SFMLDebugDraw::GLColorToSFML(color)),
@@ -102,11 +98,9 @@ void SFMLDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Colo
 	m_window->draw(line, 2, sf::Lines);
 }
 
-void SFMLDebugDraw::DrawTransform(const b2Transform& xf) 
-{
+void SFMLDebugDraw::DrawTransform(const b2Transform& xf) {
 	float lineLength = 0.4f;
 
-	/*b2Vec2 xAxis(b2Vec2(xf.p.x + (lineLength * xf.q.c), xf.p.y + (lineLength * xf.q.s)));*/
 	b2Vec2 xAxis = xf.p + lineLength * xf.q.GetXAxis();
 	sf::Vertex redLine[] = 
 	{
@@ -114,9 +108,6 @@ void SFMLDebugDraw::DrawTransform(const b2Transform& xf)
 		sf::Vertex(B2VecToSFVec(xAxis), sf::Color::Red)
 	};
 
-	// You might notice that the ordinate(Y axis) points downward unlike the one in Box2D testbed
-	// That's because the ordinate in SFML coordinate system points downward while the OpenGL(testbed) points upward
-	/*b2Vec2 yAxis(b2Vec2(xf.p.x + (lineLength * -xf.q.s), xf.p.y + (lineLength * xf.q.c)));*/
 	b2Vec2 yAxis = xf.p + lineLength * xf.q.GetYAxis();
 	sf::Vertex greenLine[] = 
 	{
@@ -128,6 +119,7 @@ void SFMLDebugDraw::DrawTransform(const b2Transform& xf)
 	m_window->draw(greenLine, 2, sf::Lines);
 }
 
+// TODO : Implement this
 void SFMLDebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color) {
 
 }

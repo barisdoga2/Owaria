@@ -11,10 +11,13 @@ class b2Utils
 {
 
 public:
-	static b2Fixture * b2Utils::AddRectangleFixture(b2Body* body, int width, int height, int x, int y, float restitution, float density, float friction, bool isSensor = 0) {
+	static b2Fixture * b2Utils::AddRectangleFixture(b2Body* body, int width, int height, int x, int y, float restitution, float density, float friction, bool isSensor = 0, bool isCenterCoords = 0) {
 		b2PolygonShape polygonShape;
 		b2FixtureDef fixtureDef;
-		polygonShape.SetAsBox(width / BOX2D_SCALE / 2, height / BOX2D_SCALE / 2, b2Vec2((x + width / 2) / BOX2D_SCALE, (y + height / 2) / BOX2D_SCALE), 0);
+		if(!isCenterCoords)
+			polygonShape.SetAsBox(width / BOX2D_SCALE / 2, height / BOX2D_SCALE / 2, b2Vec2((x + width / 2) / BOX2D_SCALE, (y + height / 2) / BOX2D_SCALE), 0);
+		else
+			polygonShape.SetAsBox(width / BOX2D_SCALE / 2, height / BOX2D_SCALE / 2, b2Vec2(x / BOX2D_SCALE, y / BOX2D_SCALE), 0);
 		fixtureDef.restitution = restitution;
 		fixtureDef.density = density;
 		fixtureDef.friction = friction;
@@ -23,10 +26,13 @@ public:
 		return body->CreateFixture(&fixtureDef);
 	}
 
-	static b2Fixture* b2Utils::AddCircleFixture(b2Body* body, int radius, int x, int y, float restitution, float density, float friction, bool isSensor = 0) {
+	static b2Fixture* b2Utils::AddCircleFixture(b2Body* body, int radius, int x, int y, float restitution, float density, float friction, bool isSensor = 0, bool isCenterCoords = 0) {
 		b2CircleShape circleShape;
 		b2FixtureDef fixtureDef;
-		circleShape.m_p.Set((x + radius) / BOX2D_SCALE, (y + radius) / BOX2D_SCALE);
+		if(!isCenterCoords)
+			circleShape.m_p.Set((x + radius) / BOX2D_SCALE, (y + radius) / BOX2D_SCALE);
+		else
+			circleShape.m_p.Set(x / BOX2D_SCALE, y / BOX2D_SCALE);
 		circleShape.m_radius = radius / BOX2D_SCALE;
 		fixtureDef.restitution = restitution;
 		fixtureDef.density = density;

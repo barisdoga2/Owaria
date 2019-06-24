@@ -10,6 +10,7 @@
 #define FOOT_SENSOR 1
 #define LADDER_SENSOR 2
 #define MAP_SENSOR 3
+#define WEAPON_SENSOR 4
 
 class ContactData
 {
