@@ -65,8 +65,9 @@ void SFMLDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Col
 	circle.setFillColor(sf::Color::Transparent);
 	circle.setOutlineThickness(-1.f);
 	circle.setOutlineColor(sf::Color::Red);
-
-	m_window->draw(circle);
+	
+	// This is disabled because it is rendering loop chain fixture's loop circle!
+	//m_window->draw(circle);
 }
 
 void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) {
@@ -91,8 +92,8 @@ void SFMLDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const 
 void SFMLDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {
 	sf::Vertex line[] =
 	{
-		sf::Vertex(B2VecToSFVec(p1), SFMLDebugDraw::GLColorToSFML(color)),
-		sf::Vertex(B2VecToSFVec(p2), SFMLDebugDraw::GLColorToSFML(color))
+		sf::Vertex(B2VecToSFVec(p1), sf::Color::Red),
+		sf::Vertex(B2VecToSFVec(p2), sf::Color::Red)
 	};
 
 	m_window->draw(line, 2, sf::Lines);

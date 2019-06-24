@@ -8,6 +8,8 @@
 #include <b2Utils.h>
 #include <ContactData.h>
 #include <Animation.h>
+class WeaponData;
+#include <WeaponData.h>
 
 class Player {
 public:
@@ -48,4 +50,6 @@ private:
 
 	b2RevoluteJoint* foot_joint;
 
+	b2Fixture* dagger;
+	WeaponData* weaponData;
 };

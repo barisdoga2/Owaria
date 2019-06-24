@@ -145,7 +145,7 @@ void Map::HandleWindowEvent(sf::Event event, Camera* camera) {
 }
 
 void Map::ApplyMarchingSquares() {
-	ContactData* bodyContact = new ContactData(CONTACT_TYPE_MAP_INSTANCE, (void*)MAP_SENSOR);
+	ContactData* bodyContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)MAP_SENSOR);
 	body->SetUserData((void*)bodyContact);
 	marchingSquares = new MarchingSquares(this);
 	

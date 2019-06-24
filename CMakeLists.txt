@@ -19,6 +19,10 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/ObjectSet.h
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/TileAsset.h
 
+	${PROJECT_SOURCE_DIR}/Engine/Combat
+	${PROJECT_SOURCE_DIR}/Engine/Combat/inc
+	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/WeaponData.h
+
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Building.h
@@ -65,6 +69,9 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/TileAsset.cpp
+
+	${PROJECT_SOURCE_DIR}/Engine/Combat
+	${PROJECT_SOURCE_DIR}/Engine/Combat/WeaponData.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp

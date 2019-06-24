@@ -19,7 +19,9 @@ public:
 	void Show();
 	void Play();
 	void Stop();
+	int GetCurrentFrame();
 	bool isFinished();
+	vector<sf::IntRect> GetFrames();
 	string GetName();
 
 private:

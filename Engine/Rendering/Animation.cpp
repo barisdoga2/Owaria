@@ -73,3 +73,11 @@ void Animation::Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vecto
 string Animation::GetName() {
 	return this->name;
 }
+
+int Animation::GetCurrentFrame() {
+	return this->currentFrame;
+}
+
+vector<sf::IntRect> Animation::GetFrames() {
+	return this->frames;
+}

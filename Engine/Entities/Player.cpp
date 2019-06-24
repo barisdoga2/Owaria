@@ -10,6 +10,7 @@
 #define NONE_DIR 0
 
 
+
 Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	this->map = map;
 
@@ -20,36 +21,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	spritesheet2 = new sf::Texture();
 	spritesheet->loadFromFile(playerPath + "Body.png");
 	spritesheet2->loadFromFile(playerPath + "Dagger.png");
-
-	// Process
-	vector<vector<sf::Vector3i>> frame_points;
-	int xx = 0;
-	int yy = 13 * 64;
-	int ww = 64;
-	int hh = 64;
-	int ll = 6;
-
-	const sf::Image im = spritesheet2->copyToImage();
-	const int imWidth = im.getSize().x;
-	const sf::Uint8* pixels = im.getPixelsPtr();
-	for (int l = 0; l < ll; l++) {
-		vector<sf::Vector3i> points;
-		for (int y = yy; y < yy + hh; y++) {
-			for (int x = xx + l * ww; x < xx + ww + l * ww; x++) {
-				const sf::Uint8* offset = pixels + (x + y * imWidth) * 4;
-				int r = (int)*(offset + 0);
-				int g = (int)*(offset + 1);
-				int b = (int)*(offset + 2);
-				int a = (int)*(offset + 3);
-				if (r == 127 && g == 1 && b == 127) 
-					points.push_back(sf::Vector3i(x % 64, y % 64, a));
-			}
-		}
-		sort(points.begin(), points.end(), [](const sf::Vector3i& lhs, const sf::Vector3i& rhs) {
-			return lhs.z < rhs.z;
-		});
-		frame_points.push_back(points);
-	}
 
 	walkAnimation = new Animation("walk", 0, 9 * 64, 64, 64, 9, 300, true);
 	walkAnimation->Play();
@@ -65,7 +36,9 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, false);
 	slashAnimation->Play();
-	
+	// Extract Weapon Data from Animation Frames and Sprite Sheet
+	weaponData = new WeaponData("dagger", *slashAnimation, *spritesheet2);
+
 	currentAnimation = idleAnimation;
 
 	// Create Physics
@@ -78,7 +51,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	// Create ContactData
 	ContactData* bodyContact = new ContactData(CONTACT_TYPE_PLAYER_INSTANCE, this);
 	ContactData* footContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)FOOT_SENSOR);
-	ContactData* weaponContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
 	body->SetUserData((void*)bodyContact);
 
 	// Body
@@ -92,14 +64,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	b2Utils::AddRectangleFixture(body, 3, 3, 35, 55, 0, 0, 0, true)->SetUserData((void*)footContact); // right feet
 
 	// Weapon Sensors
-	vector<sf::Vector2i> t_vertices;
-	t_vertices.push_back(sf::Vector2i(2, 38));
-	t_vertices.push_back(sf::Vector2i(5, 35));
-	t_vertices.push_back(sf::Vector2i(10, 34));
-	t_vertices.push_back(sf::Vector2i(12, 38));
-	t_vertices.push_back(sf::Vector2i(7, 39));
-	b2Fixture* dagger = b2Utils::AddChainLoopFixture(body, t_vertices, 0, 0, 0, true);
-	dagger->SetUserData((void*)weaponContact);
+	dagger = nullptr;
 
 	// Head
 	b2Utils::AddCircleFixture(body, 8, 24, 17, 0, PLAYER_DENSITY / 2, 0)->SetUserData((void*)bodyContact); // head
@@ -129,6 +94,7 @@ Player::~Player() {
 	delete slashAnimation;
 	delete climbUpAnimation;
 	delete climbDownAnimation;
+	delete weaponData;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
@@ -143,6 +109,27 @@ void Player::Update(int updateElapsed) {
 
 	if (isOnLadder) {
 		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
+	}
+
+	if (currentAnimation->GetName().compare("slash") == 0) {
+		if (dagger != nullptr)
+			body->DestroyFixture(dagger);
+
+		ContactData* daggerContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
+		vector<sf::Vector3i> points = weaponData->frame_points.at(currentAnimation->GetCurrentFrame());
+		vector<sf::Vector2i> points2i;
+		for (sf::Vector3i v : points)
+			points2i.push_back(sf::Vector2i(v.x, v.y));
+		dagger = b2Utils::AddChainLoopFixture(body, points2i, 0, 0, 0, true);
+		dagger->SetUserData((void*)daggerContact);
+
+	}
+	else {
+		if (dagger != nullptr) {
+			body->DestroyFixture(dagger);
+			dagger = nullptr;
+		}
+			
 	}
 }
 
@@ -224,23 +211,21 @@ void Player::HandleInputs(int updateElapsed) {
 
 void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
 	
-	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
+	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT && ((ContactData*)interacted->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
 		if ((int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR && (int)((ContactData*)interacted->GetUserData())->getData() == MAP_SENSOR) {
 			numFootContacts += isBegin ? 1 : -1;
 			isOnAir = numFootContacts == 0;
 		}
-	}
 
-	if (((ContactData*)interacted->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
-		if ((int)((ContactData*)interacted->GetUserData())->getData() == LADDER_SENSOR && (int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR) {
+		if ((int)((ContactData*)self->GetUserData())->getData() == FOOT_SENSOR && (int)((ContactData*)interacted->GetUserData())->getData() == LADDER_SENSOR) {
 			numLadderContacts += isBegin ? 1 : -1;
 			isOnLadder = numLadderContacts > 0;
 		}
 	}
-
-	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT) {
+	static int i = 0;
+	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT && ((ContactData*)interacted->GetUserData())->getDataType() != CONTACT_TYPE_PLAYER_INSTANCE) {
 		if ((int)((ContactData*)self->GetUserData())->getData() == WEAPON_SENSOR) {
-			cout << "Contact Weapon" << endl;
+			cout << "Contact Weapon: " << i++ << endl;
 		}
 	}
 }
