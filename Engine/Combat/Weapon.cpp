@@ -49,7 +49,6 @@ void Weapon::StartAttack() {
 		isAttacking = true;
 		isAvailable = false;
 		countDown = COOLDOWN;
-		animation->Play();
 	}
 }
 
