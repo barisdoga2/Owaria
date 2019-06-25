@@ -87,14 +87,15 @@ void Map::Update(int updateElapsed, Camera* camera) {
 void Map::Render(sf::RenderWindow* window, Camera* camera) {
 	sf::Vector2f cameraPos = camera->getPosition();
 
+	// Some Rendering Optimization
 	int xStart = (int)floor(cameraPos.x / tileset->getTilePixelSize().x);
 	int yStart = (int)floor(cameraPos.y / tileset->getTilePixelSize().y);
-
 	int xEnd = xStart + (int)ceil(SCREEN_WIDTH / tileset->getTilePixelSize().x) + 1;
 	int yEnd = yStart + (int)ceil(SCREEN_HEIGHT / tileset->getTilePixelSize().y) + 1;
 	xEnd = xEnd > mapSize.x ? mapSize.x : xEnd;
 	yEnd = yEnd > mapSize.y ? mapSize.y : yEnd;
 	
+	// Render All Tiles
 	tileRenderer->setSize(tileset->getTilePixelSize());
 	for (int y = yStart; y < yEnd; y++) {
 		for (int x = xStart; x < xEnd; x++) {
@@ -111,6 +112,7 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 		}
 	}
 
+	// Render Game Objects
 	for (GameObject* go : gameObjects) {
 		sf::RectangleShape r;
 		Tile* t = go->getGameObjectData()->getTile();
@@ -121,6 +123,7 @@ void Map::Render(sf::RenderWindow* window, Camera* camera) {
 		window->draw(r);
 	}
 
+	// Render Editors
 	tilemapEditor->Render(camera);
 	objectEditor->Render(camera);
 	buildingEditor->Render(camera);
@@ -145,6 +148,7 @@ void Map::HandleWindowEvent(sf::Event event, Camera* camera) {
 }
 
 void Map::ApplyMarchingSquares() {
+	// Generate Chain Loop Fixture for Map
 	ContactData* bodyContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)MAP_SENSOR);
 	body->SetUserData((void*)bodyContact);
 	marchingSquares = new MarchingSquares(this);

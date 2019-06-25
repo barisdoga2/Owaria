@@ -36,8 +36,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, false);
 	slashAnimation->Play();
-	// Extract Weapon Data from Animation Frames and Sprite Sheet
-	weaponData = new WeaponData("dagger", *slashAnimation, *spritesheet2);
 
 	currentAnimation = idleAnimation;
 
@@ -63,9 +61,6 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	b2Utils::AddRectangleFixture(body, 4, 2, 30, 57, 0, 0, 0, true)->SetUserData((void*)footContact); // mid feet
 	b2Utils::AddRectangleFixture(body, 3, 3, 35, 55, 0, 0, 0, true)->SetUserData((void*)footContact); // right feet
 
-	// Weapon Sensors
-	dagger = nullptr;
-
 	// Head
 	b2Utils::AddCircleFixture(body, 8, 24, 17, 0, PLAYER_DENSITY / 2, 0)->SetUserData((void*)bodyContact); // head
 
@@ -84,6 +79,9 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.motorSpeed = SPEED;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 
+	// Weapons
+	weaponData = new WeaponData("dagger", *slashAnimation, *spritesheet2); // Extract Weapon Data from Animation Frames and Sprite Sheet
+	dagger = nullptr;
 }
 
 Player::~Player() {
@@ -100,17 +98,21 @@ Player::~Player() {
 void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
+	// Render Body
 	currentAnimation->Render(window, spritesheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	// Render Dagger
 	currentAnimation->Render(window, spritesheet2, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
 }
 
 void Player::Update(int updateElapsed) {
 	currentAnimation->Update(updateElapsed);
 
+	// If on Ladder Apply Negative Force to Prevent falling
 	if (isOnLadder) {
 		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
 	}
 
+	// Apply attack frames to physics
 	if (currentAnimation->GetName().compare("slash") == 0) {
 		if (dagger != nullptr)
 			body->DestroyFixture(dagger);

@@ -7,50 +7,63 @@
 #include <Camera.h>
 #include <ContactListener.h>
 #include <Background.h>
-#include <tinyxml2.h>
 #include <SFMLDebugDraw.h>
 
-using namespace tinyxml2;
 
 sf::RenderWindow* sfWindow;
 b2World* world;
+ContactListener* contactListener;
+Camera* camera;
 Map* testMap;
 Player* player;
-Camera* camera;
-ContactListener* contactListener;
 Background* background;
 SFMLDebugDraw* debugDraw;
 
 void init() {
+	// Create Contact Listener
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
 
+	// Create Camera
 	camera = new Camera();
 
+	// Create Map
 	testMap = new Map(world, sfWindow, "../../Resources/Maps/TestMap.xml");
+	camera->SetMap(testMap);
 
+	// Create Player
 	player = new Player(world, testMap, sf::Vector2f(1400, 500));
+	camera->SetTarget(player);
 
-	camera = new Camera(testMap, player);
-
+	// Create Background
 	background = new Background();
 
+	// Create Box2D Debug Draw
 	debugDraw = new SFMLDebugDraw(sfWindow, world, camera);	
+
 }
 
 void update(int updateElapsed) {
 	background->Update(updateElapsed, camera);
+
 	testMap->Update(updateElapsed, camera);
+
 	if(!camera->isCameraFreeRoam())
 		player->HandleInputs(updateElapsed);
+
 	player->Update(updateElapsed);
+
 	camera->Update(updateElapsed);
+
 }
 
 void render(int renderElapsed) {
 	background->Render(sfWindow, camera);
+
 	testMap->Render(sfWindow, camera);
+
 	player->Render(sfWindow, *camera);
+
 }
 
 void cleanUp() {
@@ -65,103 +78,108 @@ void cleanUp() {
 
 int main(void)
 {
+	// Create Music
 	sf::Music music;
 	music.openFromFile("../../Resources/Musics/Main.ogg");
 	music.setVolume(25);
 	music.play();
 
+	// Create SFML window
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
-
 	window.setVerticalSyncEnabled(V_SYNC);
 	sfWindow = &window;
 	
+	// Create Box2D world
 	b2World* m_world = new b2World(b2Vec2(0, WORLD_GRAVITY));
 	world = m_world;
 	
+	// Initialize Scene
 	init();
 	
-	sf::Clock clock;
+	// Create Counters and Clocks
+	sf::Clock mainClock;
+	sf::Clock generalClock;
 	sf::Time renderElapsed = sf::Time::Zero;
 	sf::Time renderCounter = sf::Time::Zero;
-	int renders = 0;
-
 	sf::Time updateElapsed = sf::Time::Zero;
 	sf::Time updateCounter = sf::Time::Zero;
-	int updates = 0;
+	sf::Time box2DUpdateTime = sf::Time::Zero;
+	sf::Time sceneUpdateTime = sf::Time::Zero;
+	sf::Time sceneRenderTime = sf::Time::Zero;
+	int totalRenders = 0;
+	int totalUpdates = 0;
 
-	sf::Clock physicsClock;
-	sf::Time physicsCalcTook = sf::Time::Zero;
-
-	sf::Clock updateClock;
-	sf::Time updateCalcTook = sf::Time::Zero;
-
-	sf::Clock rendersClock;
-	sf::Time renderCalcTook = sf::Time::Zero;
-
+	// Main Game Loop
 	while (window.isOpen())
 	{
-		sf::Time deltaTime = clock.restart();
+		sf::Time deltaTime = mainClock.restart();
 		renderElapsed += deltaTime;
 		updateElapsed += deltaTime;
 
+		// Update
 		if (updateElapsed.asSeconds() >= TARGET_UPS_TIME)
 		{
-			updateClock.restart();
-			update(updateElapsed.asMilliseconds());
-			updateCalcTook = updateClock.restart();
+			generalClock.restart();
+			update(updateElapsed.asMilliseconds()); // Update Scene
+			sceneUpdateTime = generalClock.restart();
 
-			physicsClock.restart();
-			world->Step(TARGET_UPS_TIME, BOX2D_VELOCITY_ITERATIONS, BOX2D_POSITION_ITERATIONS);
-			physicsCalcTook = physicsClock.restart();
+			generalClock.restart();
+			world->Step(TARGET_UPS_TIME, BOX2D_VELOCITY_ITERATIONS, BOX2D_POSITION_ITERATIONS); // Update Box2D
+			box2DUpdateTime = generalClock.restart();
 
 			updateCounter += updateElapsed;
 			updateElapsed = sf::Time::Zero;
-			updates++;
+			totalUpdates++;
 		}
 
+		// Render
 		if (renderElapsed.asSeconds() >= TARGET_FPS_TIME)
 		{
-			rendersClock.restart();
-			window.clear(sf::Color(30,30,30,255));
-			render(renderElapsed.asMilliseconds());
-			debugDraw->Render();
+			generalClock.restart();
+			window.clear(sf::Color(0,0,0,255));
+			render(renderElapsed.asMilliseconds()); // Render Scene
+			debugDraw->Render(); // Render Box2D Debug Drawer
 			window.display();
-			renderCalcTook = rendersClock.restart();
+			sceneRenderTime = generalClock.restart();
+
 			renderCounter += renderElapsed;
 			renderElapsed = sf::Time::Zero;
-			renders++;
+			totalRenders++;
 		}
 		
+		// Set Debug Title
 		if(updateCounter.asSeconds() != 0 && renderCounter.asSeconds() != 0)
 			window.setTitle(
 				std::string(SCREEN_TITLE) +
-				std::string(" Updates: ") + std::to_string((int)(updates / updateCounter.asSeconds())) +
-				std::string(" / Renders: ") + std::to_string((int)(renders / renderCounter.asSeconds())) +
-				std::string(" / Per Physics(ms): ") + std::to_string(physicsCalcTook.asMilliseconds()) + 
-				std::string(" / Per Render(ms): ") + std::to_string(renderCalcTook.asMilliseconds()) +
-				std::string(" / Per Update(ms): ") + std::to_string(updateCalcTook.asMilliseconds())
+				std::string(" Updates: ") + std::to_string((int)(totalUpdates / updateCounter.asSeconds())) +
+				std::string(" / Renders: ") + std::to_string((int)(totalRenders / renderCounter.asSeconds())) +
+				std::string(" / Per Physics(ms): ") + std::to_string(box2DUpdateTime.asMilliseconds()) + 
+				std::string(" / Per Render(ms): ") + std::to_string(sceneRenderTime.asMilliseconds()) +
+				std::string(" / Per Update(ms): ") + std::to_string(sceneUpdateTime.asMilliseconds())
 			);
 
-		if (updateCounter.asSeconds() > 1) {
-			updates = 0;
+		// Reset Render and Update Counters
+		if (updateCounter.asSeconds() >= 1) {
+			totalUpdates = 0;
 			updateCounter = sf::Time::Zero;
 		}
-		if (renderCounter.asSeconds() > 1) {
-			renders = 0;
+		if (renderCounter.asSeconds() >= 1) {
+			totalRenders = 0;
 			renderCounter = sf::Time::Zero;
 		}
 
+		// Handle Inputs
 		sf::Event sfEvent;
 		while (window.pollEvent(sfEvent)) {
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
 			testMap->HandleWindowEvent(sfEvent, camera);
 		}
-			
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 			window.close();
 	}
 
+	// Clean Everything
 	cleanUp();
 
 	return 0;
