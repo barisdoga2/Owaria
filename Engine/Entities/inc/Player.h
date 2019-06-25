@@ -10,6 +10,7 @@
 #include <Animation.h>
 class WeaponData;
 #include <WeaponData.h>
+#include <Weapon.h>
 
 class Player {
 public:
@@ -24,14 +25,13 @@ public:
 	b2Body* body_foot;
 	b2Body* body;
 
-	sf::Vector2f moveDirection = sf::Vector2f(1, 0);
+	sf::Vector2i moveDirection = sf::Vector2i(1, 0);
 	int numFootContacts = 0;
 	int numLadderContacts = 0;
 
 	bool isOnLadder = false;
 	bool isOnAir = false;
 	bool isWalking = false;
-	bool isAttacking = false;
 	bool isClimbing = false;
 
 	sf::Vector2f getPixPosition();
@@ -39,17 +39,16 @@ public:
 
 private:
 	Map * map;
-	Animation* currentAnimation;
+	Animation* currentBodyAnimation;
 	Animation* walkAnimation;
 	Animation* idleAnimation;
 	Animation* slashAnimation;
 	Animation* climbUpAnimation;
 	Animation* climbDownAnimation;
-	sf::Texture* spritesheet;
-	sf::Texture* spritesheet2;
+	sf::Texture* bodySpriteSheet;
 
 	b2RevoluteJoint* foot_joint;
 
-	b2Fixture* dagger;
-	WeaponData* weaponData;
+	Weapon* daggerWeapon = nullptr;
+
 };

@@ -12,6 +12,8 @@ Animation::Animation(std::string name, sf::Vector2i startPosition, sf::Vector2i 
 	this->currentFrame = 0;
 	for (int i = 0; i < length; i++) 
 		frameCoords.push_back(sf::Vector2i(startPosition.x + i * size.x, startPosition.y));
+	
+	this->isPlaying = false;
 }
 
 Animation::~Animation() {

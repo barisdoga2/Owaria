@@ -26,6 +26,14 @@
 #define PLAYER_JUMP_SPEED 10
 #define PLAYER_DENSITY 10
 #define PLAYER_FRICTION 3
+#define PLAYER_TORQUE 10
 
 // Map Settings
 #define MAP_FRICTION 3
+
+// Constants
+#define LEFT_DIRECTION -1
+#define RIGHT_DIRECTION 1
+#define TOP_DIRECTION 1
+#define DOWN_DIRECTION -1
+#define NONE_DIRECTION 0

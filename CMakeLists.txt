@@ -22,6 +22,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Combat
 	${PROJECT_SOURCE_DIR}/Engine/Combat/inc
 	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/WeaponData.h
+	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/Weapon.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc
@@ -72,6 +73,7 @@ set(sourcefiles
 
 	${PROJECT_SOURCE_DIR}/Engine/Combat
 	${PROJECT_SOURCE_DIR}/Engine/Combat/WeaponData.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Combat/Weapon.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp

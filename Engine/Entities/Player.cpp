@@ -1,14 +1,6 @@
 #include <Player.h>
 #include <algorithm>
 
-#define SPEED 1
-#define TORQUE 10
-#define LEFT_DIR -1
-#define RIGHT_DIR 1
-#define TOP_DIR 1
-#define DOWN_DIR -1
-#define NONE_DIR 0
-
 
 
 Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
@@ -18,26 +10,15 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 
 	// Create Animations
 	bodySpriteSheet = new sf::Texture();
-	daggerSpriteSheet = new sf::Texture();
 	bodySpriteSheet->loadFromFile(playerPath + "Body.png");
-	daggerSpriteSheet->loadFromFile(playerPath + "Dagger.png");
 
 	walkAnimation = new Animation("walk", sf::Vector2i(0, 9 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	walkAnimation->Play();
-
 	climbUpAnimation = new Animation("climbUp", sf::Vector2i(0, 8 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	climbUpAnimation->Play();
-
 	climbDownAnimation = new Animation("climbDown", sf::Vector2i(0, 10 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	climbDownAnimation->Play();
-
 	idleAnimation = new Animation("idle", sf::Vector2i(0, 1 * 64), sf::Vector2i(64, 64), 2, 680, true);
-	idleAnimation->Play();
-
 	slashAnimation = new Animation("slash", sf::Vector2i(0, 13 * 64), sf::Vector2i(64, 64), 6, 50, false);
-	slashAnimation->Play();
 
-	currentAnimation = idleAnimation;
+	currentBodyAnimation = idleAnimation;
 
 	// Create Physics
 	b2BodyDef bodyDef;
@@ -75,58 +56,46 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	joint.Initialize(body_foot, body, body_foot->GetWorldCenter());
 	joint.enableMotor = true;
 	joint.collideConnected = true;
-	joint.maxMotorTorque = TORQUE;
-	joint.motorSpeed = SPEED;
+	joint.maxMotorTorque = PLAYER_TORQUE;
+	joint.motorSpeed = PLAYER_SPEED;
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 
 	// Weapons
-	weaponData = new WeaponData("dagger", *slashAnimation, *daggerSpriteSheet); // Extract Weapon Data from Animation Frames and Sprite Sheet
-	dagger = nullptr;
+	daggerWeapon = new Weapon("dagger", body, playerPath + "Dagger.png", slashAnimation);
+
 }
 
 Player::~Player() {
 	delete bodySpriteSheet;
-	delete daggerSpriteSheet;
 	delete walkAnimation;
 	delete idleAnimation;
-	delete slashAnimation;
 	delete climbUpAnimation;
 	delete climbDownAnimation;
-	delete weaponData;
+	delete slashAnimation;
+	delete daggerWeapon;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
 	// Render Body
-	currentAnimation->Render(window, bodySpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	currentBodyAnimation->Render(window, bodySpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 	// Render Dagger
-	currentAnimation->Render(window, daggerSpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	if (daggerWeapon != nullptr)
+		currentBodyAnimation->Render(window, daggerWeapon->GetSpriteSheet(), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::Update(int updateElapsed) {
-	currentAnimation->Update(updateElapsed);
+	currentBodyAnimation->Update(updateElapsed);
 
 	// If on Ladder Apply Negative Force to Prevent falling
 	if (isOnLadder) {
 		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
 	}
 
-	// Apply attack frames to physics
-	if (currentAnimation->GetName().compare("slash") == 0) {
-		if (dagger != nullptr)
-			body->DestroyFixture(dagger);
-
-		ContactData* daggerContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
-		dagger = b2Utils::AddChainLoopFixture(body, weaponData->GetFramePoints(currentAnimation->GetCurrentFrame(), moveDirection.x != LEFT_DIR), 0, 0, 0, true);
-		dagger->SetUserData((void*)daggerContact);
-	}
-	else {
-		if (dagger != nullptr) {
-			body->DestroyFixture(dagger);
-			dagger = nullptr;
-		}
-	}
+	// Update Weapon
+	if (daggerWeapon != nullptr)
+		daggerWeapon->Update(updateElapsed, moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::HandleInputs(int updateElapsed) {
@@ -135,15 +104,15 @@ void Player::HandleInputs(int updateElapsed) {
 	// Handle Ground Movements
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		isWalking = true;
-		moveDirection.x = LEFT_DIR;
+		moveDirection.x = LEFT_DIRECTION;
 		vel.x = -PLAYER_SPEED;
-		foot_joint->SetMotorSpeed(SPEED);
+		foot_joint->SetMotorSpeed(PLAYER_SPEED);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		isWalking = true;
-		moveDirection.x = RIGHT_DIR;
+		moveDirection.x = RIGHT_DIRECTION;
 		vel.x = PLAYER_SPEED;
-		foot_joint->SetMotorSpeed(-SPEED);
+		foot_joint->SetMotorSpeed(-PLAYER_SPEED);
 	}
 	else {
 		isWalking = false;
@@ -154,15 +123,15 @@ void Player::HandleInputs(int updateElapsed) {
 	// Handle Ladder
 	if (isOnLadder) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-			moveDirection.y = TOP_DIR;
+			moveDirection.y = TOP_DIRECTION;
 			vel.y = -PLAYER_SPEED;
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-			moveDirection.y = DOWN_DIR;
+			moveDirection.y = DOWN_DIRECTION;
 			vel.y = PLAYER_SPEED;
 		}
 		else {
-			moveDirection.y = NONE_DIR;
+			moveDirection.y = NONE_DIRECTION;
 			vel.y = 0;
 		}
 	}
@@ -175,34 +144,26 @@ void Player::HandleInputs(int updateElapsed) {
 	}
 	
 	// Handle Attacking
-	static int countDown;
-	countDown -= updateElapsed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !isAttacking && countDown <= 0) {
-		countDown = 1000;
-		isAttacking = true;
-	}
-	else {
-		if (slashAnimation->isFinished())
-			isAttacking = false;
-	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && daggerWeapon != nullptr)
+		daggerWeapon->StartAttack();
 
 	// Basic Animation "State Machine"
-	currentAnimation = idleAnimation;
+	currentBodyAnimation = idleAnimation;
 
 	if (isWalking) 
-		currentAnimation = walkAnimation;
+		currentBodyAnimation = walkAnimation;
 
 	if (isOnLadder) 
 		if (moveDirection.y > 0)
-			currentAnimation = climbUpAnimation;
+			currentBodyAnimation = climbUpAnimation;
 		else if(moveDirection.y < 0)
-			currentAnimation = climbDownAnimation;
+			currentBodyAnimation = climbDownAnimation;
 
-	if (isAttacking)
-		currentAnimation = slashAnimation;
+	if (daggerWeapon != nullptr && daggerWeapon->IsAttacking())
+		currentBodyAnimation = slashAnimation;
 
-	if(currentAnimation->isFinished())
-		currentAnimation->Play();
+	if(currentBodyAnimation->isFinished())
+		currentBodyAnimation->Play();
 }
 
 void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
@@ -218,10 +179,10 @@ void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegi
 			isOnLadder = numLadderContacts > 0;
 		}
 	}
-	static int i = 0;
+
 	if (((ContactData*)self->GetUserData())->getDataType() == CONTACT_TYPE_SENSOR_INT && ((ContactData*)interacted->GetUserData())->getDataType() != CONTACT_TYPE_PLAYER_INSTANCE) {
 		if ((int)((ContactData*)self->GetUserData())->getData() == WEAPON_SENSOR) {
-			cout << "Contact Weapon: " << i++ << endl;
+			cout << "Contact Weapon" << endl;
 		}
 	}
 }
