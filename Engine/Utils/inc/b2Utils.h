@@ -46,7 +46,7 @@ public:
 		b2ChainShape chainShape;
 
 		b2Vec2* v = (b2Vec2*)malloc(t_vertices.size() * sizeof(b2Vec2));
-		for (unsigned int i = 0; i < t_vertices.size(); i++)
+		for (unsigned int i = 0; i < t_vertices.size(); i++) 
 			*(v + i) = b2Vec2(t_vertices.at(i).x / BOX2D_SCALE, t_vertices.at(i).y / BOX2D_SCALE);
 		chainShape.CreateLoop(v, t_vertices.size());
 		free(v);

@@ -121,8 +121,9 @@ void Player::Update(int updateElapsed) {
 		vector<sf::Vector3i> points = weaponData->frame_points.at(currentAnimation->GetCurrentFrame());
 		vector<sf::Vector2i> points2i;
 		for (sf::Vector3i v : points)
-			points2i.push_back(sf::Vector2i(v.x, v.y));
+			points2i.push_back(sf::Vector2i((moveDirection.x == LEFT_DIR ? v.x : 64 - v.x), v.y));
 		dagger = b2Utils::AddChainLoopFixture(body, points2i, 0, 0, 0, true);
+		
 		dagger->SetUserData((void*)daggerContact);
 
 	}
