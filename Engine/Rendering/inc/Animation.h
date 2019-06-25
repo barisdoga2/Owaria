@@ -9,7 +9,7 @@ using namespace std;
 class Animation {
 
 public:
-	Animation(string name, int xStart, int yStart, int width, int height, int length, int frameDelay, bool isContinuous);
+	Animation(string name, sf::Vector2i startPosition, sf::Vector2i size, int length, int frameDelay, bool isContinuous);
 	~Animation();
 
 	void Update(int updateElapsed);
@@ -19,23 +19,27 @@ public:
 	void Show();
 	void Play();
 	void Stop();
-	int GetCurrentFrame();
 	bool isFinished();
-	vector<sf::IntRect> GetFrames();
+
+	int GetCurrentFrame();
+
+	sf::Vector2i getStartPosition();
+	sf::Vector2i getSize();
+	vector<sf::Vector2i> GetFrameCoords();
 	string GetName();
 
 private:
 	int currentFrame;
 	bool isContinuous;
 	string name;
+	sf::Vector2i startPosition;
+	sf::Vector2i size;
 	int frameDelay;
 	int length;
 	int timePassedMs;
 	int isPlaying;
-	int width;
-	int height;
 	bool isHidden = false;
-	vector<sf::IntRect> frames;
+	vector<sf::Vector2i> frameCoords;
 	sf::Sprite renderer;
 
 };

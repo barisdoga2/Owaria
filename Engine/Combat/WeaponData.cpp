@@ -9,11 +9,10 @@ WeaponData::WeaponData(std::string name, Animation animation, sf::Texture sprite
 	const int imWidth = im.getSize().x;
 	const sf::Uint8* pixels = im.getPixelsPtr();
 
-	for (sf::IntRect frame : animation.GetFrames()) {
+	for (sf::Vector2i frame : animation.GetFrameCoords()) {
 		vector<sf::Vector3i> points;
-
-		for (int y = frame.top; y < frame.top + frame.height; y++) {
-			for (int x = frame.left; x < frame.left + frame.width; x++) {
+		for (int y = frame.y; y < frame.y + animation.getSize().y; y++) {
+			for (int x = frame.x; x < frame.x + animation.getSize().x; x++) {
 				const sf::Uint8* offset = pixels + (x + y * imWidth) * 4;
 				int r = (int)*(offset + 0);
 				int g = (int)*(offset + 1);
@@ -28,11 +27,26 @@ WeaponData::WeaponData(std::string name, Animation animation, sf::Texture sprite
 			return lhs.z < rhs.z;
 		});
 
-		frame_points.push_back(points);
+		vector<sf::Vector2i> points2D;
+		vector<sf::Vector2i> points2D_yMirror;
+		for (sf::Vector3i v : points) {
+			points2D.push_back(sf::Vector2i(v.x, v.y));
+			points2D_yMirror.push_back(sf::Vector2i(animation.getSize().x - v.x, v.y));
+		}
+
+		frame_points.push_back(points2D);
+		frame_points_yMirror.push_back(points2D_yMirror);
 	}
 
 }
 
 WeaponData::~WeaponData() {
 
+}
+
+vector<sf::Vector2i> WeaponData::GetFramePoints(int frameNum, bool yMirror) {
+	if (!yMirror)
+		return frame_points.at(frameNum);
+	else
+		return frame_points_yMirror.at(frameNum);
 }

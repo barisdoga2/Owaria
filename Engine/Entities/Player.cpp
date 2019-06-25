@@ -17,24 +17,24 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	std::string playerPath = "../../Resources/Player/";
 
 	// Create Animations
-	spritesheet = new sf::Texture();
-	spritesheet2 = new sf::Texture();
-	spritesheet->loadFromFile(playerPath + "Body.png");
-	spritesheet2->loadFromFile(playerPath + "Dagger.png");
+	bodySpriteSheet = new sf::Texture();
+	daggerSpriteSheet = new sf::Texture();
+	bodySpriteSheet->loadFromFile(playerPath + "Body.png");
+	daggerSpriteSheet->loadFromFile(playerPath + "Dagger.png");
 
-	walkAnimation = new Animation("walk", 0, 9 * 64, 64, 64, 9, 300, true);
+	walkAnimation = new Animation("walk", sf::Vector2i(0, 9 * 64), sf::Vector2i(64, 64), 9, 300, true);
 	walkAnimation->Play();
 
-	climbUpAnimation = new Animation("climbUp", 0, 8 * 64, 64, 64, 9, 300, true);
+	climbUpAnimation = new Animation("climbUp", sf::Vector2i(0, 8 * 64), sf::Vector2i(64, 64), 9, 300, true);
 	climbUpAnimation->Play();
 
-	climbDownAnimation = new Animation("climbDown", 0, 10 * 64, 64, 64, 9, 300, true);
+	climbDownAnimation = new Animation("climbDown", sf::Vector2i(0, 10 * 64), sf::Vector2i(64, 64), 9, 300, true);
 	climbDownAnimation->Play();
 
-	idleAnimation = new Animation("idle", 0, 1 * 64, 64, 64, 2, 680, true);
+	idleAnimation = new Animation("idle", sf::Vector2i(0, 1 * 64), sf::Vector2i(64, 64), 2, 680, true);
 	idleAnimation->Play();
 
-	slashAnimation = new Animation("slash", 0, 13 * 64, 64, 64, 6, 50, false);
+	slashAnimation = new Animation("slash", sf::Vector2i(0, 13 * 64), sf::Vector2i(64, 64), 6, 50, false);
 	slashAnimation->Play();
 
 	currentAnimation = idleAnimation;
@@ -80,13 +80,13 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 
 	// Weapons
-	weaponData = new WeaponData("dagger", *slashAnimation, *spritesheet2); // Extract Weapon Data from Animation Frames and Sprite Sheet
+	weaponData = new WeaponData("dagger", *slashAnimation, *daggerSpriteSheet); // Extract Weapon Data from Animation Frames and Sprite Sheet
 	dagger = nullptr;
 }
 
 Player::~Player() {
-	delete spritesheet;
-	delete spritesheet2;
+	delete bodySpriteSheet;
+	delete daggerSpriteSheet;
 	delete walkAnimation;
 	delete idleAnimation;
 	delete slashAnimation;
@@ -99,9 +99,9 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 	b2Vec2 position = body->GetPosition();
 
 	// Render Body
-	currentAnimation->Render(window, spritesheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	currentAnimation->Render(window, bodySpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
 	// Render Dagger
-	currentAnimation->Render(window, spritesheet2, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
+	currentAnimation->Render(window, daggerSpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIR);
 }
 
 void Player::Update(int updateElapsed) {
@@ -118,21 +118,14 @@ void Player::Update(int updateElapsed) {
 			body->DestroyFixture(dagger);
 
 		ContactData* daggerContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
-		vector<sf::Vector3i> points = weaponData->frame_points.at(currentAnimation->GetCurrentFrame());
-		vector<sf::Vector2i> points2i;
-		for (sf::Vector3i v : points)
-			points2i.push_back(sf::Vector2i((moveDirection.x == LEFT_DIR ? v.x : 64 - v.x), v.y));
-		dagger = b2Utils::AddChainLoopFixture(body, points2i, 0, 0, 0, true);
-		
+		dagger = b2Utils::AddChainLoopFixture(body, weaponData->GetFramePoints(currentAnimation->GetCurrentFrame(), moveDirection.x != LEFT_DIR), 0, 0, 0, true);
 		dagger->SetUserData((void*)daggerContact);
-
 	}
 	else {
 		if (dagger != nullptr) {
 			body->DestroyFixture(dagger);
 			dagger = nullptr;
 		}
-			
 	}
 }
 

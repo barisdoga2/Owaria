@@ -2,16 +2,16 @@
 
 
 
-Animation::Animation(std::string name, int xStart, int yStart, int width, int height, int length, int frameDelay, bool isContinuous) {
+Animation::Animation(std::string name, sf::Vector2i startPosition, sf::Vector2i size, int length, int frameDelay, bool isContinuous) {
 	this->name = name;
+	this->size = size;
+	this->startPosition = startPosition;
 	this->frameDelay = frameDelay;
-	this->width = width;
-	this->height = height;
 	this->isContinuous = isContinuous;
 	this->length = length;
 	this->currentFrame = 0;
 	for (int i = 0; i < length; i++) 
-		frames.push_back(sf::IntRect(xStart + i * width, yStart, width, height));
+		frameCoords.push_back(sf::Vector2i(startPosition.x + i * size.x, startPosition.y));
 }
 
 Animation::~Animation() {
@@ -59,8 +59,8 @@ void Animation::Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vecto
 		return;
 
 	renderer.setTexture(*texture);
-	renderer.setPosition(sf::Vector2f(coords.x + (yMirror ? width : 0), coords.y));
-	renderer.setTextureRect(frames.at(currentFrame));
+	renderer.setPosition(sf::Vector2f(coords.x + (yMirror ? size.x : 0), coords.y));
+	renderer.setTextureRect(sf::IntRect(frameCoords.at(currentFrame), size));
 
 	if (!yMirror)
 		renderer.setScale(1, 1);
@@ -78,6 +78,14 @@ int Animation::GetCurrentFrame() {
 	return this->currentFrame;
 }
 
-vector<sf::IntRect> Animation::GetFrames() {
-	return this->frames;
+vector<sf::Vector2i> Animation::GetFrameCoords() {
+	return this->frameCoords;
+}
+
+sf::Vector2i Animation::getStartPosition() {
+	return this->startPosition;
+}
+
+sf::Vector2i Animation::getSize() {
+	return this->size;
 }
