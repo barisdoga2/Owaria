@@ -31,4 +31,8 @@ public:
 			childIter = childIter->NextSiblingElement();
 		}
 	}
+
+	static void LoadAnimationSet(XMLElement* animationsetElement) {
+		AssetStore::LoadAnimationSet(animationsetElement);
+	}
 };

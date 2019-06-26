@@ -1,0 +1,28 @@
+<AnimationSet name="player">
+
+  <AnimationAsset name="idle" frameCount="2" frameDelay="700">
+    <startPosition x="0" y="64" />
+    <size width="64" height="64" />
+  </AnimationAsset>
+  
+  <AnimationAsset name="walk" frameCount="9" frameDelay="300">
+    <startPosition x="0" y="576" />
+    <size width="64" height="64" />
+  </AnimationAsset>
+
+  <AnimationAsset name="climbUp" frameCount="9" frameDelay="300">
+    <startPosition x="0" y="512" />
+    <size width="64" height="64" />
+  </AnimationAsset>
+
+  <AnimationAsset name="climbDown" frameCount="9" frameDelay="300">
+    <startPosition x="0" y="640" />
+    <size width="64" height="64" />
+  </AnimationAsset>
+
+  <AnimationAsset name="slash" frameCount="6" frameDelay="50">
+    <startPosition x="0" y="832" />
+    <size width="64" height="64" />
+  </AnimationAsset>
+  
+</AnimationSet>

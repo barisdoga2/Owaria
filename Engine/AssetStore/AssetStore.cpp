@@ -5,6 +5,7 @@
 std::vector<Tileset*> AssetStore::tilesets;
 std::vector<BuildingAsset*> AssetStore::buildingAssets;
 std::vector<ObjectSet*> AssetStore::objectSets;
+std::vector<AnimationSet*> AssetStore::animationSets;
 
 Tileset* AssetStore::GetTileset(const char* tilesetName) {
 	for (Tileset* t : tilesets) 
@@ -22,6 +23,14 @@ ObjectSet* AssetStore::GetObjectSet(const char* objectsetName) {
 	return nullptr;
 }
 
+AnimationSet* AssetStore::GetAnimationSet(const char* animationsetName) {
+	for (AnimationSet* t : animationSets)
+		if (t->getName().compare(animationsetName) == 0)
+			return t;
+
+	return nullptr;
+}
+
 BuildingAsset* AssetStore::GetBuildingAsset(const char* buildingAssetName) {
 	for (BuildingAsset* t : buildingAssets)
 		if (t->getName().compare(buildingAssetName) == 0)
@@ -30,16 +39,24 @@ BuildingAsset* AssetStore::GetBuildingAsset(const char* buildingAssetName) {
 	return nullptr;
 }
 
-void AssetStore::LoadTileset(XMLElement* tilesetElement) {	
-	tilesets.push_back(new Tileset(tilesetElement));
+void AssetStore::LoadTileset(XMLElement* tilesetElement) {
+	if(GetTileset(tilesetElement->Attribute("name")) == nullptr)
+		tilesets.push_back(new Tileset(tilesetElement));
 }
 
 void AssetStore::LoadObjectSet(XMLElement* objectsetElement) {
-	objectSets.push_back(new ObjectSet(objectsetElement));
+	if (GetObjectSet(objectsetElement->Attribute("name")) == nullptr)
+		objectSets.push_back(new ObjectSet(objectsetElement));
 }
 
 void AssetStore::LoadBuildingAsset(XMLElement* buildingAssetElement) {
-	buildingAssets.push_back(new BuildingAsset(buildingAssetElement));
+	if (GetBuildingAsset(buildingAssetElement->Attribute("name")) == nullptr)
+		buildingAssets.push_back(new BuildingAsset(buildingAssetElement));
+}
+
+void AssetStore::LoadAnimationSet(XMLElement* animationsetElement) {
+	if (GetAnimationSet(animationsetElement->Attribute("name")) == nullptr)
+		animationSets.push_back(new AnimationSet(animationsetElement));
 }
 
 void AssetStore::CleanUp() {
@@ -51,6 +68,9 @@ void AssetStore::CleanUp() {
 
 	for (BuildingAsset* b : buildingAssets)
 		delete b;
+
+	for (AnimationSet* a : animationSets)
+		delete a;
 }
 
 vector<ObjectSet*> AssetStore::getAllObjectSets() {
@@ -59,4 +79,8 @@ vector<ObjectSet*> AssetStore::getAllObjectSets() {
 
 vector<BuildingAsset*> AssetStore::getAllBuildingAssets() {
 	return buildingAssets;
+}
+
+vector<AnimationSet*> AssetStore::getAllAnimationSets() {
+	return animationSets;
 }

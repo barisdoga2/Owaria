@@ -14,6 +14,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/AssetStore.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/AnimationAsset.h
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/AnimationSet.h
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/BuildingAsset.h
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/ObjectAsset.h
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/inc/ObjectSet.h
@@ -23,6 +25,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Combat/inc
 	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/WeaponData.h
 	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/Weapon.h
+	${PROJECT_SOURCE_DIR}/Engine/Combat/inc/Item.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc
@@ -66,6 +69,8 @@ set(sourcefiles
 
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AssetStore.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AnimationAsset.cpp
+	${PROJECT_SOURCE_DIR}/Engine/AssetStore/AnimationSet.cpp
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/BuildingAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectAsset.cpp
 	${PROJECT_SOURCE_DIR}/Engine/AssetStore/ObjectSet.cpp
@@ -74,6 +79,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Combat
 	${PROJECT_SOURCE_DIR}/Engine/Combat/WeaponData.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Combat/Weapon.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Combat/Item.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Entities
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp

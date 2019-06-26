@@ -3,13 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <AnimationAsset.h>
 
 using namespace std;
 
 class Animation {
 
 public:
-	Animation(string name, sf::Vector2i startPosition, sf::Vector2i size, int length, int frameDelay, bool isContinuous);
+	Animation(AnimationAsset* animationAsset, bool isContinuous);
 	~Animation();
 
 	void Update(int updateElapsed);
@@ -23,23 +24,16 @@ public:
 
 	int GetCurrentFrame();
 
-	sf::Vector2i getStartPosition();
-	sf::Vector2i getSize();
-	vector<sf::Vector2i> GetFrameCoords();
-	string GetName();
+	AnimationAsset* getAnimationAsset();
 
 private:
+	AnimationAsset* animationAsset;
+
 	int currentFrame;
 	bool isContinuous;
-	string name;
-	sf::Vector2i startPosition;
-	sf::Vector2i size;
-	int frameDelay;
-	int length;
 	int timePassedMs;
 	int isPlaying;
 	bool isHidden = false;
-	vector<sf::Vector2i> frameCoords;
 	sf::Sprite renderer;
 
 };

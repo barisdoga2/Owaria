@@ -1,7 +1,7 @@
 #include <WeaponData.h>
 
 
-WeaponData::WeaponData(std::string name, Animation animation, sf::Texture spriteSheet) {
+WeaponData::WeaponData(std::string name, AnimationAsset* animationAsset, sf::Texture spriteSheet) {
 	this->name = name;
 
 	// Extract Bounding Chain Fixture Points
@@ -9,10 +9,10 @@ WeaponData::WeaponData(std::string name, Animation animation, sf::Texture sprite
 	const int imWidth = im.getSize().x;
 	const sf::Uint8* pixels = im.getPixelsPtr();
 
-	for (sf::Vector2i frame : animation.GetFrameCoords()) {
+	for (sf::Vector2i frame : animationAsset->getFrameCoords()) {
 		vector<sf::Vector3i> points;
-		for (int y = frame.y; y < frame.y + animation.getSize().y; y++) {
-			for (int x = frame.x; x < frame.x + animation.getSize().x; x++) {
+		for (int y = frame.y; y < frame.y + animationAsset->getSize().y; y++) {
+			for (int x = frame.x; x < frame.x + animationAsset->getSize().x; x++) {
 				const sf::Uint8* offset = pixels + (x + y * imWidth) * 4;
 				int r = (int)*(offset + 0);
 				int g = (int)*(offset + 1);
@@ -31,7 +31,7 @@ WeaponData::WeaponData(std::string name, Animation animation, sf::Texture sprite
 		vector<sf::Vector2i> points2D_yMirror;
 		for (sf::Vector3i v : points) {
 			points2D.push_back(sf::Vector2i(v.x, v.y));
-			points2D_yMirror.push_back(sf::Vector2i(animation.getSize().x - v.x, v.y));
+			points2D_yMirror.push_back(sf::Vector2i(animationAsset->getSize().x - v.x, v.y));
 		}
 
 		frame_points.push_back(points2D);

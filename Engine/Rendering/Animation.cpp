@@ -2,17 +2,12 @@
 
 
 
-Animation::Animation(std::string name, sf::Vector2i startPosition, sf::Vector2i size, int length, int frameDelay, bool isContinuous) {
-	this->name = name;
-	this->size = size;
-	this->startPosition = startPosition;
-	this->frameDelay = frameDelay;
+Animation::Animation(AnimationAsset* animationAsset, bool isContinuous) {
+	this->animationAsset = animationAsset;
+
 	this->isContinuous = isContinuous;
-	this->length = length;
 	this->currentFrame = 0;
-	for (int i = 0; i < length; i++) 
-		frameCoords.push_back(sf::Vector2i(startPosition.x + i * size.x, startPosition.y));
-	
+
 	this->isPlaying = false;
 }
 
@@ -36,7 +31,7 @@ void Animation::Play() {
 
 void Animation::Stop() {
 	isPlaying = 0;
-	currentFrame = length - 1;
+	currentFrame = animationAsset->getFrameCount() - 1;
 }
 
 bool Animation::isFinished() {
@@ -46,9 +41,9 @@ bool Animation::isFinished() {
 void Animation::Update(int updateElapsed) {
 	if (isPlaying) {
 		timePassedMs += updateElapsed;
-		if (timePassedMs >= frameDelay * (currentFrame + 1))
+		if (timePassedMs >= animationAsset->getFrameDelay() * (currentFrame + 1))
 			currentFrame++;
-		if (currentFrame > length - 1)
+		if (currentFrame > animationAsset->getFrameCount() - 1)
 			if (isContinuous)
 				Play();
 			else
@@ -61,8 +56,8 @@ void Animation::Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vecto
 		return;
 
 	renderer.setTexture(*texture);
-	renderer.setPosition(sf::Vector2f(coords.x + (yMirror ? size.x : 0), coords.y));
-	renderer.setTextureRect(sf::IntRect(frameCoords.at(currentFrame), size));
+	renderer.setPosition(sf::Vector2f(coords.x + (yMirror ? animationAsset->getSize().x : 0), coords.y));
+	renderer.setTextureRect(sf::IntRect(animationAsset->getFrameCoords().at(currentFrame), animationAsset->getSize()));
 
 	if (!yMirror)
 		renderer.setScale(1, 1);
@@ -72,22 +67,11 @@ void Animation::Render(sf::RenderWindow* window, sf::Texture* texture, sf::Vecto
 	window->draw(renderer);
 }
 
-string Animation::GetName() {
-	return this->name;
-}
 
 int Animation::GetCurrentFrame() {
 	return this->currentFrame;
 }
 
-vector<sf::Vector2i> Animation::GetFrameCoords() {
-	return this->frameCoords;
-}
-
-sf::Vector2i Animation::getStartPosition() {
-	return this->startPosition;
-}
-
-sf::Vector2i Animation::getSize() {
-	return this->size;
+AnimationAsset* Animation::getAnimationAsset() {
+	return this->animationAsset;
 }

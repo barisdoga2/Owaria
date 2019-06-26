@@ -7,9 +7,9 @@ Weapon::Weapon(std::string name, b2Body* body, std::string spriteSheetPath, Anim
 	spriteSheet = new sf::Texture();
 	spriteSheet->loadFromFile(spriteSheetPath);
 	
-	weaponData = new WeaponData("dagger", *animation, *spriteSheet); // Extract Weapon Data from Animation Frames and Sprite Sheet
+	weaponData = new WeaponData("dagger", animation->getAnimationAsset(), *spriteSheet); // Extract Weapon Data from Animation Frames and Sprite Sheet
 
-	weaponContact = weaponContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
+	weaponContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
 
 	fixture = nullptr;
 

@@ -6,17 +6,20 @@
 Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	this->map = map;
 
-	std::string playerPath = "../../Resources/Player/";
+	// Load All Assets Related with Player
+	XMLDocument tDoc;
+	tDoc.LoadFile("../../Resources/Player/AnimationSet.xml");
+	XMLUtils::LoadAnimationSet(tDoc.FirstChildElement("AnimationSet"));
 
 	// Create Animations
 	bodySpriteSheet = new sf::Texture();
-	bodySpriteSheet->loadFromFile(playerPath + "Body.png");
+	bodySpriteSheet->loadFromFile("../../Resources/Player/Body.png");
 
-	walkAnimation = new Animation("walk", sf::Vector2i(0, 9 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	climbUpAnimation = new Animation("climbUp", sf::Vector2i(0, 8 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	climbDownAnimation = new Animation("climbDown", sf::Vector2i(0, 10 * 64), sf::Vector2i(64, 64), 9, 300, true);
-	idleAnimation = new Animation("idle", sf::Vector2i(0, 1 * 64), sf::Vector2i(64, 64), 2, 680, true);
-	slashAnimation = new Animation("slash", sf::Vector2i(0, 13 * 64), sf::Vector2i(64, 64), 6, 50, false);
+	idleAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("idle"), true);
+	walkAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("walk"), true);
+	climbUpAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("climbUp"), true);
+	climbDownAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("climbDown"), true);
+	slashAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("slash"), false);
 
 	currentBodyAnimation = idleAnimation;
 
@@ -61,7 +64,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 
 	// Weapons
-	daggerWeapon = new Weapon("dagger", body, playerPath + "Dagger.png", slashAnimation);
+	daggerWeapon = new Weapon("dagger", body, "../../Resources/Player/Dagger.png", slashAnimation);
 
 }
 
