@@ -24,5 +24,10 @@
     <startPosition x="0" y="832" />
     <size width="64" height="64" />
   </AnimationAsset>
+
+  <AnimationAsset name="thrust" frameCount="8" frameDelay="50">
+    <startPosition x="0" y="320" />
+    <size width="64" height="64" />
+  </AnimationAsset>
   
 </AnimationSet>

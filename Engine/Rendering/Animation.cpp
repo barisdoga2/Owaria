@@ -75,3 +75,7 @@ int Animation::GetCurrentFrame() {
 AnimationAsset* Animation::getAnimationAsset() {
 	return this->animationAsset;
 }
+
+string Animation::getAnimationAssetName() {
+	return this->animationAsset->getName();
+}

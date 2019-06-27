@@ -14,7 +14,7 @@ class WeaponData;
 
 class Player {
 public:
-	Player(b2World* world, Map* map, sf::Vector2f worldPosition);
+	Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex);
 	~Player();
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, Camera camera);
@@ -37,12 +37,17 @@ public:
 	sf::Vector2f getPixPosition();
 	b2Vec2 getb2Position();
 
+	static void LoadAssets();
+
 private:
+	int sex;
+
 	Map * map;
 	Animation* currentBodyAnimation;
 	Animation* walkAnimation;
 	Animation* idleAnimation;
 	Animation* slashAnimation;
+	Animation* thrustAnimation;
 	Animation* climbUpAnimation;
 	Animation* climbDownAnimation;
 	sf::Texture* bodySpriteSheet;

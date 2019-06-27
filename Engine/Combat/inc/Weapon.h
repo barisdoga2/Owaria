@@ -6,31 +6,32 @@
 #include <WeaponData.h>
 #include <Animation.h>
 #include <ContactData.h>
+#include <ItemAsset.h>
 
 #define COOLDOWN 1000
 
 class Weapon {
 
 public:
-	Weapon(std::string name, b2Body* body, std::string spriteSheetPath, Animation* animationToExtractWeaponData);
+	Weapon(ItemAsset* itemAsset, Animation* animation);
 	~Weapon();
 
-	void Update(int updateElapsedMs, bool yMirror);
+	void Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror);
 	void StartAttack();
 	bool IsAttacking();
 
-	sf::Texture* GetSpriteSheet();
+	Animation* GetAnimation();
+	ItemAsset* GetItemAsset();
 
 private:
 	bool isAttacking;
 	bool isAvailable;
 	int countDown;
 
-	sf::Texture* spriteSheet;
-	WeaponData* weaponData;
+	ItemAsset* itemAsset;
 	ContactData* weaponContact;
 	Animation* animation;
 
 	b2Fixture* fixture;
-	b2Body* body;
+
 };

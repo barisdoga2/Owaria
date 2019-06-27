@@ -25,6 +25,7 @@ public:
 	int GetCurrentFrame();
 
 	AnimationAsset* getAnimationAsset();
+	string getAnimationAssetName();
 
 private:
 	AnimationAsset* animationAsset;

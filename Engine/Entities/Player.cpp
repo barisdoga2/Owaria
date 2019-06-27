@@ -3,23 +3,24 @@
 
 
 
-Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
+Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
 	this->map = map;
-
-	// Load All Assets Related with Player
-	XMLDocument tDoc;
-	tDoc.LoadFile("../../Resources/Player/AnimationSet.xml");
-	XMLUtils::LoadAnimationSet(tDoc.FirstChildElement("AnimationSet"));
+	this->sex = sex;
 
 	// Create Animations
 	bodySpriteSheet = new sf::Texture();
-	bodySpriteSheet->loadFromFile("../../Resources/Player/Body.png");
+
+	if(sex == MALE_SEX)
+		bodySpriteSheet->loadFromFile("../../Resources/Player/BodyMale.png");
+	else if (sex == FEMALE_SEX)
+		bodySpriteSheet->loadFromFile("../../Resources/Player/BodyFemale.png");
 
 	idleAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("idle"), true);
 	walkAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("walk"), true);
 	climbUpAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("climbUp"), true);
 	climbDownAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("climbDown"), true);
 	slashAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("slash"), false);
+	thrustAnimation = new Animation(AssetStore::GetAnimationSet("player")->getAnimationAsset("thrust"), false);
 
 	currentBodyAnimation = idleAnimation;
 
@@ -64,7 +65,8 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition) {
 	foot_joint = (b2RevoluteJoint*)world->CreateJoint(&joint);
 
 	// Weapons
-	daggerWeapon = new Weapon("dagger", body, "../../Resources/Player/Dagger.png", slashAnimation);
+	//daggerWeapon = new Weapon(AssetStore::GetItemAsset("dagger"), slashAnimation);
+	daggerWeapon = new Weapon(AssetStore::GetItemAsset("spear"), thrustAnimation);
 
 }
 
@@ -75,6 +77,7 @@ Player::~Player() {
 	delete climbUpAnimation;
 	delete climbDownAnimation;
 	delete slashAnimation;
+	delete thrustAnimation;
 	delete daggerWeapon;
 }
 
@@ -85,7 +88,7 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 	currentBodyAnimation->Render(window, bodySpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 	// Render Dagger
 	if (daggerWeapon != nullptr)
-		currentBodyAnimation->Render(window, daggerWeapon->GetSpriteSheet(), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+		currentBodyAnimation->Render(window, daggerWeapon->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::Update(int updateElapsed) {
@@ -98,7 +101,7 @@ void Player::Update(int updateElapsed) {
 
 	// Update Weapon
 	if (daggerWeapon != nullptr)
-		daggerWeapon->Update(updateElapsed, moveDirection.x == RIGHT_DIRECTION);
+		daggerWeapon->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::HandleInputs(int updateElapsed) {
@@ -163,7 +166,7 @@ void Player::HandleInputs(int updateElapsed) {
 			currentBodyAnimation = climbDownAnimation;
 
 	if (daggerWeapon != nullptr && daggerWeapon->IsAttacking())
-		currentBodyAnimation = slashAnimation;
+		currentBodyAnimation = daggerWeapon->GetAnimation();
 
 	if(currentBodyAnimation->isFinished())
 		currentBodyAnimation->Play();
@@ -196,4 +199,11 @@ sf::Vector2f Player::getPixPosition() {
 
 b2Vec2 Player::getb2Position() {
 	return body->GetPosition();
+}
+
+void Player::LoadAssets() {
+	// Load All Assets Related with Player
+	XMLDocument tDoc;
+	tDoc.LoadFile("../../Resources/Player/AnimationSet.xml");
+	XMLUtils::LoadAnimationSet(tDoc.FirstChildElement("AnimationSet"));
 }

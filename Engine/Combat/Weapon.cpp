@@ -1,14 +1,9 @@
 #include <Weapon.h>
 
-Weapon::Weapon(std::string name, b2Body* body, std::string spriteSheetPath, Animation* animationToExtractWeaponData) {
-	this->body = body;
-	this->animation = animationToExtractWeaponData;
-
-	spriteSheet = new sf::Texture();
-	spriteSheet->loadFromFile(spriteSheetPath);
+Weapon::Weapon(ItemAsset* itemAsset, Animation* animation) {
+	this->animation = animation;
+	this->itemAsset = itemAsset;
 	
-	weaponData = new WeaponData("dagger", animation->getAnimationAsset(), *spriteSheet); // Extract Weapon Data from Animation Frames and Sprite Sheet
-
 	weaponContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
 
 	fixture = nullptr;
@@ -18,20 +13,18 @@ Weapon::Weapon(std::string name, b2Body* body, std::string spriteSheetPath, Anim
 }
 
 Weapon::~Weapon() {
-	delete spriteSheet;
-	delete weaponData;
 	delete weaponContact;
 }
 
-void Weapon::Update(int updateElapsedMs, bool yMirror) {
+void Weapon::Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror) {
 	countDown -= updateElapsedMs;
 	isAvailable = countDown <= 0;
 
 	if (isAttacking) {
 		if (fixture != nullptr)
 			body->DestroyFixture(fixture);
-
-		fixture = b2Utils::AddChainLoopFixture(body, weaponData->GetFramePoints(animation->GetCurrentFrame(), yMirror), 0, 0, 0, true);
+		
+		fixture = b2Utils::AddChainLoopFixture(body, itemAsset->getWeaponData(sex)->GetFramePoints(animation->GetCurrentFrame(), yMirror), 0, 0, 0, true);
 		fixture->SetUserData((void*)weaponContact);
 	}
 	else {
@@ -56,6 +49,10 @@ bool Weapon::IsAttacking() {
 	return isAttacking;
 }
 
-sf::Texture* Weapon::GetSpriteSheet() {
-	return this->spriteSheet;
+ItemAsset* Weapon::GetItemAsset() {
+	return itemAsset;
+}
+
+Animation* Weapon::GetAnimation() {
+	return animation;
 }

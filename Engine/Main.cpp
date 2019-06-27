@@ -8,6 +8,7 @@
 #include <ContactListener.h>
 #include <Background.h>
 #include <SFMLDebugDraw.h>
+#include <XMLUtils.h>
 
 
 sf::RenderWindow* sfWindow;
@@ -20,6 +21,10 @@ Background* background;
 SFMLDebugDraw* debugDraw;
 
 void init() {
+	// Load Assets
+	Player::LoadAssets();
+	XMLUtils::LoadItemAssets();
+
 	// Create Contact Listener
 	contactListener = new ContactListener();
 	world->SetContactListener(contactListener);
@@ -32,7 +37,7 @@ void init() {
 	camera->SetMap(testMap);
 
 	// Create Player
-	player = new Player(world, testMap, sf::Vector2f(1400, 500));
+	player = new Player(world, testMap, sf::Vector2f(1400, 500), MALE_SEX);
 	camera->SetTarget(player);
 
 	// Create Background

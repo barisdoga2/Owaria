@@ -35,4 +35,17 @@ public:
 	static void LoadAnimationSet(XMLElement* animationsetElement) {
 		AssetStore::LoadAnimationSet(animationsetElement);
 	}
+
+	static void LoadItemAssets() {
+		XMLDocument tDoc;
+		tDoc.LoadFile("../../Resources/Items/Items.xml");
+		XMLElement* childIter = tDoc.FirstChildElement("ItemAssets")->FirstChildElement("ItemAsset");
+
+		while (childIter != nullptr) {
+			AssetStore::LoadItemAsset(childIter);
+			childIter = childIter->NextSiblingElement();
+		}
+
+
+	}
 };
