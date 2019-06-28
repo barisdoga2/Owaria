@@ -12,6 +12,8 @@ class WeaponData;
 #include <WeaponData.h>
 #include <Weapon.h>
 
+
+
 class Player {
 public:
 	Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex);
@@ -38,6 +40,19 @@ public:
 	b2Vec2 getb2Position();
 
 	static void LoadAssets();
+
+	int inventory[5 * 10] = {
+		0,1,2,0,1,
+		2,0,1,2,0,
+		1,2,0,1,2,
+		0,1,2,0,1,
+		2,0,1,2,0,
+		1,2,0,1,2,
+		0,1,2,0,1,
+		2,0,1,2,0,
+		1,2,0,1,2,
+		0,1,2,0,1
+	};
 
 private:
 	int sex;

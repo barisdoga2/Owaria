@@ -1,13 +1,15 @@
 <ItemAssets>
 
-  <ItemAsset name="dagger" eitherSex="0" forMale="1" forFemale="1">
+  <ItemAsset name="dagger" eitherSex="0" forMale="1" forFemale="1" id="1">
     <spriteSheetName>Dagger.png</spriteSheetName>
     <animationAssetRef>slash</animationAssetRef>
+    <iconName>Dagger.png</iconName>
   </ItemAsset>
   
-  <ItemAsset name="spear" eitherSex="1" forMale="1" forFemale="1">
+  <ItemAsset name="spear" eitherSex="1" forMale="1" forFemale="1" id="2">
     <spriteSheetName>Spear.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
+    <iconName>Spear.png</iconName>
   </ItemAsset>
 
 </ItemAssets>

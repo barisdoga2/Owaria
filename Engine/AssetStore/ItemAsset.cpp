@@ -4,8 +4,8 @@
 ItemAsset::ItemAsset(XMLElement* itemAssetElement) {
 	name = itemAssetElement->Attribute("name");
 
+	id = itemAssetElement->IntAttribute("id");
 	eitherSex = itemAssetElement->BoolAttribute("eitherSex");
-	cout << eitherSex << endl;
 	forMale = itemAssetElement->BoolAttribute("forMale");
 	forFemale = itemAssetElement->BoolAttribute("forFemale");
 
@@ -34,6 +34,9 @@ ItemAsset::ItemAsset(XMLElement* itemAssetElement) {
 		}
 	}
 
+	string iconName = itemAssetElement->FirstChildElement("iconName")->GetText();
+	icon = new sf::Texture();
+	icon->loadFromFile("../../Resources/Items/Icons/" + iconName);
 }
 
 ItemAsset::~ItemAsset() {
@@ -54,6 +57,8 @@ ItemAsset::~ItemAsset() {
 
 	if (femaleWeaponData != nullptr)
 		delete femaleWeaponData;
+
+	delete icon;
 }
 
 string ItemAsset::getName() {
@@ -108,4 +113,12 @@ sf::Texture* ItemAsset::getSpriteSheet(int sex) {
 
 AnimationAsset* ItemAsset::getAnimationAsset() {
 	return animatonAsset;
+}
+
+sf::Texture* ItemAsset::getIcon() {
+	return icon;
+}
+
+int ItemAsset::getID() {
+	return id;
 }

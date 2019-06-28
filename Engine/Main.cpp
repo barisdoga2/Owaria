@@ -9,6 +9,7 @@
 #include <Background.h>
 #include <SFMLDebugDraw.h>
 #include <XMLUtils.h>
+#include <Inventory.h>
 
 
 sf::RenderWindow* sfWindow;
@@ -19,6 +20,7 @@ Map* testMap;
 Player* player;
 Background* background;
 SFMLDebugDraw* debugDraw;
+Inventory* inventory;
 
 void init() {
 	// Load Assets
@@ -46,6 +48,7 @@ void init() {
 	// Create Box2D Debug Draw
 	debugDraw = new SFMLDebugDraw(sfWindow, world, camera);	
 
+	inventory = new Inventory(sfWindow, player);
 }
 
 void update(int updateElapsed) {
@@ -60,6 +63,7 @@ void update(int updateElapsed) {
 
 	camera->Update(updateElapsed);
 
+	inventory->Update();
 }
 
 void render(int renderElapsed) {
@@ -69,6 +73,7 @@ void render(int renderElapsed) {
 
 	player->Render(sfWindow, *camera);
 
+	inventory->Render(sfWindow);
 }
 
 void cleanUp() {
@@ -77,6 +82,7 @@ void cleanUp() {
 	delete testMap;
 	delete player;
 	delete background;
+	delete inventory;
 
 	AssetStore::CleanUp();
 }
@@ -87,7 +93,7 @@ int main(void)
 	sf::Music music;
 	music.openFromFile("../../Resources/Musics/Main.ogg");
 	music.setVolume(25);
-	music.play();
+	//music.play();
 
 	// Create SFML window
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
@@ -179,6 +185,7 @@ int main(void)
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
 			testMap->HandleWindowEvent(sfEvent, camera);
+			inventory->HandleWindowEvent(sfEvent);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 			window.close();

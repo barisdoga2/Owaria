@@ -24,12 +24,15 @@ public:
 	ItemAsset(XMLElement* itemAssetElement);
 	~ItemAsset();
 
+	int getID();
 	string getName();
 	AnimationAsset* getAnimationAsset();
 	WeaponData* getWeaponData(int sex);
 	sf::Texture* getSpriteSheet(int sex);
+	sf::Texture* getIcon();
 
 private:
+	int id;
 	string name;
 	bool forMale;
 	bool forFemale;
@@ -43,5 +46,7 @@ private:
 	sf::Texture* maleSpriteSheet = nullptr;
 	sf::Texture* femaleSpriteSheet = nullptr;
 	sf::Texture* eitherSpriteSheet = nullptr;
+
+	sf::Texture* icon = nullptr;
 
 };

@@ -4,6 +4,7 @@ project(Owaria)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
+	${PROJECT_SOURCE_DIR}/Engine/Inventory.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
 	${PROJECT_SOURCE_DIR}/Engine/Editors/inc
@@ -62,6 +63,7 @@ include_directories(
 
 set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Inventory.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
 	${PROJECT_SOURCE_DIR}/Engine/Editors/BuildingEditor.cpp

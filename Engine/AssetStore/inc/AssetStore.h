@@ -26,6 +26,7 @@ public:
 	static BuildingAsset* GetBuildingAsset(const char* buildingAssetName);
 	static AnimationSet* GetAnimationSet(const char* animationsetName);
 	static ItemAsset* GetItemAsset(const char* itemAssetName);
+	static ItemAsset* GetItemAssetByID(int id);
 
 	static void LoadTileset(XMLElement* tilesetElement);
 	static void LoadObjectSet(XMLElement* objectsetElement);

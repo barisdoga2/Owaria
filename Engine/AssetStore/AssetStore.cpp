@@ -47,6 +47,13 @@ ItemAsset* AssetStore::GetItemAsset(const char* itemAssetName) {
 
 	return nullptr;
 }
+ItemAsset* AssetStore::GetItemAssetByID(int id) {
+	for (ItemAsset* t : itemAssets)
+		if (t->getID() == id)
+			return t;
+
+	return nullptr;
+}
 
 void AssetStore::LoadTileset(XMLElement* tilesetElement) {
 	if(GetTileset(tilesetElement->Attribute("name")) == nullptr)
