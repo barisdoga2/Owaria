@@ -66,7 +66,12 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
 
 	// Weapons
 	//daggerWeapon = new Weapon(AssetStore::GetItemAsset("dagger"), slashAnimation);
-	daggerWeapon = new Weapon(AssetStore::GetItemAsset("leatherBoots"), thrustAnimation);
+	daggerWeapon = new Weapon(AssetStore::GetItemAsset("spear"), thrustAnimation);
+	daggerWeapon2 = new Weapon(AssetStore::GetItemAsset("clothHood"), nullptr);
+	daggerWeapon3 = new Weapon(AssetStore::GetItemAsset("leatherChest"), nullptr);
+	daggerWeapon4 = new Weapon(AssetStore::GetItemAsset("leatherGountlet"), nullptr);
+	daggerWeapon5 = new Weapon(AssetStore::GetItemAsset("leatherBoots"), nullptr);
+	daggerWeapon6 = new Weapon(AssetStore::GetItemAsset("shield"), nullptr);
 
 }
 
@@ -87,8 +92,13 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 	// Render Body
 	currentBodyAnimation->Render(window, bodySpriteSheet, sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 	// Render Dagger
-	if (daggerWeapon != nullptr)
-		currentBodyAnimation->Render(window, daggerWeapon->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon2->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon3->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon4->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon5->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon5->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
+	currentBodyAnimation->Render(window, daggerWeapon6->GetItemAsset()->getSpriteSheet(sex), sf::Vector2f(position.x * BOX2D_SCALE - camera.getPosition().x, position.y * BOX2D_SCALE - camera.getPosition().y), moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::Update(int updateElapsed) {
@@ -100,8 +110,12 @@ void Player::Update(int updateElapsed) {
 	}
 
 	// Update Weapon
-	if (daggerWeapon != nullptr)
-		daggerWeapon->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon2->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon3->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon4->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon5->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	daggerWeapon6->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::HandleInputs(int updateElapsed) {

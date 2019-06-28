@@ -70,5 +70,10 @@ private:
 	b2RevoluteJoint* foot_joint;
 
 	Weapon* daggerWeapon = nullptr;
+	Weapon* daggerWeapon2 = nullptr;
+	Weapon* daggerWeapon3 = nullptr;
+	Weapon* daggerWeapon4 = nullptr;
+	Weapon* daggerWeapon5 = nullptr;
+	Weapon* daggerWeapon6 = nullptr;
 
 };
