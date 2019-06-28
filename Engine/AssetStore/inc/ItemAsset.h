@@ -10,6 +10,9 @@ class WeaponData;
 using namespace tinyxml2;
 using namespace std;
 
+#define MELEE_WEAPON "meleeWeapon"
+#define HELMET "helmet"
+
 #define MALE_SEX 1
 #define FEMALE_SEX 2
 

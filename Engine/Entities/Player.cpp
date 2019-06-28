@@ -66,7 +66,7 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
 
 	// Weapons
 	//daggerWeapon = new Weapon(AssetStore::GetItemAsset("dagger"), slashAnimation);
-	daggerWeapon = new Weapon(AssetStore::GetItemAsset("spear"), thrustAnimation);
+	daggerWeapon = new Weapon(AssetStore::GetItemAsset("leatherBoots"), thrustAnimation);
 
 }
 

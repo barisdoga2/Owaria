@@ -73,7 +73,7 @@ void render(int renderElapsed) {
 
 	player->Render(sfWindow, *camera);
 
-	inventory->Render(sfWindow);
+	inventory->Render();
 }
 
 void cleanUp() {
