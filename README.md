@@ -16,4 +16,4 @@
 #### Owaria
 - Clone Owaria, browse into the directory, Right Click->Click Open In Visual Studio.
 
-![alt text](https://i.ibb.co/HrvHGZP/owaria.png)
+![alt text](https://i.ibb.co/jhqWrSz/owaria2.png)
