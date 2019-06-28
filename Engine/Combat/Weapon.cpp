@@ -17,6 +17,9 @@ Weapon::~Weapon() {
 }
 
 void Weapon::Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror) {
+	if (animation == nullptr)
+		return;
+
 	countDown -= updateElapsedMs;
 	isAvailable = countDown <= 0;
 
