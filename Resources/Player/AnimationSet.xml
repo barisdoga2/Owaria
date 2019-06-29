@@ -1,31 +1,31 @@
 <AnimationSet name="player">
 
-  <AnimationAsset name="idle" frameCount="2" frameDelay="700">
+  <AnimationAsset name="idle" frameCount="2" frameDelay="700" isContinious="1">
     <startPosition x="0" y="64" />
     <size width="64" height="64" />
   </AnimationAsset>
   
-  <AnimationAsset name="walk" frameCount="9" frameDelay="300">
+  <AnimationAsset name="walk" frameCount="9" frameDelay="300" isContinious="1">
     <startPosition x="0" y="576" />
     <size width="64" height="64" />
   </AnimationAsset>
 
-  <AnimationAsset name="climbUp" frameCount="9" frameDelay="300">
+  <AnimationAsset name="climbUp" frameCount="9" frameDelay="300" isContinious="1">
     <startPosition x="0" y="512" />
     <size width="64" height="64" />
   </AnimationAsset>
 
-  <AnimationAsset name="climbDown" frameCount="9" frameDelay="300">
+  <AnimationAsset name="climbDown" frameCount="9" frameDelay="300" isContinious="1">
     <startPosition x="0" y="640" />
     <size width="64" height="64" />
   </AnimationAsset>
 
-  <AnimationAsset name="slash" frameCount="6" frameDelay="50">
+  <AnimationAsset name="slash" frameCount="6" frameDelay="50" isContinious="0">
     <startPosition x="0" y="832" />
     <size width="64" height="64" />
   </AnimationAsset>
 
-  <AnimationAsset name="thrust" frameCount="8" frameDelay="50">
+  <AnimationAsset name="thrust" frameCount="8" frameDelay="50" isContinious="0">
     <startPosition x="0" y="320" />
     <size width="64" height="64" />
   </AnimationAsset>

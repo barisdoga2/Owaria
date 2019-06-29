@@ -2,19 +2,19 @@
 
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include <Weapon.h>
 #include <WeaponData.h>
 #include <Animation.h>
 #include <ContactData.h>
 #include <ItemAsset.h>
+#include <Item.h>
 
 #define COOLDOWN 1000
 
-class Weapon {
+class MeleeWeapon : public Item {
 
 public:
-	Weapon(ItemAsset* itemAsset, Animation* animation);
-	~Weapon();
+	MeleeWeapon(ItemAsset* itemAsset, Animation* animation);
+	~MeleeWeapon();
 
 	void Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror);
 	void StartAttack();
@@ -28,7 +28,6 @@ private:
 	bool isAvailable;
 	int countDown;
 
-	ItemAsset* itemAsset;
 	ContactData* weaponContact;
 	Animation* animation;
 

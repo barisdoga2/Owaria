@@ -8,7 +8,8 @@ AnimationSet::AnimationSet(XMLElement* animationsetElement) {
 	while (object != NULL) {
 		XMLElement* startPosition = object->FirstChildElement("startPosition");
 		XMLElement* size = object->FirstChildElement("size");
-		animationAssets.push_back(new AnimationAsset(object->Attribute("name"), sf::Vector2i(startPosition->IntAttribute("x"), startPosition->IntAttribute("y")), sf::Vector2i(size->IntAttribute("width"), size->IntAttribute("height")), object->IntAttribute("frameCount"), object->IntAttribute("frameDelay")));
+		
+		animationAssets.push_back(new AnimationAsset(object->Attribute("name"), sf::Vector2i(startPosition->IntAttribute("x"), startPosition->IntAttribute("y")), sf::Vector2i(size->IntAttribute("width"), size->IntAttribute("height")), object->IntAttribute("frameCount"), object->IntAttribute("frameDelay"), object->BoolAttribute("isContinious")));
 		object = object->NextSiblingElement();
 	}
 }
@@ -28,4 +29,8 @@ AnimationAsset* AnimationSet::getAnimationAsset(string name) {
 			return animationAsset;
 
 	return nullptr;
+}
+
+vector<AnimationAsset*> AnimationSet::getAllAnimationAssets() {
+	return animationAssets;
 }

@@ -10,9 +10,6 @@ class WeaponData;
 using namespace tinyxml2;
 using namespace std;
 
-#define MELEE_WEAPON "meleeWeapon"
-#define HELMET "helmet"
-
 #define MALE_SEX 1
 #define FEMALE_SEX 2
 
@@ -28,6 +25,7 @@ public:
 	~ItemAsset();
 
 	int getID();
+	int getType();
 	string getName();
 	AnimationAsset* getAnimationAsset();
 	WeaponData* getWeaponData(int sex);
@@ -36,6 +34,7 @@ public:
 
 private:
 	int id;
+	int type;
 	string name;
 	bool forMale;
 	bool forFemale;

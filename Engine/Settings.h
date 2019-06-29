@@ -1,6 +1,6 @@
 // SFML Settings
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
 #define SCREEN_TITLE "Owaria!"
 #define TARGET_FPS 60.0f
 #define TARGET_UPS 60.0f
@@ -37,3 +37,13 @@
 #define TOP_DIRECTION 1
 #define DOWN_DIRECTION -1
 #define NONE_DIRECTION 0
+
+// Wearables
+#define WEARABLE_MINIMUM 0
+#define WEARABLE_WEAPON 0
+#define WEARABLE_SHIELD 1
+#define WEARABLE_HELMET 2
+#define WEARABLE_PAULDRON 3
+#define WEARABLE_GAUNTLETS 4
+#define WEARABLE_BOOTS 5
+#define WEARABLE_COUNT 6

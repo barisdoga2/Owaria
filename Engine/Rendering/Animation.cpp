@@ -2,12 +2,10 @@
 
 
 
-Animation::Animation(AnimationAsset* animationAsset, bool isContinuous) {
+Animation::Animation(AnimationAsset* animationAsset) {
 	this->animationAsset = animationAsset;
 
-	this->isContinuous = isContinuous;
 	this->currentFrame = 0;
-
 	this->isPlaying = false;
 }
 
@@ -44,7 +42,7 @@ void Animation::Update(int updateElapsed) {
 		if (timePassedMs >= animationAsset->getFrameDelay() * (currentFrame + 1))
 			currentFrame++;
 		if (currentFrame > animationAsset->getFrameCount() - 1)
-			if (isContinuous)
+			if (animationAsset->isContinious())
 				Play();
 			else
 				Stop();

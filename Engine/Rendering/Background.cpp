@@ -41,13 +41,13 @@ void Background::Update(int updateElapsed, Camera* camera) {
 	// Update Clouds
 	float move = (updateElapsed / 1000.0f) * CLOUDS_SPEED;
 	if (camera->isOffsetsLocked().x == 0)
-		move -= camera->GetTarget()->body->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
+		move -= camera->GetTarget()->getBody()->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
 	clouds_position.x += move;
 	clouds_position.x = mathUtils::findMod(clouds_position.x, clouds_sprite->getGlobalBounds().width);
 
 	move = (updateElapsed / 1000.0f) * (CLOUDS_SPEED / SLOW_CLOUD_DIV);
 	if (camera->isOffsetsLocked().x == 0)
-		move -= camera->GetTarget()->body->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
+		move -= camera->GetTarget()->getBody()->GetLinearVelocity().x / PLAYER_CLOUD_MULT;
 	clouds2_position.x += move;
 	clouds2_position.x = mathUtils::findMod(clouds2_position.x, clouds2_sprite->getGlobalBounds().width);
 

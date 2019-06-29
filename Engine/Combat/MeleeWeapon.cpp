@@ -1,8 +1,7 @@
-#include <Weapon.h>
+#include <MeleeWeapon.h>
 
-Weapon::Weapon(ItemAsset* itemAsset, Animation* animation) {
+MeleeWeapon::MeleeWeapon(ItemAsset* itemAsset, Animation* animation) : Item(itemAsset) {
 	this->animation = animation;
-	this->itemAsset = itemAsset;
 	
 	weaponContact = new ContactData(CONTACT_TYPE_SENSOR_INT, (void*)WEAPON_SENSOR);
 
@@ -12,11 +11,11 @@ Weapon::Weapon(ItemAsset* itemAsset, Animation* animation) {
 	isAvailable = true;
 }
 
-Weapon::~Weapon() {
+MeleeWeapon::~MeleeWeapon() {
 	delete weaponContact;
 }
 
-void Weapon::Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror) {
+void MeleeWeapon::Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror) {
 	if (animation == nullptr)
 		return;
 
@@ -40,7 +39,7 @@ void Weapon::Update(int updateElapsedMs, b2Body* body, int sex, bool yMirror) {
 	isAttacking = !animation->isFinished();
 }
 
-void Weapon::StartAttack() {
+void MeleeWeapon::StartAttack() {
 	if (isAvailable) {
 		isAttacking = true;
 		isAvailable = false;
@@ -48,14 +47,14 @@ void Weapon::StartAttack() {
 	}
 }
 
-bool Weapon::IsAttacking() {
+bool MeleeWeapon::IsAttacking() {
 	return isAttacking;
 }
 
-ItemAsset* Weapon::GetItemAsset() {
+ItemAsset* MeleeWeapon::GetItemAsset() {
 	return itemAsset;
 }
 
-Animation* Weapon::GetAnimation() {
+Animation* MeleeWeapon::GetAnimation() {
 	return animation;
 }

@@ -16,6 +16,7 @@ public:
 
 	string getName();
 	AnimationAsset* getAnimationAsset(string name);
+	vector<AnimationAsset*> getAllAnimationAssets();
 
 private:
 	string name;

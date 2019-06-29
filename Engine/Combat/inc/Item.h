@@ -1,16 +1,18 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include <ItemAsset.h>
 
-
-
-class Item {
-
+class Item{
 public:
-	Item();
-	~Item();
+	Item(ItemAsset* itemAsset) {
+		this->itemAsset = itemAsset;
+	}
 
-private:
-	
+	ItemAsset* GetItemAsset() {
+		return itemAsset;
+	}
+
+protected:
+	ItemAsset * itemAsset;
 
 };

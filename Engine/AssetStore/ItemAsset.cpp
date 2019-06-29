@@ -4,6 +4,7 @@
 ItemAsset::ItemAsset(XMLElement* itemAssetElement) {
 	name = itemAssetElement->Attribute("name");
 
+	type = itemAssetElement->IntAttribute("type");
 	id = itemAssetElement->IntAttribute("id");
 	eitherSex = itemAssetElement->BoolAttribute("eitherSex");
 	forMale = itemAssetElement->BoolAttribute("forMale");
@@ -121,4 +122,8 @@ sf::Texture* ItemAsset::getIcon() {
 
 int ItemAsset::getID() {
 	return id;
+}
+
+int ItemAsset::getType() {
+	return type;
 }

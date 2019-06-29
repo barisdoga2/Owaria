@@ -10,7 +10,7 @@ using namespace std;
 class Animation {
 
 public:
-	Animation(AnimationAsset* animationAsset, bool isContinuous);
+	Animation(AnimationAsset* animationAsset);
 	~Animation();
 
 	void Update(int updateElapsed);
@@ -31,7 +31,6 @@ private:
 	AnimationAsset* animationAsset;
 
 	int currentFrame;
-	bool isContinuous;
 	int timePassedMs;
 	int isPlaying;
 	bool isHidden = false;
