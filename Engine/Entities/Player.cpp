@@ -3,7 +3,7 @@
 
 
 
-Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
+Player::Player(sf::RenderWindow* window, b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
 	this->map = map;
 	this->sex = sex;
 
@@ -19,42 +19,19 @@ Player::Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex) {
 
 	// Create Physics
 	CreatePhysics(world, worldPosition);
+
+	// Create Inventory
+	inventory = new Inventory(window, this);
+	
 }
 
 Player::~Player() {
 	delete bodySpriteSheet;
 	
-	for (int i = 0; i < WEARABLE_COUNT; i++)
-		if (items[i] != nullptr)
-			delete items[i];
+	delete inventory;
 
 	for (Animation* a : animations)
 		delete a;
-}
-
-bool Player::WearItem(ItemAsset* itemAsset) {
-	switch (itemAsset->getType())
-	{
-	case WEARABLE_WEAPON:
-		items[itemAsset->getType()] = new MeleeWeapon(itemAsset, GetAnimation(itemAsset->getAnimationAsset()->getName()));
-		break;
-
-	case WEARABLE_SHIELD:
-		items[itemAsset->getType()] = new MeleeWeapon(itemAsset, GetAnimation(itemAsset->getAnimationAsset()->getName()));
-		break;
-
-	default:
-		items[itemAsset->getType()] = new Armor(itemAsset);
-		break;
-	}
-
-	return true;
-}
-
-bool Player::UnWearItem(ItemAsset* itemAsset) {
-	items[itemAsset->getType()] = nullptr;
-
-	return true;
 }
 
 void Player::Render(sf::RenderWindow* window, Camera camera) {
@@ -66,7 +43,9 @@ void Player::Render(sf::RenderWindow* window, Camera camera) {
 	
 	// Render Wearables
 	for(int i = 0 ; i < WEARABLE_COUNT ; i++)
-		if (items[i] != nullptr) currentBodyAnimation->Render(window, items[i]->GetItemAsset()->getSpriteSheet(sex),	renderPos, yMirror);
+		if (inventory->GetWear(i) != nullptr) currentBodyAnimation->Render(window, inventory->GetWear(i)->GetItemAsset()->getSpriteSheet(sex),	renderPos, yMirror);
+
+	inventory->Render();
 	
 }
 
@@ -78,7 +57,7 @@ void Player::Update(int updateElapsed) {
 		body_foot->ApplyForceToCenter(b2Vec2(0, -WORLD_GRAVITY * (body->GetMass() + body_foot->GetMass())), false);
 
 	// Update Weapon
-	if (items[WEARABLE_WEAPON] != nullptr) ((MeleeWeapon*)items[WEARABLE_WEAPON])->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
+	if (inventory->GetWear(WEARABLE_WEAPON) != nullptr) ((MeleeWeapon*)inventory->GetWear(WEARABLE_WEAPON))->Update(updateElapsed, body, sex, moveDirection.x == RIGHT_DIRECTION);
 }
 
 void Player::HandleInputs(int updateElapsed) {
@@ -127,8 +106,8 @@ void Player::HandleInputs(int updateElapsed) {
 	}
 
 	// Handle Attacking
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && items[WEARABLE_WEAPON] != nullptr)
-		((MeleeWeapon*)items[WEARABLE_WEAPON])->StartAttack();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && inventory->GetWear(WEARABLE_WEAPON) != nullptr)
+		((MeleeWeapon*)inventory->GetWear(WEARABLE_WEAPON))->StartAttack();
 
 	// Basic Animation "State Machine"
 	currentBodyAnimation = GetAnimation(IDLE);
@@ -141,11 +120,25 @@ void Player::HandleInputs(int updateElapsed) {
 		else if (moveDirection.y < 0)
 			currentBodyAnimation = GetAnimation(CLIMB_DOWN);
 
-	if (items[WEARABLE_WEAPON] != nullptr && ((MeleeWeapon*)items[WEARABLE_WEAPON])->IsAttacking())
-		currentBodyAnimation = ((MeleeWeapon*)items[WEARABLE_WEAPON])->GetAnimation();
+	if (inventory->GetWear(WEARABLE_WEAPON) != nullptr && ((MeleeWeapon*)inventory->GetWear(WEARABLE_WEAPON))->IsAttacking())
+		currentBodyAnimation = ((MeleeWeapon*)inventory->GetWear(WEARABLE_WEAPON))->GetAnimation();
 
 	if (currentBodyAnimation->isFinished())
 		currentBodyAnimation->Play();
+
+	// Open Or Close Inventory
+	static bool keyReleaseFrag = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+		keyReleaseFrag = true;
+	}
+	else if(keyReleaseFrag){
+		inventory->setVisible(!inventory->isVisible());
+		keyReleaseFrag = false;
+	}
+}
+
+void Player::HandleWindowEvent(sf::Event event) {
+	inventory->HandleWindowEvent(event);
 }
 
 void Player::HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin) {
@@ -213,7 +206,9 @@ void Player::CreatePhysics(b2World* world, sf::Vector2f worldPosition) {
 void Player::LoadAssets() {
 	// Load All Assets Related with Player
 	XMLDocument tDoc;
-	tDoc.LoadFile("../../Resources/Player/AnimationSet.xml");
+	tDoc.LoadFile("../../Resources/Player/Player.xml");
+
+	// Load Animation Set
 	XMLUtils::LoadAnimationSet(tDoc.FirstChildElement("AnimationSet"));
 }
 

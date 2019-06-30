@@ -13,6 +13,8 @@ class WeaponData;
 #include <MeleeWeapon.h>
 #include <Armor.h>
 #include <Item.h>
+class Inventory;
+#include <Inventory.h>
 
 #define IDLE "idle"
 #define WALK "walk"
@@ -23,38 +25,23 @@ class WeaponData;
 
 class Player {
 public:
-	Player(b2World* world, Map* map, sf::Vector2f worldPosition, int sex);
+	Player(sf::RenderWindow* window, b2World* world, Map* map, sf::Vector2f worldPosition, int sex);
 	~Player();
 
 	void Update(int updateElapsed);
 	void Render(sf::RenderWindow* window, Camera camera);
 	void HandleInputs(int updateElapsed);
+	void HandleWindowEvent(sf::Event event);
 	void HandleCollision(b2Fixture* self, b2Fixture* interacted, bool isBegin);
 
 	// Getters
 	sf::Vector2f getPixPosition();
 	b2Vec2 getb2Position();
 	b2Body* getBody();
+	Animation* GetAnimation(string animationAssetName);
 
 	// Static
 	static void LoadAssets();
-	
-	// Goods
-	bool WearItem(ItemAsset* itemAsset);
-	bool UnWearItem(ItemAsset* itemAsset);
-	Item* items[WEARABLE_COUNT] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-	int inventory[5 * 10] = {
-		1,	2,	0,	0,	0,
-		11,	12,	13,	14,	0,
-		20,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0,
-		0,	0,	0,	0,	0
-	};
 
 private:
 	int sex;
@@ -65,7 +52,6 @@ private:
 	Animation* currentBodyAnimation;
 	vector<Animation*> animations;
 	void CreateAnimations();
-	Animation* GetAnimation(string animationAssetName);
 
 	// Physics
 	b2Body* body_foot;
@@ -80,6 +66,7 @@ private:
 	bool isClimbing = false;
 	void CreatePhysics(b2World* world, sf::Vector2f worldPosition);
 
-
+	// Inventory
+	Inventory* inventory;
 
 };

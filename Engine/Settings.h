@@ -39,11 +39,12 @@
 #define NONE_DIRECTION 0
 
 // Wearables
+// This integers also represents render order
 #define WEARABLE_MINIMUM 0
-#define WEARABLE_WEAPON 0
-#define WEARABLE_SHIELD 1
-#define WEARABLE_HELMET 2
-#define WEARABLE_PAULDRON 3
-#define WEARABLE_GAUNTLETS 4
-#define WEARABLE_BOOTS 5
+#define WEARABLE_WEAPON 4
+#define WEARABLE_SHIELD 5
+#define WEARABLE_HELMET 3
+#define WEARABLE_PAULDRON 1
+#define WEARABLE_GAUNTLETS 2
+#define WEARABLE_BOOTS 0
 #define WEARABLE_COUNT 6

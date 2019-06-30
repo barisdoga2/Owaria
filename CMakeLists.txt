@@ -4,7 +4,6 @@ project(Owaria)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Engine
-	${PROJECT_SOURCE_DIR}/Engine/Inventory.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
 	${PROJECT_SOURCE_DIR}/Engine/Editors/inc
@@ -48,6 +47,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Background.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Camera.h
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Tileset.h
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/inc/Inventory.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
 	${PROJECT_SOURCE_DIR}/Engine/Utils/inc
@@ -64,7 +64,6 @@ include_directories(
 
 set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Main.cpp
-	${PROJECT_SOURCE_DIR}/Engine/Inventory.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Editors
 	${PROJECT_SOURCE_DIR}/Engine/Editors/BuildingEditor.cpp
@@ -101,6 +100,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Background.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Camera.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Rendering/Tileset.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Rendering/Inventory.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Utils
 	${PROJECT_SOURCE_DIR}/Engine/Utils/MarchingSquares

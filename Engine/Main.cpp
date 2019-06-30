@@ -9,7 +9,6 @@
 #include <Background.h>
 #include <SFMLDebugDraw.h>
 #include <XMLUtils.h>
-#include <Inventory.h>
 
 
 sf::RenderWindow* sfWindow;
@@ -20,7 +19,6 @@ Map* testMap;
 Player* player;
 Background* background;
 SFMLDebugDraw* debugDraw;
-Inventory* inventory;
 
 void init() {
 	// Load Assets
@@ -39,7 +37,7 @@ void init() {
 	camera->SetMap(testMap);
 
 	// Create Player
-	player = new Player(world, testMap, sf::Vector2f(1400, 500), MALE_SEX);
+	player = new Player(sfWindow, world, testMap, sf::Vector2f(1400, 500), MALE_SEX);
 	camera->SetTarget(player);
 
 	// Create Background
@@ -48,7 +46,6 @@ void init() {
 	// Create Box2D Debug Draw
 	debugDraw = new SFMLDebugDraw(sfWindow, world, camera);	
 
-	inventory = new Inventory(sfWindow, player);
 }
 
 void update(int updateElapsed) {
@@ -63,7 +60,6 @@ void update(int updateElapsed) {
 
 	camera->Update(updateElapsed);
 
-	inventory->Update();
 }
 
 void render(int renderElapsed) {
@@ -73,7 +69,6 @@ void render(int renderElapsed) {
 
 	player->Render(sfWindow, *camera);
 
-	inventory->Render();
 }
 
 void cleanUp() {
@@ -82,7 +77,6 @@ void cleanUp() {
 	delete testMap;
 	delete player;
 	delete background;
-	delete inventory;
 
 	AssetStore::CleanUp();
 }
@@ -185,7 +179,7 @@ int main(void)
 			if (sfEvent.type == sfEvent.Closed)
 				window.close();
 			testMap->HandleWindowEvent(sfEvent, camera);
-			inventory->HandleWindowEvent(sfEvent);
+			player->HandleWindowEvent(sfEvent);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 			window.close();

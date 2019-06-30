@@ -1,42 +1,43 @@
 <ItemAssets>
 
-  <ItemAsset name="dagger" eitherSex="0" forMale="1" forFemale="1" id="1" type="0">
+  <!--type also represents render order-->
+  <ItemAsset name="dagger" eitherSex="0" forMale="1" forFemale="1" id="1" type="4">
     <spriteSheetName>Dagger.png</spriteSheetName>
     <animationAssetRef>slash</animationAssetRef>
     <iconName>Dagger.png</iconName>
   </ItemAsset>
   
-  <ItemAsset name="spear" eitherSex="1" forMale="1" forFemale="1" id="2" type="0">
+  <ItemAsset name="spear" eitherSex="1" forMale="1" forFemale="1" id="2" type="4">
     <spriteSheetName>Spear.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>Spear.png</iconName>
   </ItemAsset>
 
-  <ItemAsset name="shield" eitherSex="1" forMale="1" forFemale="1" id="20" type="1">
+  <ItemAsset name="shield" eitherSex="1" forMale="1" forFemale="1" id="20" type="5">
     <spriteSheetName>Shield.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>Shield.png</iconName>
   </ItemAsset>
 
-  <ItemAsset name="clothHood" eitherSex="0" forMale="1" forFemale="1" id="11" type="2">
+  <ItemAsset name="clothHood" eitherSex="0" forMale="1" forFemale="1" id="11" type="3">
     <spriteSheetName>ClothHood.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>ClothHood.png</iconName>
   </ItemAsset>
 
-  <ItemAsset name="leatherChest" eitherSex="0" forMale="1" forFemale="1" id="12" type="3">
+  <ItemAsset name="leatherChest" eitherSex="0" forMale="1" forFemale="1" id="12" type="1">
     <spriteSheetName>LeatherChest.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>LeatherChest.png</iconName>
   </ItemAsset>
 
-  <ItemAsset name="leatherGountlet" eitherSex="0" forMale="1" forFemale="1" id="13" type="4">
+  <ItemAsset name="leatherGountlet" eitherSex="0" forMale="1" forFemale="1" id="13" type="2">
     <spriteSheetName>LeatherGountlet.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>LeatherGountlet.png</iconName>
   </ItemAsset>
 
-  <ItemAsset name="leatherBoots" eitherSex="0" forMale="1" forFemale="1" id="14" type="5">
+  <ItemAsset name="leatherBoots" eitherSex="0" forMale="1" forFemale="1" id="14" type="0">
     <spriteSheetName>LeatherBoots.png</spriteSheetName>
     <animationAssetRef>thrust</animationAssetRef>
     <iconName>LeatherBoots.png</iconName>
