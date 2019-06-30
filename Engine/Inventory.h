@@ -25,50 +25,43 @@ public:
 
 private:
 	const int inventoryCellPadding = 11;
-	const sf::Vector2i inventoryCellStart = sf::Vector2i(12, 12);
+	const sf::Vector2i inventoryCellStart = sf::Vector2i(12, 273);
 	const sf::Vector2i inventoryCellSize = sf::Vector2i(34, 35);
-	const sf::Vector2i coinPosition = sf::Vector2i(115, 475);
+	const sf::Vector2i coinPosition = sf::Vector2i(115, 734);
 
 	Gui * gui;
 	sf::RenderWindow* window;
 	Player* player;
 	Texture textureLoader;
 
-	Picture::Ptr characterPicture;
 	Picture::Ptr inventoryPicture;
-	void characterMousePressedCallback();
-	void characterMouseReleasedCallback();
-	void inventoryMousePressedCallback();
 	void inventoryMouseReleasedCallback();
+
+	void pictureMouseClickedCallback(int x, int y, bool isCharacter, int WEARABLE_TYPE);
+	void pictureMousePressedCallback(int x, int y, bool isCharacter, int WEARABLE_TYPE);
+	void pictureMouseReleasedCallback(int x, int y, bool isCharacter, int WEARABLE_TYPE);
+
+	Label::Ptr coin;
+	Picture::Ptr inventoryPictures[50];
 
 	sf::Vector2i inventoryMovingPictureIndices;
 	sf::Vector2i inventoryMovingPictureOffset;
 	int inventoryMovingItemAssetID;
 	bool inventoryMovingPicture = false;
-	void pictureMouseClickedCallback(int x, int y);
-	void pictureMousePressedCallback(int x, int y);
-	void pictureMouseReleasedCallback(int x, int y);
-
 
 	sf::Vector2i characterMovingPictureOffset;
 	int characterMovingItemAssetID;
 	bool characterMovingPicture = false;
-	void characterPictureMouseClickedCallback(int type);
-	void characterPictureMousePressedCallback(int type);
-	void characterPictureReleasedCallback(int type);
-
-	Label::Ptr coin;
-	Picture::Ptr inventoryPictures[50];
 
 	void Create();
 
 	sf::Vector2i itemPositions[WEARABLE_COUNT] = {
-		sf::Vector2i(13, 95),	// WEARABLE_WEAPON
-		sf::Vector2i(108, 95),	// WEARABLE_SHIELD
-		sf::Vector2i(60, 12),	// WEARABLE_HELMET
-		sf::Vector2i(13, 54),	// WEARABLE_PAULDRON
-		sf::Vector2i(108, 54),	// WEARABLE_GAUNTLETS
-		sf::Vector2i(61, 135)	// WEARABLE_BOOTS
+		sf::Vector2i(99, 142),	// WEARABLE_WEAPON
+		sf::Vector2i(194, 142),	// WEARABLE_SHIELD
+		sf::Vector2i(146, 59),	// WEARABLE_HELMET
+		sf::Vector2i(99, 101),	// WEARABLE_PAULDRON
+		sf::Vector2i(194, 101),	// WEARABLE_GAUNTLETS
+		sf::Vector2i(146, 182)	// WEARABLE_BOOTS
 	};
 	Picture::Ptr itemPictures[WEARABLE_COUNT];
 };
