@@ -34,6 +34,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Building.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/GameObject.h
 	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Player.h
+	${PROJECT_SOURCE_DIR}/Engine/Entities/inc/Mob.h
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
 	${PROJECT_SOURCE_DIR}/Engine/Map/inc
@@ -89,6 +90,7 @@ set(sourcefiles
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Building.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/GameObject.cpp
 	${PROJECT_SOURCE_DIR}/Engine/Entities/Player.cpp
+	${PROJECT_SOURCE_DIR}/Engine/Entities/Mob.cpp
 
 	${PROJECT_SOURCE_DIR}/Engine/Map
 	${PROJECT_SOURCE_DIR}/Engine/Map/Map.cpp
