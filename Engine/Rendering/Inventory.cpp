@@ -10,7 +10,7 @@ Inventory::Inventory(sf::RenderWindow* window, Player* player) {
 
 	textureLoader = Texture();
 
-	textureLoader.load("../../Resources/Inventory2.png");
+	textureLoader.load("../../Resources/Inventory.png");
 	inventoryPicture = Picture::create(textureLoader);
 
 	textureLoader.load("../../Resources/Transparent.png");
