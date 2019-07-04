@@ -21,8 +21,9 @@ public:
 	bool isVisible();
 	void setVisible(bool flag);
 
-	void WearItem(sf::Vector2i inventoryPosition);
+	void WearItem(sf::Vector2i inventoryPosition, int TO_TYPE);
 	void UnWearItem(int WEARABLE_TYPE);
+	void UnWearItem(int WEARABLE_TYPE, sf::Vector2i toCell);
 	Item* GetWear(int WEARABLE_TYPE);
 	ItemAsset* GetInventoryCell(sf::Vector2i inventoryPosition);
 	void SwapInventoryCells(sf::Vector2i cellInventoryPosition1, sf::Vector2i cellInventoryPosition2);
@@ -50,14 +51,14 @@ private:
 	const sf::Vector2i INVENTORY_CELL_SIZE				  =		sf::Vector2i(34, 35);
 	const sf::Vector2i INVENTORY_COIN_POSITION			  =		sf::Vector2i(115, 734);
 	const sf::Vector2i WEARABLE_POSITIONS[WEARABLE_COUNT] = {
-																sf::Vector2i(99, 142),	// WEARABLE_WEAPON
-																sf::Vector2i(194, 142),	// WEARABLE_SHIELD
-																sf::Vector2i(146, 59),	// WEARABLE_HELMET
-																sf::Vector2i(99, 101),	// WEARABLE_PAULDRON
-																sf::Vector2i(194, 101),	// WEARABLE_GAUNTLETS
-																sf::Vector2i(146, 182)	// WEARABLE_BOOTS
+																sf::Vector2i(146, 182),	// WEARABLE_WEAPON
+																sf::Vector2i(99, 101),	// WEARABLE_SHIELD
+																sf::Vector2i(194, 101),	// WEARABLE_HELMET
+																sf::Vector2i(146, 59),	// WEARABLE_PAULDRON
+																sf::Vector2i(99, 142),	// WEARABLE_GAUNTLETS
+																sf::Vector2i(194, 142)	// WEARABLE_BOOTS
 															};
-
+	
 	Gui * gui;
 	sf::RenderWindow* window;
 	Player* player;

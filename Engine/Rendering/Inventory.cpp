@@ -73,8 +73,12 @@ void Inventory::Render() {
 /*****************************************************************************************************************************************************************/
 /*************************************************************************************HELPER FUNCTIONS************************************************************/
 /*****************************************************************************************************************************************************************/
-void Inventory::WearItem(sf::Vector2i inventoryPosition) {
+
+void Inventory::WearItem(sf::Vector2i inventoryPosition, int TO_TYPE) {
 	ItemAsset* asset = GetInventoryCell(inventoryPosition);
+	if (asset->getType() != TO_TYPE)
+		return;
+
 	Item* wear = GetWear(asset->getType());
 
 	inventoryItemIDs[inventoryPosition.x + inventoryPosition.y * INVENTORY_SIZE.x] = (wear == nullptr ? 0 : wear->GetItemAsset()->getID());
@@ -92,10 +96,19 @@ void Inventory::WearItem(sf::Vector2i inventoryPosition) {
 	}
 }
 
+
+void Inventory::UnWearItem(int WEARABLE_TYPE, sf::Vector2i toCell) {
+	int id = inventoryItemIDs[toCell.x + toCell.y * INVENTORY_SIZE.x];
+
+	if (id == 0) {
+		inventoryItemIDs[toCell.x + toCell.y * INVENTORY_SIZE.x] = GetWear(WEARABLE_TYPE)->GetItemAsset()->getID();
+		wearableItems[WEARABLE_TYPE] = nullptr;
+	}
+}
+
 void Inventory::UnWearItem(int WEARABLE_TYPE) {
-	// Find Empty Cell
 	int i, found = false;
-	for(i = 0 ; i < INVENTORY_SIZE.x * INVENTORY_SIZE.y; i++)
+	for (i = 0; i < INVENTORY_SIZE.x * INVENTORY_SIZE.y; i++)
 		if (inventoryItemIDs[i] == 0) {
 			found = true;
 			break;
@@ -174,7 +187,7 @@ void Inventory::cellMouseClicked(sf::Vector2i inventoryCellPosition, bool isChar
 	}
 	// Inventory Right Click
 	else if (lastSFButton == sf::Mouse::Button::Right && GetInventoryCell(inventoryCellPosition) != nullptr) {
-		WearItem(inventoryCellPosition);
+		WearItem(inventoryCellPosition, GetInventoryCell(inventoryCellPosition)->getType());
 
 		CreateWidgets();
 	}
@@ -211,14 +224,14 @@ void Inventory::cellMouseReleased(sf::Vector2i inventoryCellPosition, bool isCha
 	// Inventory Item Dragged to Wearable Slot
 	if (isCharacter && lastSFButton == sf::Mouse::Button::Left && cellMoving) {
 		if (cellMovingAsset->getType() == WEARABLE_TYPE) {
-			WearItem(cellMovingIndice);
+			WearItem(cellMovingIndice, WEARABLE_TYPE);
 
 			CreateWidgets();
 		}
 
 		cellMoving = false;
 	}
-	else if (lastSFButton == sf::Mouse::Button::Left) {
+	else if (!isCharacter && lastSFButton == sf::Mouse::Button::Left) {
 		// Inventory Slot Dragged to Inventory Slot
 		if (cellMoving) {
 			cellMoving = false;
@@ -233,14 +246,18 @@ void Inventory::cellMouseReleased(sf::Vector2i inventoryCellPosition, bool isCha
 
 			// If Dragged Inventory Slot is Empty
 			if (GetInventoryCell(inventoryCellPosition) == nullptr) {
-				UnWearItem(wearableMovingAsset->getType());
+				UnWearItem(wearableMovingAsset->getType(), inventoryCellPosition);
 			}
 			else {
-				WearItem(inventoryCellPosition);
+				WearItem(inventoryCellPosition, wearableMovingAsset->getType());
 			}
 
 			CreateWidgets();
 		}
+	}
+	else {
+		cellMoving = false;
+		wearableMoving = false;
 	}
 }
 
